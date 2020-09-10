@@ -3,13 +3,16 @@
 
 #include "HealthComponent.h"
 
+#include "EnemyCharacter.h"
+
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	
+
+	MaxHealth = 100.0f;
 	// ...
 }
 
@@ -35,7 +38,10 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 void UHealthComponent::OnTakeDamage(float Damage)
 {
-	CurrentHealth -= Damage;
+	if (CurrentHealth > 0)
+	{
+		CurrentHealth -= Damage;
+	}
 	if (CurrentHealth <= 0) 
 	{
 		CurrentHealth = 0;
@@ -45,7 +51,13 @@ void UHealthComponent::OnTakeDamage(float Damage)
 
 void UHealthComponent::OnDeath()
 {
-
+	AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetOwner());
+	if (EnemyCharacter->CurrentAgentState != AgentState::DEAD)
+	{
+		EnemyCharacter->Died();
+		EnemyCharacter->CurrentAgentState = AgentState::DEAD;
+		EnemyCharacter->Path.Empty();
+	}
 }
 
 float UHealthComponent::HealthPercentageRemaining()

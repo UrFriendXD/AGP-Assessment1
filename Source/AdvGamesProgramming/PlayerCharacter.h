@@ -3,11 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GenericTeamAgentInterface.h"
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
-class ADVGAMESPROGRAMMING_API APlayerCharacter : public ACharacter
+class ADVGAMESPROGRAMMING_API APlayerCharacter : public ACharacter, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -43,4 +44,7 @@ private:
 
 	UPROPERTY(EditInstanceOnly)
 	float SprintMultiplier;
+	
+	FGenericTeamId TeamId;
+    FGenericTeamId GetGenericTeamId() const;
 };

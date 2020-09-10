@@ -3,6 +3,7 @@
 
 #include "EnemyCharacter.h"
 #include "EngineUtils.h"
+#include "SelectionSet.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
@@ -20,10 +21,14 @@ void AEnemyCharacter::BeginPlay()
 	PerceptionComponent = FindComponentByClass<UAIPerceptionComponent>();
 	if (!PerceptionComponent) { UE_LOG(LogTemp, Error, TEXT("NO PERCEPTION COMPONENT FOUND")) }
 	PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyCharacter::SensePlayer);
+
+	EnemyAIController = Cast<AEnemyAIController>(GetController());
 	
 	HealthComponent = FindComponentByClass<UHealthComponent>();
 	DetectedActor = nullptr;
-	bCanSeeActor = false;
+	bCanSeePlayer = false;
+
+	HealTimer = HealDelay;
 }
 
 // Called every frame
@@ -31,45 +36,81 @@ void AEnemyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (CurrentAgentState == AgentState::PATROL)
+	switch (CurrentAgentState)
 	{
+	case AgentState::PATROL:
 		AgentPatrol();
-		if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() >= 0.4f)
+		if (bHealingOthers)
+		{
+			CurrentAgentState = AgentState::HEALINGAGENTS;
+			//Path.Empty();
+		}
+		if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() >= 0.4f)
 		{
 			CurrentAgentState = AgentState::ENGAGE;
 			Path.Empty();
 		}
-		else if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() < 0.4f)
+		if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() <= 0.4f)
 		{
 			CurrentAgentState = AgentState::EVADE;
 			Path.Empty();
 		}
-	}
-	else if (CurrentAgentState == AgentState::ENGAGE)
-	{
+		break;
+	case AgentState::ENGAGE:
 		AgentEngage();
-		if (!bCanSeeActor)
+		if (!bCanSeePlayer)
 		{
 			CurrentAgentState = AgentState::PATROL;
+			FaceDirection = FRotator::ZeroRotator;
 		}
-		else if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() < 0.4f)
+		if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() <= 0.4f)
 		{
 			CurrentAgentState = AgentState::EVADE;
+			FaceDirection = FRotator::ZeroRotator;
 			Path.Empty();
 		}
-	}
-	else if (CurrentAgentState == AgentState::EVADE)
-	{
+		break;
+	case AgentState::EVADE:
 		AgentEvade();
-		if (!bCanSeeActor)
+		if (bHealingOthers)
+		{
+			CurrentAgentState = AgentState::HEALINGAGENTS;
+			//Path.Empty();
+		}
+		if (!bCanSeePlayer)
 		{
 			CurrentAgentState = AgentState::PATROL;
 		}
-		else if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() >= 0.4f)
+		if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() >= 0.4f)
 		{
 			CurrentAgentState = AgentState::ENGAGE;
 			Path.Empty();
 		}
+		break;
+		case AgentState::DEAD:
+			if (HealthComponent->HealthPercentageRemaining() >= 1.0f)
+			{
+				Revive();
+				CurrentAgentState = AgentState::PATROL;
+			}
+			break;
+		case AgentState::HEALINGAGENTS:
+			AgentHealing();
+		break;
+	default: ;
+	}
+
+	if (bEnemyHealing)
+	{
+		if (HealTimer <= 0)
+		{
+			Heal();
+		}
+	}
+
+	if (HealTimer > 0)
+	{
+		HealTimer -= GetWorld()->GetDeltaSeconds();
 	}
 	MoveAlongPath();
 }
@@ -83,7 +124,7 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void AEnemyCharacter::AgentPatrol()
 {
-	if (Path.Num() == 0 && Manager != NULL)
+	if (Path.Num() == 0 && Manager != nullptr)
 	{
 		Path = Manager->GeneratePath(CurrentNode, Manager->AllNodes[FMath::RandRange(0, Manager->AllNodes.Num() - 1)]);
 	}
@@ -91,10 +132,11 @@ void AEnemyCharacter::AgentPatrol()
 
 void AEnemyCharacter::AgentEngage()
 {
-	if (bCanSeeActor)
+	if (bCanSeePlayer)
 	{
 		FVector DirectionToTarget = DetectedActor->GetActorLocation() - GetActorLocation();
 		Fire(DirectionToTarget);
+		FaceDirection = DirectionToTarget.Rotation();
 		if (Path.Num() == 0)
 		{
 			Path = Manager->GeneratePath(CurrentNode, Manager->FindNearestNode(DetectedActor->GetActorLocation()));
@@ -105,8 +147,7 @@ void AEnemyCharacter::AgentEngage()
 
 void AEnemyCharacter::AgentEvade()
 {
-	
-	if (bCanSeeActor)
+	if (bCanSeePlayer)
 	{
 		FVector DirectionToTarget = DetectedActor->GetActorLocation() - GetActorLocation();
 		Fire(DirectionToTarget);
@@ -121,14 +162,64 @@ void AEnemyCharacter::SensePlayer(AActor* SensedActor, FAIStimulus Stimulus)
 {
 	if (Stimulus.WasSuccessfullySensed())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Player Detected"))
-		DetectedActor = SensedActor;
-		bCanSeeActor = true;
+		if(SensedActor->ActorHasTag(TEXT("Player")) && !bHealingOthers)
+		{
+			DetectedActor = SensedActor;
+			bCanSeePlayer = true;
+			UE_LOG(LogTemp, Warning, TEXT("Player Detected"))
+		}
+		if (SensedActor->ActorHasTag(TEXT("Enemy")))
+		{
+			DetectedActor = SensedActor;
+			bCanSeeEnemy = true;
+			UE_LOG(LogTemp, Warning, TEXT("Enemy Detected"))
+			if (Cast<AEnemyCharacter>(SensedActor)->HealthComponent->HealthPercentageRemaining() == 0 && !bHealingOthers)
+			{
+				bHealingOthers = true;
+				CurrentAgentState = AgentState::HEALINGAGENTS;
+				Path.Empty();
+				Path = Manager->GeneratePath(CurrentNode, Manager->FindNearestNode(DetectedActor->GetActorLocation()));
+				UE_LOG(LogTemp, Warning, TEXT("Enemy Needs help"))
+			}
+		}
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Player Lost"))
-		bCanSeeActor = false;
+		bCanSeePlayer = false;
+		if (!bHealingOthers)
+		{
+			bCanSeeEnemy = false;
+		}
+		//bHealing = false;
+	}
+}
+
+void AEnemyCharacter::AgentHealing()
+{
+	if (bCanSeeEnemy)
+	{
+		const FVector DirectionToTarget = DetectedActor->GetActorLocation() - GetActorLocation();
+		FaceDirection = DirectionToTarget.Rotation();
+	}
+	float Distance = FVector::Distance(DetectedActor->GetActorLocation(), GetActorLocation());
+	if (Distance < 150.0f)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Helping Friend"))
+		Path.Empty();
+		if (!Cast<AEnemyCharacter>(DetectedActor)->bEnemyHealing)
+		{
+			Cast<AEnemyCharacter>(DetectedActor)->bEnemyHealing = true;
+		}
+		if (Cast<AEnemyCharacter>(DetectedActor)->HealthComponent->HealthPercentageRemaining() >= 1.0f)
+		{
+			bHealingOthers = false;
+			Cast<AEnemyCharacter>(DetectedActor)->bEnemyHealing = false;
+			CurrentAgentState = AgentState::PATROL;
+		}
+	} else if (Path.Num() == 0)
+	{
+		Path = Manager->GeneratePath(CurrentNode, Manager->FindNearestNode(DetectedActor->GetActorLocation()));
 	}
 }
 
@@ -139,7 +230,7 @@ void AEnemyCharacter::MoveAlongPath()
 		//UE_LOG(LogTemp, Display, TEXT("Current Node: %s"), *CurrentNode->GetName())
 		if ((GetActorLocation() - CurrentNode->GetActorLocation()).IsNearlyZero(100.0f))
 		{
-			UE_LOG(LogTemp, Display, TEXT("At Node %s"), *CurrentNode->GetName())
+			//UE_LOG(LogTemp, Display, TEXT("At Node %s"), *CurrentNode->GetName())
 			CurrentNode = Path.Pop();
 		}
 		else
@@ -149,7 +240,10 @@ void AEnemyCharacter::MoveAlongPath()
 			AddMovementInput(WorldDirection, 1.0f);
 
 			//Get the AI to face in the direction of travel.
-			FRotator FaceDirection = WorldDirection.ToOrientationRotator();
+			if (CurrentAgentState != AgentState::ENGAGE && CurrentAgentState != AgentState::HEALINGAGENTS)
+			{
+				FaceDirection = WorldDirection.ToOrientationRotator();
+			}
 			FaceDirection.Roll = 0.f;
 			FaceDirection.Pitch = 0.f;
 			SetActorRotation(FaceDirection);
@@ -157,3 +251,13 @@ void AEnemyCharacter::MoveAlongPath()
 	}
 }
 
+void AEnemyCharacter::Heal()
+{
+	if (HealthComponent->HealthPercentageRemaining() < 1)
+	{
+		HealthComponent->CurrentHealth += 3.0f;
+		FMath::Clamp(HealthComponent->CurrentHealth, 0.0f, 100.0f);
+		HealTimer = HealDelay;
+		UE_LOG(LogTemp, Display, TEXT("Healed"));
+	}
+}

@@ -18,6 +18,8 @@ APlayerCharacter::APlayerCharacter()
 	LookSensitivity = 75.0f;
 	MoveSpeed = 150.0f;
 	SprintMultiplier = 1.5f;
+	
+	TeamId = FGenericTeamId(1);
 }
 
 // Called when the game starts or when spawned
@@ -80,5 +82,10 @@ void APlayerCharacter::SprintStart()
 void APlayerCharacter::SprintEnd()
 {
 	GetCharacterMovement()->MaxWalkSpeed /= SprintMultiplier;
+}
+
+FGenericTeamId APlayerCharacter::GetGenericTeamId() const
+{
+    return TeamId;
 }
 

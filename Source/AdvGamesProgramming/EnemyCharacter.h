@@ -6,6 +6,7 @@
 #include "NavigationNode.h"
 #include "GameFramework/Character.h"
 #include "AIManager.h"
+#include "EnemyAIController.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "HealthComponent.h"
 #include "EnemyCharacter.generated.h"
@@ -15,7 +16,9 @@ enum class AgentState : uint8
 {
 	PATROL,
 	ENGAGE,
-	EVADE
+	EVADE,
+	HEALINGAGENTS,
+	DEAD
 };
 
 UCLASS()
@@ -35,7 +38,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TArray<ANavigationNode*> Path;
 	UPROPERTY(VisibleAnywhere)
 	ANavigationNode* CurrentNode;
@@ -46,30 +49,67 @@ public:
 	UAIPerceptionComponent* PerceptionComponent;
 
 	UPROPERTY(VisibleAnywhere)
+	AEnemyAIController* EnemyAIController;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	AgentState CurrentAgentState;
 	UPROPERTY(VisibleAnywhere)
 	AActor* DetectedActor;
-	UPROPERTY(VisibleAnywhere)
-	bool bCanSeeActor;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bCanSeePlayer;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bCanSeeEnemy;
 
 	UHealthComponent* HealthComponent;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void AgentPatrol();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void AgentEngage();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void AgentEvade();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
+	void AgentHealing();
+	UFUNCTION(BlueprintCallable)
 	void SensePlayer(AActor* ActorSensed, FAIStimulus Stimulus);
 	UFUNCTION(BlueprintImplementableEvent)
 	void Fire(FVector FireDirection);
+	UFUNCTION(BlueprintImplementableEvent)
+    void Died();
+	UFUNCTION(BlueprintImplementableEvent)
+    void Revive();
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere, Category=Behavior)
+	class UBehaviorTree* EnemyCharacterBehavior;
+
+	UFUNCTION()
+	void Heal();
+
+	UPROPERTY(EditAnywhere)
+	bool bEnemyHealing;
+
+	UPROPERTY(EditAnywhere)
+	float HealDelay;
+	
 private:
 
+	UFUNCTION(BlueprintCallable)
 	void MoveAlongPath();
 
+	UPROPERTY(EditAnywhere)
+	bool bUnderCover;
+
+	UPROPERTY(VisibleAnywhere)
+	bool bHealingOthers;
+
+	UPROPERTY(VisibleAnywhere)
+	float HealTimer;
+	
+	// UPROPERTY(VisibleAnywhere)
+ //    float HealingOthersTimer;
+
+	FRotator FaceDirection;
 };
