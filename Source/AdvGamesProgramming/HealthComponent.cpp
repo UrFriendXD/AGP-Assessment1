@@ -54,7 +54,6 @@ void UHealthComponent::OnDeath()
 	AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetOwner());
 	if (EnemyCharacter->CurrentAgentState != AgentState::DEAD)
 	{
-		EnemyCharacter->Died();
 		EnemyCharacter->CurrentAgentState = AgentState::DEAD;
 		EnemyCharacter->Path.Empty();
 	}

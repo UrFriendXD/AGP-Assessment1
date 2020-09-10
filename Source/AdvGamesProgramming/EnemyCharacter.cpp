@@ -21,8 +21,6 @@ void AEnemyCharacter::BeginPlay()
 	PerceptionComponent = FindComponentByClass<UAIPerceptionComponent>();
 	if (!PerceptionComponent) { UE_LOG(LogTemp, Error, TEXT("NO PERCEPTION COMPONENT FOUND")) }
 	PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyCharacter::SensePlayer);
-
-	EnemyAIController = Cast<AEnemyAIController>(GetController());
 	
 	HealthComponent = FindComponentByClass<UHealthComponent>();
 	DetectedActor = nullptr;
@@ -90,7 +88,6 @@ void AEnemyCharacter::Tick(float DeltaTime)
 		case AgentState::DEAD:
 			if (HealthComponent->HealthPercentageRemaining() >= 1.0f)
 			{
-				Revive();
 				CurrentAgentState = AgentState::PATROL;
 			}
 			break;
@@ -158,43 +155,6 @@ void AEnemyCharacter::AgentEvade()
 	}
 }
 
-void AEnemyCharacter::SensePlayer(AActor* SensedActor, FAIStimulus Stimulus)
-{
-	if (Stimulus.WasSuccessfullySensed())
-	{
-		if(SensedActor->ActorHasTag(TEXT("Player")) && !bHealingOthers)
-		{
-			DetectedActor = SensedActor;
-			bCanSeePlayer = true;
-			UE_LOG(LogTemp, Warning, TEXT("Player Detected"))
-		}
-		if (SensedActor->ActorHasTag(TEXT("Enemy")))
-		{
-			DetectedActor = SensedActor;
-			bCanSeeEnemy = true;
-			UE_LOG(LogTemp, Warning, TEXT("Enemy Detected"))
-			if (Cast<AEnemyCharacter>(SensedActor)->HealthComponent->HealthPercentageRemaining() == 0 && !bHealingOthers)
-			{
-				bHealingOthers = true;
-				CurrentAgentState = AgentState::HEALINGAGENTS;
-				Path.Empty();
-				Path = Manager->GeneratePath(CurrentNode, Manager->FindNearestNode(DetectedActor->GetActorLocation()));
-				UE_LOG(LogTemp, Warning, TEXT("Enemy Needs help"))
-			}
-		}
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Player Lost"))
-		bCanSeePlayer = false;
-		if (!bHealingOthers)
-		{
-			bCanSeeEnemy = false;
-		}
-		//bHealing = false;
-	}
-}
-
 void AEnemyCharacter::AgentHealing()
 {
 	if (bCanSeeEnemy)
@@ -203,7 +163,8 @@ void AEnemyCharacter::AgentHealing()
 		FaceDirection = DirectionToTarget.Rotation();
 	}
 	float Distance = FVector::Distance(DetectedActor->GetActorLocation(), GetActorLocation());
-	if (Distance < 150.0f)
+	UE_LOG(LogTemp, Display, TEXT("Distance is: %f"), Distance);
+	if (Distance < 250.0f)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Helping Friend"))
 		Path.Empty();
@@ -220,6 +181,46 @@ void AEnemyCharacter::AgentHealing()
 	} else if (Path.Num() == 0)
 	{
 		Path = Manager->GeneratePath(CurrentNode, Manager->FindNearestNode(DetectedActor->GetActorLocation()));
+	}
+}
+
+void AEnemyCharacter::SensePlayer(AActor* SensedActor, FAIStimulus Stimulus)
+{
+	if (CurrentAgentState != AgentState::DEAD)
+	{
+		if (Stimulus.WasSuccessfullySensed())
+		{
+			if(SensedActor->ActorHasTag(TEXT("Player")) && !bHealingOthers)
+			{
+				DetectedActor = SensedActor;
+				bCanSeePlayer = true;
+				UE_LOG(LogTemp, Warning, TEXT("Player Detected"))
+			}
+			if (SensedActor->ActorHasTag(TEXT("Enemy")))
+			{
+				DetectedActor = SensedActor;
+				bCanSeeEnemy = true;
+				UE_LOG(LogTemp, Warning, TEXT("Enemy Detected"))
+				if (Cast<AEnemyCharacter>(SensedActor)->HealthComponent->HealthPercentageRemaining() == 0 && !bHealingOthers)
+				{
+					bHealingOthers = true;
+					CurrentAgentState = AgentState::HEALINGAGENTS;
+					Path.Empty();
+					Path = Manager->GeneratePath(CurrentNode, Manager->FindNearestNode(DetectedActor->GetActorLocation()));
+					UE_LOG(LogTemp, Warning, TEXT("Enemy Needs help"))
+				}
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Player Lost"))
+			bCanSeePlayer = false;
+			if (!bHealingOthers)
+			{
+				bCanSeeEnemy = false;
+			}
+			//bHealing = false;
+		}
 	}
 }
 

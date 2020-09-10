@@ -6,7 +6,6 @@
 #include "NavigationNode.h"
 #include "GameFramework/Character.h"
 #include "AIManager.h"
-#include "EnemyAIController.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "HealthComponent.h"
 #include "EnemyCharacter.generated.h"
@@ -48,9 +47,6 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UAIPerceptionComponent* PerceptionComponent;
 
-	UPROPERTY(VisibleAnywhere)
-	AEnemyAIController* EnemyAIController;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	AgentState CurrentAgentState;
 	UPROPERTY(VisibleAnywhere)
@@ -74,10 +70,6 @@ public:
 	void SensePlayer(AActor* ActorSensed, FAIStimulus Stimulus);
 	UFUNCTION(BlueprintImplementableEvent)
 	void Fire(FVector FireDirection);
-	UFUNCTION(BlueprintImplementableEvent)
-    void Died();
-	UFUNCTION(BlueprintImplementableEvent)
-    void Revive();
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
