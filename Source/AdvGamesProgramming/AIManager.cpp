@@ -112,6 +112,14 @@ void AAIManager::CreateAgents()
 	}
 }
 
+void AAIManager::PopulateCovers()
+{
+	for (TActorIterator<ACover> It(GetWorld()); It; ++It)
+	{
+		AllCovers.Add(*It);
+	}
+}
+
 ANavigationNode* AAIManager::FindNearestNode(const FVector& Location)
 {
 	ANavigationNode* NearestNode = nullptr;
@@ -147,5 +155,36 @@ ANavigationNode* AAIManager::FindFurthestNode(const FVector& Location)
 
 	UE_LOG(LogTemp, Error, TEXT("Furthest Node: %s"), *FurthestNode->GetName())
 	return FurthestNode;
+}
+
+
+ACoverNode* AAIManager::FindFurthestCoverNode(const FVector & Location)
+{
+	ACover* FurthestCover = nullptr;
+	ACoverNode* FurthestCoverNode = nullptr;
+	float FurthestDistance = 0.0f;
+
+	for (ACover* CurrentCover : AllCovers)
+	{
+		float CurrentCoverDistance = FVector::Distance(Location, CurrentCover->GetActorLocation());
+		if (CurrentCoverDistance > FurthestDistance)
+		{
+			FurthestDistance = CurrentCoverDistance;
+			FurthestCover = CurrentCover;
+		}
+	}
+
+	for (ACoverNode* CurrentNode : FurthestCover->AttachedNodes)
+	{
+		float CurrentNodeDistance = FVector::Distance(Location, CurrentNode->GetActorLocation());
+		if (CurrentNodeDistance > FurthestDistance)
+		{
+			FurthestDistance = CurrentNodeDistance;
+			FurthestCoverNode = CurrentNode;
+		}
+	}
+	UE_LOG(LogTemp, Error, TEXT("Furthest Cover Node: %s"), *FurthestCoverNode->GetName())
+	return FurthestCoverNode;
+	
 }
 

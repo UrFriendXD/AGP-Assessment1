@@ -15,7 +15,8 @@ enum class AgentState : uint8
 {
 	PATROL,
 	ENGAGE,
-	EVADE
+	EVADE, 
+	COVER
 };
 
 UCLASS()
@@ -51,6 +52,8 @@ public:
 	AActor* DetectedActor;
 	UPROPERTY(VisibleAnywhere)
 	bool bCanSeeActor;
+	UPROPERTY(VisibleAnywhere)
+	bool bBehindCover;
 
 	UHealthComponent* HealthComponent;
 
@@ -60,6 +63,10 @@ public:
 	void AgentEngage();
 	UFUNCTION()
 	void AgentEvade();
+	UFUNCTION()
+	void AgentCover();
+
+
 	UFUNCTION()
 	void SensePlayer(AActor* ActorSensed, FAIStimulus Stimulus);
 	UFUNCTION(BlueprintImplementableEvent)

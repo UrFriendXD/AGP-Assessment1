@@ -24,6 +24,7 @@ void AEnemyCharacter::BeginPlay()
 	HealthComponent = FindComponentByClass<UHealthComponent>();
 	DetectedActor = nullptr;
 	bCanSeeActor = false;
+	bBehindCover = false;
 }
 
 // Called every frame
@@ -41,7 +42,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
 		}
 		else if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() < 0.4f)
 		{
-			CurrentAgentState = AgentState::EVADE;
+			CurrentAgentState = AgentState::COVER;
 			Path.Empty();
 		}
 	}
@@ -54,10 +55,24 @@ void AEnemyCharacter::Tick(float DeltaTime)
 		}
 		else if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() < 0.4f)
 		{
-			CurrentAgentState = AgentState::EVADE;
+			CurrentAgentState = AgentState::COVER;
 			Path.Empty();
 		}
 	}
+	else if (CurrentAgentState == AgentState::COVER)
+	{
+		AgentCover();
+		if (HealthComponent->HealthPercentageRemaining() == 1.0f)
+		{
+			CurrentAgentState = AgentState::PATROL;
+		}
+		else if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() >= 0.4f)
+		{
+			CurrentAgentState = AgentState::ENGAGE;
+			Path.Empty();
+		}
+	}
+	/*
 	else if (CurrentAgentState == AgentState::EVADE)
 	{
 		AgentEvade();
@@ -71,6 +86,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
 			Path.Empty();
 		}
 	}
+	*/
 	MoveAlongPath();
 }
 
@@ -114,6 +130,23 @@ void AEnemyCharacter::AgentEvade()
 		{
 			Path = Manager->GeneratePath(CurrentNode, Manager->FindFurthestNode(DetectedActor->GetActorLocation()));
 		}
+	}
+}
+
+void AEnemyCharacter::AgentCover()
+{
+	if (!bBehindCover)
+	{
+		Path = Manager->GeneratePath(CurrentNode, Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
+	}
+	else
+	{
+		//Heal();
+	}
+
+	if (Path.Num() == 0)
+	{
+		bBehindCover = true;
 	}
 }
 
