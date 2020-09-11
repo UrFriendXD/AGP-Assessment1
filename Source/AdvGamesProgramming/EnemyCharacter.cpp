@@ -188,10 +188,10 @@ void AEnemyCharacter::AgentHealing()
 		FaceDirection = DirectionToTarget.Rotation();
 	}
 	float Distance = FVector::Distance(DetectedActor->GetActorLocation(), GetActorLocation());
-	UE_LOG(LogTemp, Display, TEXT("Distance is: %f"), Distance);
+	//UE_LOG(LogTemp, Display, TEXT("Distance is: %f"), Distance);
 	if (Distance < 250.0f)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Helping Friend"))
+		//UE_LOG(LogTemp, Warning, TEXT("Helping Friend"))
 		Path.Empty();
 		if (!Cast<AEnemyCharacter>(DetectedActor)->bEnemyHealing)
 		{
@@ -244,7 +244,7 @@ void AEnemyCharacter::SensePlayer(AActor* SensedActor, FAIStimulus Stimulus)
 					if (SensedActor->ActorHasTag(TEXT("Player")) && !bHealingOthers)
 					{
 						bCanHearPlayer = true;
-						UE_LOG(LogTemp, Warning, TEXT("Player Heard"))
+						//UE_LOG(LogTemp, Warning, TEXT("Player Heard"))
 					}
 					
 					break;
