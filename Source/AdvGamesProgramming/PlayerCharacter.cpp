@@ -81,4 +81,3 @@ void APlayerCharacter::SprintEnd()
 {
 	GetCharacterMovement()->MaxWalkSpeed /= SprintMultiplier;
 }
-
