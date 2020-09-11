@@ -191,10 +191,10 @@ void AEnemyCharacter::AgentCover()
         Path = Manager->GeneratePath(CurrentNode, Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
         //UE_LOG(LogTemp, Error, TEXT("Generated new path to FurthestCoverNode"));
     }
-	// Will heal if it's behind cover and cannot see the Player
+	// Only heals if it's behind cover and cannot see the Player
     else if (bBehindCover && !bCanSeePlayer)
     {
-        //UE_LOG(LogTemp, Error, TEXT("Behind cover and can't see player; healing."));
+        // Make sure it doesn't heal too fast (not every tick)
 		if (HealTimer <= 0)
 		{
 			Heal();
@@ -349,6 +349,7 @@ void AEnemyCharacter::MoveAlongPath()
 // Heals enemy agent
 void AEnemyCharacter::Heal()
 {
+	// Gets AI to look at player if they can hear the player - and when they do, run to another cover
 	if (bCanHearPlayer)
 	{
 		const FVector DirectionToTarget = DetectedActor->GetActorLocation() - GetActorLocation();
@@ -357,7 +358,8 @@ void AEnemyCharacter::Heal()
 		FaceDirection.Pitch = 0.0f;
 		SetActorRotation(FaceDirection);
 	}
-	if (HealthComponent->HealthPercentageRemaining() < 1)
+	// Else if AI cannot sense the player through sight or sound, start healing
+	else if (HealthComponent->HealthPercentageRemaining() < 1)
 	{
 		HealthComponent->CurrentHealth += 3.0f;
 		FMath::Clamp(HealthComponent->CurrentHealth, 0.0f, 100.0f);

@@ -57,6 +57,8 @@ public:
 	@return FurthestNode - The furthest node from the given location.
 	*/
 	ANavigationNode* FindFurthestNode(const FVector& Location);
+
+	// Finds the furthest cover node from the given location
 	ACoverNode* FindFurthestCoverNode(const FVector& Location);
 
 	void PopulateNodes();
