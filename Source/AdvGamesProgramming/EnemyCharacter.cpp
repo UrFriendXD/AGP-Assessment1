@@ -24,6 +24,7 @@ void AEnemyCharacter::BeginPlay()
 	HealthComponent = FindComponentByClass<UHealthComponent>();
 	DetectedActor = nullptr;
 	bCanSeeActor = false;
+	bBehindCover = false;
 }
 
 // Called every frame
@@ -41,7 +42,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
 		}
 		else if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() < 0.4f)
 		{
-			CurrentAgentState = AgentState::EVADE;
+			CurrentAgentState = AgentState::COVER;
 			Path.Empty();
 		}
 	}
@@ -54,10 +55,26 @@ void AEnemyCharacter::Tick(float DeltaTime)
 		}
 		else if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() < 0.4f)
 		{
-			CurrentAgentState = AgentState::EVADE;
+			CurrentAgentState = AgentState::COVER;
 			Path.Empty();
 		}
 	}
+	else if (CurrentAgentState == AgentState::COVER)
+	{
+		AgentCover();
+		if (HealthComponent->HealthPercentageRemaining() == 1.0f)
+		{
+			CurrentAgentState = AgentState::PATROL;
+			bBehindCover = false;
+		}
+		else if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() >= 0.4f)
+		{
+			CurrentAgentState = AgentState::ENGAGE;
+			bBehindCover = false;
+			Path.Empty();
+		}
+	}
+	/*
 	else if (CurrentAgentState == AgentState::EVADE)
 	{
 		AgentEvade();
@@ -71,6 +88,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
 			Path.Empty();
 		}
 	}
+	*/
 	MoveAlongPath();
 }
 
@@ -114,6 +132,30 @@ void AEnemyCharacter::AgentEvade()
 		{
 			Path = Manager->GeneratePath(CurrentNode, Manager->FindFurthestNode(DetectedActor->GetActorLocation()));
 		}
+	}
+}
+
+void AEnemyCharacter::AgentCover()
+{
+	UE_LOG(LogTemp, Error, TEXT("Entered AgentCover state"));
+	if (bCanSeeActor && Path.Num() == 0)
+	{
+		Path = Manager->GeneratePath(CurrentNode, Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
+		UE_LOG(LogTemp, Error, TEXT("Generated new path to FurthestCoverNode"));
+	}
+	else if (bBehindCover && !bCanSeeActor)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Behind cover and can't see player; healing."));
+		//Heal();
+	}
+
+	if (Path.Num() == 0)
+	{
+		bBehindCover = true;
+	}
+	else
+	{
+		bBehindCover = false;
 	}
 }
 

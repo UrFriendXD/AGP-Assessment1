@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "CoverNode.h"
+#include "Cover.h"
 #include "NavigationNode.h"
 #include "AIManager.generated.h"
 
@@ -30,6 +32,12 @@ public:
 	int32 NumAI;
 	UPROPERTY(VisibleAnywhere, Category = "Navigation Nodes")
 	TArray<ANavigationNode*> AllNodes;
+
+	UPROPERTY(VisibleAnywhere, Category = "Covers")
+	TArray<ACover*> AllCovers;
+	UPROPERTY(VisibleAnywhere, Category = "Cover Nodes")
+	TArray<ACoverNode*> AllCoverNodes;
+
 	UPROPERTY(VisibleAnywhere, Category = "Agents")
 	TArray<AEnemyCharacter*> AllAgents;
 	UPROPERTY(EditAnywhere, Category = "Agents")
@@ -49,8 +57,9 @@ public:
 	@return FurthestNode - The furthest node from the given location.
 	*/
 	ANavigationNode* FindFurthestNode(const FVector& Location);
+	ACoverNode* FindFurthestCoverNode(const FVector& Location);
 
 	void PopulateNodes();
 	void CreateAgents();
-
+	void PopulateCovers();
 };
