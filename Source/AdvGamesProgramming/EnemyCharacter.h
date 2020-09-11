@@ -17,7 +17,8 @@ enum class AgentState : uint8
 	ENGAGE,
 	EVADE,
 	HEALINGAGENTS,
-	DEAD
+	DEAD,
+	COVER
 };
 
 UCLASS()
@@ -57,6 +58,8 @@ public:
     bool bCanHearPlayer;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool bCanSeeEnemy;
+	UPROPERTY(VisibleAnywhere)
+	bool bBehindCover;
 
 	UHealthComponent* HealthComponent;
 
@@ -68,6 +71,8 @@ public:
 	void AgentEvade();
 	UFUNCTION(BlueprintCallable)
 	void AgentHealing();
+	UFUNCTION(BlueprintCallable)
+	void AgentCover();
 	UFUNCTION(BlueprintCallable)
 	void SensePlayer(AActor* ActorSensed, FAIStimulus Stimulus);
 	UFUNCTION(BlueprintImplementableEvent)
