@@ -81,7 +81,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
         }
         break;
 
-    // Cover state
+    // Cover state when HP is < 40%
     case AgentState::COVER:
         AgentCover();
 
@@ -182,20 +182,27 @@ void AEnemyCharacter::AgentEvade()
     }
 }
 
+// Replaces Evade function
 void AEnemyCharacter::AgentCover()
 {
-    UE_LOG(LogTemp, Error, TEXT("Entered AgentCover state"));
+    // Generates a path to the furthest cover node from the Player
     if (bCanSeePlayer && Path.Num() == 0)
     {
         Path = Manager->GeneratePath(CurrentNode, Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
-        UE_LOG(LogTemp, Error, TEXT("Generated new path to FurthestCoverNode"));
+        //UE_LOG(LogTemp, Error, TEXT("Generated new path to FurthestCoverNode"));
     }
+	// Only heals if it's behind cover and cannot see the Player
     else if (bBehindCover && !bCanSeePlayer)
     {
-        UE_LOG(LogTemp, Error, TEXT("Behind cover and can't see player; healing."));
-        Heal();
+        // Make sure it doesn't heal too fast (not every tick)
+		if (HealTimer <= 0)
+		{
+			Heal();
+		}
+        
     }
 
+	// Ensuring that it's only marked as behind cover when it's not navigating
     if (Path.Num() == 0)
     {
         bBehindCover = true;
@@ -274,8 +281,7 @@ void AEnemyCharacter::SensePlayer(AActor* SensedActor, FAIStimulus Stimulus)
                         bHealingOthers = true;
                         CurrentAgentState = AgentState::HEALINGAGENTS;
                         Path.Empty();
-                        Path = Manager->GeneratePath(CurrentNode,
-                                                     Manager->FindNearestNode(DetectedActor->GetActorLocation()));
+                        Path = Manager->GeneratePath(CurrentNode, Manager->FindNearestNode(DetectedActor->GetActorLocation()));
                         UE_LOG(LogTemp, Warning, TEXT("Enemy Needs help"))
                     }
                 }
@@ -286,7 +292,8 @@ void AEnemyCharacter::SensePlayer(AActor* SensedActor, FAIStimulus Stimulus)
                 // If not healing and hearing target is a player
                 if (SensedActor->ActorHasTag(TEXT("Player")) && !bHealingOthers)
                 {
-                    bCanHearPlayer = true;
+					DetectedActor = SensedActor;
+					bCanHearPlayer = true;
                     //UE_LOG(LogTemp, Warning, TEXT("Player Heard"))
                 }
                 break;
@@ -342,12 +349,17 @@ void AEnemyCharacter::MoveAlongPath()
 // Heals enemy agent
 void AEnemyCharacter::Heal()
 {
+	// Gets AI to look at player if they can hear the player - and when they do, run to another cover
 	if (bCanHearPlayer)
 	{
 		const FVector DirectionToTarget = DetectedActor->GetActorLocation() - GetActorLocation();
 		FaceDirection = DirectionToTarget.Rotation();
+		FaceDirection.Roll = 0.0f;
+		FaceDirection.Pitch = 0.0f;
+		SetActorRotation(FaceDirection);
 	}
-	if (HealthComponent->HealthPercentageRemaining() < 1)
+	// Else if AI cannot sense the player through sight or sound, start healing
+	else if (HealthComponent->HealthPercentageRemaining() < 1)
 	{
 		HealthComponent->CurrentHealth += 3.0f;
 		FMath::Clamp(HealthComponent->CurrentHealth, 0.0f, 100.0f);
