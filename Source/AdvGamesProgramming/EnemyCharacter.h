@@ -17,7 +17,7 @@ enum class AgentState : uint8
 	ENGAGE,
 	EVADE,
 	HEALINGAGENTS,
-	DEAD
+	DEAD,
 	COVER
 };
 
@@ -69,7 +69,7 @@ public:
 	void AgentEvade();
 	UFUNCTION(BlueprintCallable)
 	void AgentHealing();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void AgentCover();
 	UFUNCTION(BlueprintCallable)
 	void SensePlayer(AActor* ActorSensed, FAIStimulus Stimulus);

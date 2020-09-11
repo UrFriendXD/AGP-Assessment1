@@ -36,68 +36,56 @@ void AEnemyCharacter::Tick(float DeltaTime)
 
 	switch (CurrentAgentState)
 	{
-	case AgentState::PATROL:
-		AgentPatrol();
-		if (bHealingOthers)
-		{
-			CurrentAgentState = AgentState::HEALINGAGENTS;
-			//Path.Empty();
-		}
-		if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() >= 0.4f)
-		{
-			CurrentAgentState = AgentState::ENGAGE;
-			Path.Empty();
-		}
-		if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() <= 0.4f)
-		{
-			CurrentAgentState = AgentState::COVER;
-			Path.Empty();
-		}
-		break;
-	case AgentState::ENGAGE:
-		AgentEngage();
-		if (!bCanSeePlayer)
-		{
-			CurrentAgentState = AgentState::PATROL;
-			FaceDirection = FRotator::ZeroRotator;
-		}
-		if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() <= 0.4f)
-		{
-			CurrentAgentState = AgentState::COVER;
-			Path.Empty();
-		}
-		break;
-	case AgentState::EVADE:
-	{
-		AgentCover();
-		if (HealthComponent->HealthPercentageRemaining() == 1.0f)
-		{
-			bBehindCover = false;
-			CurrentAgentState = AgentState::PATROL;
-		}
-		}
-	}
-			Path.Empty();
-			bBehindCover = false;
-			CurrentAgentState = AgentState::ENGAGE;
-		else if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() >= 0.4f)
-		{
-		AgentEvade();
-		if (bHealingOthers)
-		{
-			CurrentAgentState = AgentState::HEALINGAGENTS;
-			//Path.Empty();
-		}
-		if (!bCanSeePlayer)
-		{
-			CurrentAgentState = AgentState::PATROL;
-		}
-		if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() >= 0.4f)
-		{
-			CurrentAgentState = AgentState::ENGAGE;
-			Path.Empty();
-		}
-		break;
+		case AgentState::PATROL:
+			AgentPatrol();
+			if (bHealingOthers)
+			{
+				CurrentAgentState = AgentState::HEALINGAGENTS;
+				//Path.Empty();
+			}
+			if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() >= 0.4f)
+			{
+				CurrentAgentState = AgentState::ENGAGE;
+				Path.Empty();
+			}
+			if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() <= 0.4f)
+			{
+				CurrentAgentState = AgentState::COVER;
+				Path.Empty();
+			}
+			break;
+		case AgentState::ENGAGE:
+			AgentEngage();
+			if (!bCanSeePlayer)
+			{
+				CurrentAgentState = AgentState::PATROL;
+				FaceDirection = FRotator::ZeroRotator;
+			}
+			if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() <= 0.4f)
+			{
+				CurrentAgentState = AgentState::COVER;
+				Path.Empty();
+			}
+			break;
+		case AgentState::COVER:
+			AgentCover();
+			if (bHealingOthers)
+			{
+				CurrentAgentState = AgentState::HEALINGAGENTS;
+				//Path.Empty();
+			}
+			if (!bCanSeePlayer && HealthComponent->HealthPercentageRemaining() == 1.0f)
+			{
+				CurrentAgentState = AgentState::PATROL;
+				bBehindCover = false;
+			}
+			else if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() >= 0.4f)
+			{
+				CurrentAgentState = AgentState::ENGAGE;
+				Path.Empty();
+				bBehindCover = false;
+			}
+			break;
 		case AgentState::DEAD:
 			if (HealthComponent->HealthPercentageRemaining() >= 1.0f)
 			{
@@ -106,8 +94,8 @@ void AEnemyCharacter::Tick(float DeltaTime)
 			break;
 		case AgentState::HEALINGAGENTS:
 			AgentHealing();
-		break;
-	default: ;
+			break;
+		default: ;
 	}
 
 	if (bEnemyHealing)
@@ -171,15 +159,15 @@ void AEnemyCharacter::AgentEvade()
 void AEnemyCharacter::AgentCover()
 {
 	UE_LOG(LogTemp, Error, TEXT("Entered AgentCover state"));
-	if (bCanSeeActor && Path.Num() == 0)
+	if (bCanSeePlayer && Path.Num() == 0)
 	{
 		Path = Manager->GeneratePath(CurrentNode, Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
 		UE_LOG(LogTemp, Error, TEXT("Generated new path to FurthestCoverNode"));
 	}
-	else if (bBehindCover && !bCanSeeActor)
+	else if (bBehindCover && !bCanSeePlayer)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Behind cover and can't see player; healing."));
-		//Heal();
+		Heal();
 	}
 
 	if (Path.Num() == 0)
@@ -192,7 +180,6 @@ void AEnemyCharacter::AgentCover()
 	}
 }
 
-void AEnemyCharacter::SensePlayer(AActor* SensedActor, FAIStimulus Stimulus)
 void AEnemyCharacter::AgentHealing()
 {
 	if (bCanSeeEnemy)
@@ -216,7 +203,8 @@ void AEnemyCharacter::AgentHealing()
 			Cast<AEnemyCharacter>(DetectedActor)->bEnemyHealing = false;
 			CurrentAgentState = AgentState::PATROL;
 		}
-	} else if (Path.Num() == 0)
+	} 
+	else if (Path.Num() == 0)
 	{
 		Path = Manager->GeneratePath(CurrentNode, Manager->FindNearestNode(DetectedActor->GetActorLocation()));
 	}
