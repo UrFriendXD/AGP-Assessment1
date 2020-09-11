@@ -93,7 +93,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
         }
 
         // Change to patrol state if healthy
-        if (!bCanSeePlayer && HealthComponent->HealthPercentageRemaining() == 1.0f)
+        if (!bCanSeePlayer && HealthComponent->HealthPercentageRemaining() >= 0.9f)
         {
             CurrentAgentState = AgentState::PATROL;
             bBehindCover = false;
