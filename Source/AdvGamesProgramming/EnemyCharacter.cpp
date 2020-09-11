@@ -74,7 +74,8 @@ void AEnemyCharacter::Tick(float DeltaTime)
 				CurrentAgentState = AgentState::HEALINGAGENTS;
 				//Path.Empty();
 			}
-			if (!bCanSeePlayer && HealthComponent->HealthPercentageRemaining() == 1.0f)
+
+			if (!bCanSeePlayer && HealthComponent->HealthPercentageRemaining() >= 0.9f)
 			{
 				CurrentAgentState = AgentState::PATROL;
 				bBehindCover = false;
@@ -296,6 +297,11 @@ void AEnemyCharacter::MoveAlongPath()
 
 void AEnemyCharacter::Heal()
 {
+	if (bCanHearPlayer)
+	{
+		const FVector DirectionToTarget = DetectedActor->GetActorLocation() - GetActorLocation();
+		FaceDirection = DirectionToTarget.Rotation();
+	}
 	if (HealthComponent->HealthPercentageRemaining() < 1)
 	{
 		HealthComponent->CurrentHealth += 3.0f;
