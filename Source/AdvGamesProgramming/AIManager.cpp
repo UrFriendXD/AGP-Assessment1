@@ -167,6 +167,7 @@ ACoverNode* AAIManager::FindFurthestCoverNode(const FVector & Location)
 	ACoverNode* FurthestCoverNode = nullptr;
 	float FurthestDistance = 0.0f;
 
+	// Finds the furthest Cover from the Player
 	for (ACover* CurrentCover : AllCovers)
 	{
 		float CurrentCoverDistance = FVector::Distance(Location, CurrentCover->GetActorLocation());
@@ -178,6 +179,7 @@ ACoverNode* AAIManager::FindFurthestCoverNode(const FVector & Location)
 		}
 	}
 
+	// Then finds the furthest Cover Node attached to that Cover
 	for (ACoverNode* CurrentNode : FurthestCover->AttachedNodes)
 	{
 		
@@ -189,6 +191,5 @@ ACoverNode* AAIManager::FindFurthestCoverNode(const FVector & Location)
 		}
 	}
 	return FurthestCoverNode;
-	
 }
 
