@@ -54,6 +54,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool bCanSeePlayer;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    bool bCanHearPlayer;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool bCanSeeEnemy;
 
 	UHealthComponent* HealthComponent;

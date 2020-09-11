@@ -190,31 +190,47 @@ void AEnemyCharacter::SensePlayer(AActor* SensedActor, FAIStimulus Stimulus)
 	{
 		if (Stimulus.WasSuccessfullySensed())
 		{
-			if(SensedActor->ActorHasTag(TEXT("Player")) && !bHealingOthers)
+			switch (Stimulus.Type)
 			{
-				DetectedActor = SensedActor;
-				bCanSeePlayer = true;
-				UE_LOG(LogTemp, Warning, TEXT("Player Detected"))
-			}
-			if (SensedActor->ActorHasTag(TEXT("Enemy")))
-			{
-				DetectedActor = SensedActor;
-				bCanSeeEnemy = true;
-				UE_LOG(LogTemp, Warning, TEXT("Enemy Detected"))
-				if (Cast<AEnemyCharacter>(SensedActor)->HealthComponent->HealthPercentageRemaining() == 0 && !bHealingOthers)
+				case 0:
+				if (SensedActor->ActorHasTag(TEXT("Player")) && !bHealingOthers)
 				{
-					bHealingOthers = true;
-					CurrentAgentState = AgentState::HEALINGAGENTS;
-					Path.Empty();
-					Path = Manager->GeneratePath(CurrentNode, Manager->FindNearestNode(DetectedActor->GetActorLocation()));
-					UE_LOG(LogTemp, Warning, TEXT("Enemy Needs help"))
+					DetectedActor = SensedActor;
+					bCanSeePlayer = true;
+					UE_LOG(LogTemp, Warning, TEXT("Player Detected"))
 				}
+				if (SensedActor->ActorHasTag(TEXT("Enemy")))
+				{
+					DetectedActor = SensedActor;
+					bCanSeeEnemy = true;
+					UE_LOG(LogTemp, Warning, TEXT("Enemy Detected"))
+					if (Cast<AEnemyCharacter>(SensedActor)->HealthComponent->HealthPercentageRemaining() == 0 && !bHealingOthers)
+					{
+						bHealingOthers = true;
+						CurrentAgentState = AgentState::HEALINGAGENTS;
+						Path.Empty();
+						Path = Manager->GeneratePath(CurrentNode, Manager->FindNearestNode(DetectedActor->GetActorLocation()));
+						UE_LOG(LogTemp, Warning, TEXT("Enemy Needs help"))
+					}
+				}
+					break;
+				case 1:
+					if (SensedActor->ActorHasTag(TEXT("Player")) && !bHealingOthers)
+					{
+						bCanHearPlayer = true;
+						UE_LOG(LogTemp, Warning, TEXT("Player Heard"))
+					}
+					
+					break;
+				default:
+					UE_LOG(LogTemp, Warning, TEXT("Unknown Stimulus detected"));
 			}
 		}
 		else
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Player Lost"))
 			bCanSeePlayer = false;
+			bCanHearPlayer = false;
 			if (!bHealingOthers)
 			{
 				bCanSeeEnemy = false;
