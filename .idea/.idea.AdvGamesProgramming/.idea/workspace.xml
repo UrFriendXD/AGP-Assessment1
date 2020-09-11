@@ -7,9 +7,7 @@
   <component name="ChangeListManager">
     <list default="true" id="40af60b9-44eb-4908-9192-70f2029bbdf5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Levels/TestingMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Levels/TestingMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/HealthComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/HealthComponent.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +21,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/HealthComponent.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" />
       </list>
     </option>
@@ -261,6 +260,7 @@
       <updated>1599811822153</updated>
       <workItem from="1599811833835" duration="1057000" />
       <workItem from="1599813063452" duration="1373000" />
+      <workItem from="1599825634005" duration="1727000" />
     </task>
     <servers />
   </component>

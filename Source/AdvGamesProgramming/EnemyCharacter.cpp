@@ -222,11 +222,12 @@ void AEnemyCharacter::AgentHealing()
         FaceDirection = DirectionToTarget.Rotation();
     }
     float Distance = FVector::Distance(DetectedActor->GetActorLocation(), GetActorLocation());
-
+    //UE_LOG(LogTemp, Warning, TEXT("Distance %f"), Distance);
+    
     // If distance of enemy and dead enemy < X, heal the enemy
-    if (Distance < 250.0f)
+    if (Distance < 300.0f)
     {
-        //UE_LOG(LogTemp, Warning, TEXT("Helping Friend"))
+        //UE_LOG(LogTemp, Warning, TEXT("Helping Friend"));
         Path.Empty();
         if (!Cast<AEnemyCharacter>(DetectedActor)->bEnemyHealing)
         {
@@ -350,7 +351,7 @@ void AEnemyCharacter::MoveAlongPath()
 void AEnemyCharacter::Heal()
 {
 	// Gets AI to look at player if they can hear the player - and when they do, run to another cover
-	if (bCanHearPlayer)
+	if (bCanHearPlayer && CurrentAgentState != AgentState::DEAD)
 	{
 		const FVector DirectionToTarget = DetectedActor->GetActorLocation() - GetActorLocation();
 		FaceDirection = DirectionToTarget.Rotation();

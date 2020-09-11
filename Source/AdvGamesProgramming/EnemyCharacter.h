@@ -107,8 +107,5 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	float HealTimer;
 	
-	// UPROPERTY(VisibleAnywhere)
- //    float HealingOthersTimer;
-
 	FRotator FaceDirection;
 };
