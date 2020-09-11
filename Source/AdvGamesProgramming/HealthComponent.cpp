@@ -51,7 +51,10 @@ void UHealthComponent::OnTakeDamage(float Damage)
 
 void UHealthComponent::OnDeath()
 {
+	// Get enemy char script on agent 
 	AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetOwner());
+
+	// If agent isn't already dead, set it to dead and clear current path
 	if (EnemyCharacter->CurrentAgentState != AgentState::DEAD)
 	{
 		EnemyCharacter->CurrentAgentState = AgentState::DEAD;
