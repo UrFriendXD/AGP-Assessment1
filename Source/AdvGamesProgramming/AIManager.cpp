@@ -137,7 +137,7 @@ ANavigationNode* AAIManager::FindNearestNode(const FVector& Location)
 			NearestNode = CurrentNode;
 		}
 	}
-	UE_LOG(LogTemp, Error, TEXT("Nearest Node: %s"), *NearestNode->GetName())
+	//UE_LOG(LogTemp, Error, TEXT("Nearest Node: %s"), *NearestNode->GetName())
 	return NearestNode;
 }
 
@@ -156,7 +156,7 @@ ANavigationNode* AAIManager::FindFurthestNode(const FVector& Location)
 		}
 	}
 
-	UE_LOG(LogTemp, Error, TEXT("Furthest Node: %s"), *FurthestNode->GetName())
+	//UE_LOG(LogTemp, Error, TEXT("Furthest Node: %s"), *FurthestNode->GetName())
 	return FurthestNode;
 }
 
