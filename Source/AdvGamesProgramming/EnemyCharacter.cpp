@@ -65,10 +65,12 @@ void AEnemyCharacter::Tick(float DeltaTime)
 		if (HealthComponent->HealthPercentageRemaining() == 1.0f)
 		{
 			CurrentAgentState = AgentState::PATROL;
+			bBehindCover = false;
 		}
 		else if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() >= 0.4f)
 		{
 			CurrentAgentState = AgentState::ENGAGE;
+			bBehindCover = false;
 			Path.Empty();
 		}
 	}
@@ -135,18 +137,25 @@ void AEnemyCharacter::AgentEvade()
 
 void AEnemyCharacter::AgentCover()
 {
-	if (!bBehindCover)
+	UE_LOG(LogTemp, Error, TEXT("Entered AgentCover state"));
+	if (bCanSeeActor && Path.Num() == 0)
 	{
 		Path = Manager->GeneratePath(CurrentNode, Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
+		UE_LOG(LogTemp, Error, TEXT("Generated new path to FurthestCoverNode"));
 	}
-	else
+	else if (bBehindCover && !bCanSeeActor)
 	{
+		UE_LOG(LogTemp, Error, TEXT("Behind cover and can't see player; healing."));
 		//Heal();
 	}
 
 	if (Path.Num() == 0)
 	{
 		bBehindCover = true;
+	}
+	else
+	{
+		bBehindCover = false;
 	}
 }
 
