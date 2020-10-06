@@ -40854,10 +40854,14 @@
           <e p="HealthComponent.h" t="Include" />
           <e p="NavigationNode.cpp" t="Include" />
           <e p="NavigationNode.h" t="Include" />
+          <e p="Pickup.cpp" t="Include" />
+          <e p="Pickup.h" t="Include" />
           <e p="PickupRotator.cpp" t="Include" />
           <e p="PickupRotator.h" t="Include" />
           <e p="PlayerCharacter.cpp" t="Include" />
           <e p="PlayerCharacter.h" t="Include" />
+          <e p="WeaponPickup.cpp" t="Include" />
+          <e p="WeaponPickup.h" t="Include" />
         </e>
         <e p="AdvGamesProgramming.Target.cs" t="Include" />
         <e p="AdvGamesProgrammingEditor.Target.cs" t="Include" />
