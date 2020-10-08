@@ -36,14 +36,18 @@ void AProceduralGeneration::Tick(float DeltaTime)
     {
         ChooseStartingPoint();
     }
-    if (TimeBetweenRoom <= 0)
+    
+    if (!bIsOutOfBounds)
     {
-        Move();
-        TimeBetweenRoom = StartTimeBetweenRoom;
-    }
-    else
-    {
-        TimeBetweenRoom -= DeltaTime;
+        if (TimeBetweenRoom <= 0)
+        {
+            Move();
+            TimeBetweenRoom = StartTimeBetweenRoom;
+        }
+        else
+        {
+            TimeBetweenRoom -= DeltaTime;
+        }
     }
 }
 
@@ -57,21 +61,84 @@ void AProceduralGeneration::ChooseStartingPoint()
 
 void AProceduralGeneration::Move()
 {
+    // Goes To the right
     if (Direction == 1 || Direction == 2)
     {
-        FVector NewPos = FVector(GetActorLocation().X + MoveAmount, GetActorLocation().Y, ZPos);
-        SetActorLocation(NewPos);
+        if (GetActorLocation().Y > MinY)
+        {
+            FVector NewPos = FVector(GetActorLocation().X, GetActorLocation().Y - MoveAmount, ZPos);
+            SetActorLocation(NewPos);
+
+            // Spawns a random room
+            int Rand = FMath::RandRange(0, Rooms.Num()-1);
+            AActor* Agent = GetWorld()->SpawnActor<AActor>(Rooms[Rand], GetActorLocation(), FRotator::ZeroRotator);
+
+            // Makes sure it can only move right or down
+            Direction = FMath::RandRange(1,5);
+            if (Direction == 3)
+            {
+                Direction = 2;
+            }
+            else if (Direction == 4)
+            {
+                Direction = 5;
+            }
+        }
+        else
+        {
+            Direction = 5;
+        }
     }
+
+    // Goes to the left
     else if (Direction == 3 || Direction == 4)
     {
-        FVector NewPos = FVector(GetActorLocation().X - MoveAmount, GetActorLocation().Y, ZPos);
-        SetActorLocation(NewPos);
+        if (GetActorLocation().Y < MaxY)
+        {
+            FVector NewPos = FVector(GetActorLocation().X,GetActorLocation().Y + MoveAmount,  ZPos);
+            SetActorLocation(NewPos);
+
+            // Spawns a random room
+            int Rand = FMath::RandRange(0, Rooms.Num()-1);
+            AActor* Agent = GetWorld()->SpawnActor<AActor>(Rooms[Rand], GetActorLocation(), FRotator::ZeroRotator);
+            
+            // Makes sure it can only move left or down
+            Direction = FMath::RandRange(3,5);
+
+            if (Direction == 1)
+            {
+                Direction = 3;
+            }
+            else if (Direction == 2)
+            {
+                Direction = 5;
+            }
+        }
+        else
+        {
+            Direction = 5;
+        }
     }
+
+    // Goes down
     else if (Direction == 5)
     {
-        FVector NewPos = FVector(GetActorLocation().X, GetActorLocation().Y - MoveAmount, ZPos);
-        SetActorLocation(NewPos);
+        if (GetActorLocation().X < MaxX)
+        {
+            FVector NewPos = FVector(GetActorLocation().X + MoveAmount, GetActorLocation().Y , ZPos);
+            SetActorLocation(NewPos);
+
+            // Spawns a random that has a top opening
+            int Rand = FMath::RandRange(2, 3);
+            AActor* Agent = GetWorld()->SpawnActor<AActor>(Rooms[Rand], GetActorLocation(), FRotator::ZeroRotator);
+            
+            // Choose any new direction
+            Direction = FMath::RandRange(1, 5);
+        }
+        else
+        {
+            bIsOutOfBounds = true;
+        }
     }
     AActor* Agent = GetWorld()->SpawnActor<AActor>(Rooms[0], GetActorLocation(), FRotator::ZeroRotator);
-    Direction = Direction = FMath::RandRange(0, 5);
 }

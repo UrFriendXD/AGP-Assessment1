@@ -32,7 +32,7 @@ public:
     bool bChooseNewStartingPoint;
 
     UPROPERTY(EditAnywhere, Category = "Rooms")
-    TArray<TSubclassOf<AActor>> Rooms;
+    TArray<TSubclassOf<AActor>> Rooms; // index 0 --> LR, index 1 --> LRB, index 2 --> LRT, index 3 --> LRBT
 
     UPROPERTY(EditAnywhere)
     float MoveAmount;
@@ -42,6 +42,14 @@ public:
 
     UPROPERTY(EditAnywhere)
     float StartTimeBetweenRoom;
+
+    // Map size variables. Min Y is negative and going right, Max Y is positive and going left, Max X is going down with down positive
+    UPROPERTY(EditAnywhere)
+    float MinY;
+    UPROPERTY(EditAnywhere)
+    float MaxY;
+    UPROPERTY(EditAnywhere)
+    float MaxX;
     
 private:
     void ChooseStartingPoint();
@@ -51,4 +59,7 @@ private:
     void Move();
 
     float TimeBetweenRoom;
+
+    UPROPERTY(VisibleAnywhere)
+    bool bIsOutOfBounds;
 };
