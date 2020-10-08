@@ -50,6 +50,10 @@ public:
     float MaxY;
     UPROPERTY(EditAnywhere)
     float MaxX;
+
+    UPROPERTY(EditAnywhere)
+    TArray < TEnumAsByte < EObjectTypeQuery > > ActorsToCheck;
+    UClass* ActorClass;
     
 private:
     void ChooseStartingPoint();
