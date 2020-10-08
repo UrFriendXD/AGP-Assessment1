@@ -3,21 +3,29 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "Room.h"
+#include "NavigationNode.h"
+#include "CoverNode.h"
+#include "Engine/World.h"
+#include "EngineUtils.h"
+#include "ProceduralSpawner.generated.h"
 
-/**
- * 
- */
-class ADVGAMESPROGRAMMING_API ProceduralSpawner
+UCLASS()
+class ADVGAMESPROGRAMMING_API AProceduralSpawner : public AActor
 {
-public:
-	ProceduralSpawner();
-	~ProceduralSpawner();
-
+	GENERATED_BODY()
+	
+public:	
+	// Sets default values for this actor's properties
+	AProceduralSpawner();
 
 protected:
 	// Called when the game starts or when spawned
-	virtual void BeginPlay();
+	virtual void BeginPlay() override;
 
-
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
 };
