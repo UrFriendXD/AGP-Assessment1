@@ -40867,6 +40867,8 @@
           <e p="ProceduralGeneration.h" t="Include" />
           <e p="Room.cpp" t="Include" />
           <e p="Room.h" t="Include" />
+          <e p="RoomSpawner.cpp" t="Include" />
+          <e p="RoomSpawner.h" t="Include" />
           <e p="WeaponPickup.cpp" t="Include" />
           <e p="WeaponPickup.h" t="Include" />
         </e>

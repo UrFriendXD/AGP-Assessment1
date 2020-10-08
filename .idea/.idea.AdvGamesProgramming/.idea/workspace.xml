@@ -7,8 +7,9 @@
   <component name="ChangeListManager">
     <list default="true" id="96ff311f-40e9-4160-837e-352234de21b4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/ProceduralGenerationBP.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/ProceduralGenerationBP.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Levels/ProceduralMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Levels/ProceduralMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +24,8 @@
       <list>
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/Room.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/Room.h" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/RoomSpawner.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/RoomSpawner.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" />
       </list>
@@ -269,7 +272,9 @@
       <updated>1601986746161</updated>
       <workItem from="1601986755973" duration="3197000" />
       <workItem from="1602055186920" duration="5739000" />
-      <workItem from="1602140677463" duration="4008000" />
+      <workItem from="1602140677463" duration="12761000" />
+      <workItem from="1602158574536" duration="2866000" />
+      <workItem from="1602163124523" duration="776000" />
     </task>
     <servers />
   </component>
@@ -280,5 +285,15 @@
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1602152376419">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080/-1920.0.1920.1080@0.0.1920.1080" timestamp="1602152376419" />
+    <state x="682" y="453" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1602147697220">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="682" y="453" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.0.1920.1080/-1920.0.1920.1080@0.0.1920.1080" timestamp="1602147697220" />
   </component>
 </project>

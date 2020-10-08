@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "RoomSpawner.h"
 #include "GameFramework/Actor.h"
 #include "ProceduralGeneration.generated.h"
 
@@ -54,11 +56,18 @@ public:
     UPROPERTY(EditAnywhere)
     TArray < TEnumAsByte < EObjectTypeQuery > > ActorsToCheck;
     UClass* ActorClass;
+
+    UFUNCTION(BlueprintImplementableEvent)
+    void CheckRoom();
+
+    TArray<ARoomSpawner*> RoomSpawners;
     
 private:
     void ChooseStartingPoint();
 
+    UPROPERTY(VisibleAnywhere)
     int Direction;
+    int DownCounter;
 
     void Move();
 
@@ -66,4 +75,9 @@ private:
 
     UPROPERTY(VisibleAnywhere)
     bool bIsOutOfBounds;
+
+    UFUNCTION(BlueprintCallable)
+    void SpawnRoomWithBottom();
+
+    void SpawnEmptyRoom();
 };
