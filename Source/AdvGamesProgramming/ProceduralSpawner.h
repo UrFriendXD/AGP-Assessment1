@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Room.h"
 #include "NavigationNode.h"
+#include "Cover.h"
 #include "CoverNode.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
@@ -19,6 +20,8 @@ class ADVGAMESPROGRAMMING_API AProceduralSpawner : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AProceduralSpawner();
+	TArray<ANavigationNode*> AllNodesInRoom;
+	TSubclassOf<ACover> CoverBlueprint;
 
 protected:
 	// Called when the game starts or when spawned

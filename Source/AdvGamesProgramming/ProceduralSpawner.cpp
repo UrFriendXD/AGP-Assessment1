@@ -21,40 +21,49 @@ void AProceduralSpawner::BeginPlay()
 	for (TActorIterator<ARoom> It(GetWorld()); It; ++It)
 	{
 		// Randomise number of AI, covers, pickups to spawn
-		int NumAI = FMath::FRandRange(0, 2);
 		int NumCovers = FMath::FRandRange(2, 3);
+		int NumAI = FMath::FRandRange(0, 2);
 		int NumPickup = FMath::FRandRange(0, 1);
 		int NumTotalSpawns = NumAI + NumCovers + NumPickup;
 
-		
-		// Add all NavNodes to an array
-		for (TActorIterator<ANavigationNode> It(GetWorld()); It; ++It)
+		// Add all NavNodes to an array, access the NavNodes thru the Room BP
+		for (TActorIterator<ANavigationNode> NavNodeItr(GetWorld()); NavNodeItr; ++NavNodeItr)
 		{
-			
+			AllNodesInRoom.Add(*NavNodeItr);
 		}
 
-		// For each thing to spawn, pick a random node and if it's NOT a door node, spawn covers
+		// For each cover to spawn, pick a random node and if it's NOT a door node, spawn covers
 		for (int i = 0; i < NumTotalSpawns; i++)
 		{
-
-		}
-
-		
-		
-		// Do cover and cover node stuff
-		// Pick a random node to spawn AI and pickup
-
-
-		/*
-		for (TActorIterator<ANavigationNode> It(GetWorld()); It; ++It)
-		{
-			// If the node is NOT a Door Node, spawn cover
-			if (It->IsA(ACoverNode::StaticClass))
+			int RandomIndex = FMath::FRandRange(0, AllNodesInRoom.Num() - 1);
+			//while (AllNodesInRoom[RandomIndex]->IsA(ADoorNode::StaticClass) 
+			//	|| AllNodesInRoom[RandomIndex]->bSpawnedSomething == true)
+			//{
+			//	RandomIndex = FMath::FRandRange(0, AllNodesInRoom.Num() - 1);
+			//}
+			
+			if (NumCovers != 0)
 			{
+				if (GetWorld()->SpawnActor<ACover>(CoverBlueprint, AllNodesInRoom[RandomIndex]->GetActorLocation(), FRotator::ZeroRotator))
+				{
+					// Destroy NavNodes under Cover
+					AllNodesInRoom[RandomIndex]->Destroy();
+					// Connect cover nodes to NavNodes, access the CoverNodes thru the Cover BP
+					
 
+					AllNodesInRoom[RandomIndex]->bSpawnedSomething = true;
+					NumCovers--;
+				}
+			}
+			else if (NumAI != 0)
+			{
+				// Spawn AI
+			}
+			else if (NumPickup != 0)
+			{
+				// Spawn Pickup
 			}
 		}
-		*/
 	}
 	
 }

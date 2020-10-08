@@ -11,6 +11,7 @@ ANavigationNode::ANavigationNode()
 
 	LocationComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Location Component"));
 	RootComponent = LocationComponent;
+	bSpawnedSomething = false;
 }
 
 // Called when the game starts or when spawned

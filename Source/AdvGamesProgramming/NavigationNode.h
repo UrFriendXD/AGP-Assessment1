@@ -33,4 +33,6 @@ public:
 	float FScore();
 
 	ANavigationNode* CameFrom;
+
+	bool bSpawnedSomething;
 };
