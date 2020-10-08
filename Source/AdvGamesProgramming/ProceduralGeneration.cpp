@@ -4,6 +4,7 @@
 #include "ProceduralGeneration.h"
 
 #include "Engine/World.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
 AProceduralGeneration::AProceduralGeneration()
@@ -125,6 +126,10 @@ void AProceduralGeneration::Move()
     {
         if (GetActorLocation().X < MaxX)
         {
+            TArray<AActor*> RoomHit;
+            TArray<AActor*> ActorsToIgnore;
+            UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetActorLocation(), 200.0f, ActorsToCheck, ActorClass, ActorsToIgnore, RoomHit);
+            
             FVector NewPos = FVector(GetActorLocation().X + MoveAmount, GetActorLocation().Y , ZPos);
             SetActorLocation(NewPos);
 
