@@ -5,18 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="96ff311f-40e9-4160-837e-352234de21b4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultInput.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultInput.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/Audio/FirstPersonTemplateWeaponFire02.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Audio/FirstPersonTemplateWeaponFire02.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/Mannequin/AnimStarterPack/BS_Jog.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Mannequin/AnimStarterPack/BS_Jog.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/Mannequin/AnimStarterPack/Jog_Bwd_Rifle.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Mannequin/AnimStarterPack/Jog_Bwd_Rifle.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/Mannequin/AnimStarterPack/Jog_Fwd_Rifle.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Mannequin/AnimStarterPack/Jog_Fwd_Rifle.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/Mannequin/AnimStarterPack/UE4ASP_HeroTPP_AnimBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Mannequin/AnimStarterPack/UE4ASP_HeroTPP_AnimBlueprint.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/Mannequin/AnimStarterPack/UE4_Mannequin/Mesh/UE4_Mannequin_Skeleton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Mannequin/AnimStarterPack/UE4_Mannequin/Mesh/UE4_Mannequin_Skeleton.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/GunBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/GunBlueprint.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/PlayerCharacterBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/PlayerCharacterBlueprint.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Levels/TestingMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Levels/TestingMap.umap" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +16,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.h" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" />
+      </list>
+    </option>
   </component>
   <component name="ProjectId" id="1iVJI7EXJ8xEdZTB7hzDQvJmHpk" />
   <component name="ProjectViewState">
@@ -159,14 +158,15 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1601986746161</updated>
-      <workItem from="1601986755973" duration="2524000" />
+      <workItem from="1601986755973" duration="3197000" />
+      <workItem from="1602055186920" duration="5739000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="UnityProjectConfiguration" hasMinimizedUI="null" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />

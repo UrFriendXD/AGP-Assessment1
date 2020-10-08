@@ -40860,6 +40860,8 @@
           <e p="PickupRotator.h" t="Include" />
           <e p="PlayerCharacter.cpp" t="Include" />
           <e p="PlayerCharacter.h" t="Include" />
+          <e p="ProceduralGeneration.cpp" t="Include" />
+          <e p="ProceduralGeneration.h" t="Include" />
           <e p="WeaponPickup.cpp" t="Include" />
           <e p="WeaponPickup.h" t="Include" />
         </e>
