@@ -23,8 +23,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int RoomType;
+
+	UFUNCTION(BlueprintCallable)
 	void RoomDestruction();
 
 };
