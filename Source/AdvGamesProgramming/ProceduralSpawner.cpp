@@ -44,12 +44,15 @@ void AProceduralSpawner::BeginPlay()
 			
 			if (NumCovers != 0)
 			{
-				if (GetWorld()->SpawnActor<ACover>(CoverBlueprint, AllNodesInRoom[RandomIndex]->GetActorLocation(), FRotator::ZeroRotator))
+				ACover* Cover = GetWorld()->SpawnActor<ACover>(CoverBlueprint, AllNodesInRoom[RandomIndex]->GetActorLocation(), FRotator::ZeroRotator);
+				if (Cover)
 				{
 					// Destroy NavNodes under Cover
 					AllNodesInRoom[RandomIndex]->Destroy();
 					// Connect cover nodes to NavNodes, access the CoverNodes thru the Cover BP
-					
+					//Get cover nodes djkfhakjfhkjsda
+					//Cover->AttachedNodes
+					//find navnodes which are within the radius of the covernode
 
 					AllNodesInRoom[RandomIndex]->bSpawnedSomething = true;
 					NumCovers--;
