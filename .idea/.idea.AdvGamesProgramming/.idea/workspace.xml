@@ -8,6 +8,7 @@
     <list default="true" id="96ff311f-40e9-4160-837e-352234de21b4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/RoomFourWay_LRTB_BP.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/RoomFourWay_LRTB_BP.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Levels/ProceduralMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Levels/ProceduralMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.h" afterDir="false" />
@@ -25,6 +26,7 @@
       <list>
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/Room.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/Room.h" />
       </list>
     </option>
@@ -270,7 +272,7 @@
       <updated>1601986746161</updated>
       <workItem from="1601986755973" duration="3197000" />
       <workItem from="1602055186920" duration="5739000" />
-      <workItem from="1602140677463" duration="2947000" />
+      <workItem from="1602140677463" duration="3254000" />
     </task>
     <servers />
   </component>
