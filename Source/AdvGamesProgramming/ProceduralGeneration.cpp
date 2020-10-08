@@ -151,7 +151,6 @@ void AProceduralGeneration::Move()
             SpawnEmptyRoom();
         }
     }
-    //AActor* Agent = GetWorld()->SpawnActor<AActor>(Rooms[0], GetActorLocation(), FRotator::ZeroRotator);
 }
 
 void AProceduralGeneration::SpawnRoomWithBottom()
@@ -176,6 +175,6 @@ void AProceduralGeneration::SpawnEmptyRoom()
 {
     for (ARoomSpawner* RoomSpawner : RoomSpawners)
     {
-        RoomSpawner->SpawnRoom();
+        RoomSpawner->CheckIfOnRoom();
     }
 }

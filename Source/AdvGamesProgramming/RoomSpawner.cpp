@@ -34,7 +34,6 @@ void ARoomSpawner::Tick(float DeltaTime)
 
 void ARoomSpawner::SpawnRoom()
 {
-	CheckIfOnRoom();
 	if (!bIsOnRoom)
 	{
 		int Random = FMath::RandRange(0, ProceduralGeneration->Rooms.Num()-1);
