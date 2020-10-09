@@ -40851,6 +40851,8 @@
           <e p="Cover.h" t="Include" />
           <e p="CoverNode.cpp" t="Include" />
           <e p="CoverNode.h" t="Include" />
+          <e p="DoorConnectionNode.cpp" t="Include" />
+          <e p="DoorConnectionNode.h" t="Include" />
           <e p="EnemyCharacter.cpp" t="Include" />
           <e p="EnemyCharacter.h" t="Include" />
           <e p="HealthComponent.cpp" t="Include" />

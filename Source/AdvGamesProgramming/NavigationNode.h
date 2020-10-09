@@ -23,7 +23,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, Category = "Connected Nodes")
+	UPROPERTY(EditAnywhere, Category = "Connected Nodes", BlueprintReadOnly)
 	TArray<ANavigationNode*> ConnectedNodes;
 
 	USceneComponent* LocationComponent;

@@ -11,101 +11,101 @@
 #include "EnemyCharacter.generated.h"
 
 UENUM()
-enum class AgentState : uint8 
+enum class AgentState : uint8
 {
-	PATROL,
-	ENGAGE,
-	EVADE,
-	HEALINGAGENTS,
-	DEAD,
-	COVER
+    PATROL,
+    ENGAGE,
+    EVADE,
+    HEALINGAGENTS,
+    DEAD,
+    COVER
 };
 
 UCLASS()
 class ADVGAMESPROGRAMMING_API AEnemyCharacter : public ACharacter
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
-	AEnemyCharacter();
+    // Sets default values for this character's properties
+    AEnemyCharacter();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+public:
+    // Called every frame
+    virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	TArray<ANavigationNode*> Path;
-	UPROPERTY(VisibleAnywhere)
-	ANavigationNode* CurrentNode;
-	UPROPERTY(VisibleAnywhere)
-	AAIManager* Manager;
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+    TArray<ANavigationNode*> Path;
+    UPROPERTY(VisibleAnywhere)
+    ANavigationNode* CurrentNode;
+    UPROPERTY(VisibleAnywhere)
+    AAIManager* Manager;
 
-	UPROPERTY(VisibleAnywhere)
-	UAIPerceptionComponent* PerceptionComponent;
+    UPROPERTY(VisibleAnywhere)
+    UAIPerceptionComponent* PerceptionComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	AgentState CurrentAgentState;
-	UPROPERTY(VisibleAnywhere)
-	AActor* DetectedActor;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	bool bCanSeePlayer;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+    AgentState CurrentAgentState;
+    UPROPERTY(VisibleAnywhere)
+    AActor* DetectedActor;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    bool bCanSeePlayer;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     bool bCanHearPlayer;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	bool bCanSeeEnemy;
-	UPROPERTY(VisibleAnywhere)
-	bool bBehindCover;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    bool bCanSeeEnemy;
+    UPROPERTY(VisibleAnywhere)
+    bool bBehindCover;
 
-	UHealthComponent* HealthComponent;
+    UHealthComponent* HealthComponent;
 
-	UFUNCTION(BlueprintCallable)
-	void AgentPatrol();
-	UFUNCTION(BlueprintCallable)
-	void AgentEngage();
-	UFUNCTION(BlueprintCallable)
-	void AgentEvade();
-	UFUNCTION(BlueprintCallable)
-	void AgentHealing();
-	UFUNCTION(BlueprintCallable)
-	void AgentCover();
-	UFUNCTION(BlueprintCallable)
-	void SensePlayer(AActor* ActorSensed, FAIStimulus Stimulus);
-	UFUNCTION(BlueprintImplementableEvent)
-	void Fire(FVector FireDirection);
+    UFUNCTION(BlueprintCallable)
+    void AgentPatrol();
+    UFUNCTION(BlueprintCallable)
+    void AgentEngage();
+    UFUNCTION(BlueprintCallable)
+    void AgentEvade();
+    UFUNCTION(BlueprintCallable)
+    void AgentHealing();
+    UFUNCTION(BlueprintCallable)
+    void AgentCover();
+    UFUNCTION(BlueprintCallable)
+    void SensePlayer(AActor* ActorSensed, FAIStimulus Stimulus);
+    UFUNCTION(BlueprintImplementableEvent)
+    void Fire(FVector FireDirection);
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+    // Called to bind functionality to input
+    virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UPROPERTY(EditAnywhere, Category=Behavior)
-	class UBehaviorTree* EnemyCharacterBehavior;
+    UPROPERTY(EditAnywhere, Category=Behavior)
+    class UBehaviorTree* EnemyCharacterBehavior;
 
-	UFUNCTION()
-	void Heal();
+    UFUNCTION()
+    void Heal();
 
-	UPROPERTY(EditAnywhere)
-	bool bEnemyHealing;
+    UPROPERTY(EditAnywhere)
+    bool bEnemyHealing;
 
-	UPROPERTY(EditAnywhere)
-	float HealDelay;
-	
+    UPROPERTY(EditAnywhere)
+    float HealDelay;
+
 private:
 
-	UFUNCTION(BlueprintCallable)
-	void MoveAlongPath();
+    UFUNCTION(BlueprintCallable)
+    void MoveAlongPath();
 
-	UPROPERTY(EditAnywhere)
-	bool bUnderCover;
+    UPROPERTY(EditAnywhere)
+    bool bUnderCover;
 
-	UPROPERTY(VisibleAnywhere)
-	bool bHealingOthers;
+    UPROPERTY(VisibleAnywhere)
+    bool bHealingOthers;
 
-	UPROPERTY(VisibleAnywhere)
-	float HealTimer;
-	
-	FRotator FaceDirection;
+    UPROPERTY(VisibleAnywhere)
+    float HealTimer;
+
+    FRotator FaceDirection;
 };

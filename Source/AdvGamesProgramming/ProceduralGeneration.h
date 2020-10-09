@@ -36,12 +36,14 @@ public:
     UPROPERTY(EditAnywhere, Category = "Rooms")
     TArray<TSubclassOf<AActor>> Rooms; // index 0 --> LR, index 1 --> LRB, index 2 --> LRT, index 3 --> LRBT
 
+    // Move room amount
     UPROPERTY(EditAnywhere)
     float MoveAmount;
 
     UPROPERTY(EditAnywhere)
     float ZPos;
 
+    // Timer
     UPROPERTY(EditAnywhere)
     float StartTimeBetweenRoom;
 
@@ -54,14 +56,17 @@ public:
     float MaxX;
 
     UPROPERTY(EditAnywhere)
-    TArray < TEnumAsByte < EObjectTypeQuery > > ActorsToCheck;
+    TArray<TEnumAsByte<EObjectTypeQuery>> ActorsToCheck;
     UClass* ActorClass;
 
     UFUNCTION(BlueprintImplementableEvent)
     void CheckRoom();
 
     TArray<ARoomSpawner*> RoomSpawners;
-    
+
+    UFUNCTION(BlueprintImplementableEvent)
+    ARoomSpawner* GetRoomSpawnerInPos();
+
 private:
     void ChooseStartingPoint();
 
