@@ -10,6 +10,8 @@
 #include "CoverNode.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
+#include "EnemyCharacter.h"
+#include "Pickup.h"
 #include "ProceduralSpawner.generated.h"
 
 UCLASS()
@@ -30,5 +32,14 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	ACover* Cover;
+	AEnemyCharacter* EnemyAI;
+	APickup* Pickup;
 
+	//UFUNCTION(BlueprintImplementableEvent)
+	//void CheckCoverNodeCollisions(FVector NodeLoc);
+
+	void SpawnObjects();
 };

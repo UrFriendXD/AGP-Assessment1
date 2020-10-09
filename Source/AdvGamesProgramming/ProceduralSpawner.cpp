@@ -16,6 +16,18 @@ void AProceduralSpawner::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	
+}
+
+// Called every frame
+void AProceduralSpawner::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
+void AProceduralSpawner::SpawnObjects()
+{
 	// Iterate over all rooms to iterate over all navnodes 
 	// to randomly spawn 0-2 AI, 2-3 covers, 0-1 pickup (gun/health)
 	for (TActorIterator<ARoom> It(GetWorld()); It; ++It)
@@ -41,40 +53,43 @@ void AProceduralSpawner::BeginPlay()
 			//{
 			//	RandomIndex = FMath::FRandRange(0, AllNodesInRoom.Num() - 1);
 			//}
-			
+
 			if (NumCovers != 0)
 			{
-				ACover* Cover = GetWorld()->SpawnActor<ACover>(CoverBlueprint, AllNodesInRoom[RandomIndex]->GetActorLocation(), FRotator::ZeroRotator);
+				Cover = nullptr;
+				Cover = GetWorld()->SpawnActor<ACover>(CoverBlueprint, AllNodesInRoom[RandomIndex]->GetActorLocation(), FRotator::ZeroRotator);
 				if (Cover)
 				{
 					// Destroy NavNodes under Cover
 					AllNodesInRoom[RandomIndex]->Destroy();
-					// Connect cover nodes to NavNodes, access the CoverNodes thru the Cover BP
-					//Get cover nodes djkfhakjfhkjsda
-					//Cover->AttachedNodes
-					//find navnodes which are within the radius of the covernode
+					// Connect cover nodes to NavNodes via CoverBP
+					Cover->CheckForNavNodes();
 
-					AllNodesInRoom[RandomIndex]->bSpawnedSomething = true;
+					//AllNodesInRoom[RandomIndex]->bSpawnedSomething = true;
 					NumCovers--;
 				}
 			}
 			else if (NumAI != 0)
 			{
 				// Spawn AI
+				EnemyAI = nullptr;
+				EnemyAI = GetWorld()->SpawnActor<AEnemyCharacter>(AEnemyCharacter::StaticClass(), AllNodesInRoom[RandomIndex]->GetActorLocation(), FRotator::ZeroRotator);
+				if (EnemyAI)
+				{
+					NumAI--;
+				}
 			}
 			else if (NumPickup != 0)
 			{
-				// Spawn Pickup
+				Pickup = nullptr;
+				Pickup = GetWorld()->SpawnActor<APickup>(APickup::StaticClass(), AllNodesInRoom[RandomIndex]->GetActorLocation(), FRotator::ZeroRotator);
+				if (Pickup)
+				{
+					NumPickup--;
+				}
 			}
 		}
 	}
-	
-}
-
-// Called every frame
-void AProceduralSpawner::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 
 }
 

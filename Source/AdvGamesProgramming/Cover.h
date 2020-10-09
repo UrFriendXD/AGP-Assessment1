@@ -26,4 +26,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attached Nodes")
 	TArray<ACoverNode*> AttachedNodes;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void CheckForNavNodes();
 };
