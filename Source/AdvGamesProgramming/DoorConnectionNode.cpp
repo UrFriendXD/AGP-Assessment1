@@ -9,15 +9,19 @@
 void ADoorConnectionNode::BeginPlay()
 {
     Super::BeginPlay();
-    ADoorConnectionNode* DoorNode = CheckForNearbyDoorNode();
-    if (!ConnectedNodes.Contains(DoorNode))
-    {
-        ConnectedNodes.Add(DoorNode);
-        DoorNode->ConnectedNodes.Add(this);
-    }   
-
+    CheckForNearbyDoorNode();
+    
     for (auto It = ConnectedNodes.CreateConstIterator(); It; ++It)
     {
         DrawDebugLine(GetWorld(), GetActorLocation(), (*It)->GetActorLocation(), FColor::Blue, true);
+    }
+}
+
+void ADoorConnectionNode::AddConnectionNode(ADoorConnectionNode* DoorConnectionNode)
+{
+    if (!ConnectedNodes.Contains(DoorConnectionNode))
+    {
+        ConnectedNodes.Add(DoorConnectionNode);
+        DoorConnectionNode->ConnectedNodes.Add(this);
     }
 }

@@ -3,8 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
-
 #include "GameFramework/Actor.h"
 #include "RoomSpawner.generated.h"
 
@@ -29,4 +27,5 @@ public:
     void SpawnRoom();
 
     AProceduralGeneration* ProceduralGeneration;
+
 };
