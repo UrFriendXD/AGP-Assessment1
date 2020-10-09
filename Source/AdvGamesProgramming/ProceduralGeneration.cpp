@@ -4,6 +4,7 @@
 #include "ProceduralGeneration.h"
 
 
+#include "EngineUtils.h"
 #include "Room.h"
 #include "Engine/World.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -28,6 +29,13 @@ void AProceduralGeneration::BeginPlay()
 
     Direction = FMath::RandRange(1, 5);
     ChooseStartingPoint();
+
+    // Get procedural generation and add this to the RoomSpawners Array
+    for (TActorIterator<ARoomSpawner> It(GetWorld()); It; ++It)
+    {
+        It->ProceduralGeneration = this;
+        RoomSpawners.Add(*It);
+    }
 }
 
 // Called every frame
@@ -60,22 +68,33 @@ void AProceduralGeneration::ChooseStartingPoint()
     SetActorLocation(StartingLocations[RandStartingPos]->GetActorLocation());
     AActor* Agent = GetWorld()->SpawnActor<AActor>(Rooms[0], GetActorLocation(), FRotator(0.f, 0.f, 0.f));
     bChooseNewStartingPoint = false;
+
+    // Removes the room spawner it's on top of
+    RoomSpawners.Remove(GetRoomSpawnerInPos());
 }
 
 void AProceduralGeneration::Move()
 {
-    // Goes To the right
+    // If direction is 1 or 2 go right
     if (Direction == 1 || Direction == 2)
     {
+        // If within right bounds
         if (GetActorLocation().Y > MinY)
         {
+            // Reset counter
             DownCounter = 0;
+
+            // Get new pose and set actor to new pos
             FVector NewPos = FVector(GetActorLocation().X, GetActorLocation().Y - MoveAmount, ZPos);
             SetActorLocation(NewPos);
+            //ARoomSpawner* RoomSpawner = GetRoomSpawnerInPos();
+            //RoomSpawner->bRoomExists = true;
+            // Removes the room spawner it's on top of
+            RoomSpawners.Remove(GetRoomSpawnerInPos());
 
             // Spawns a random room
             int Rand = FMath::RandRange(0, Rooms.Num() - 1);
-            AActor* Agent = GetWorld()->SpawnActor<AActor>(Rooms[Rand], GetActorLocation(), FRotator::ZeroRotator);
+            GetWorld()->SpawnActor<ARoom>(Rooms[Rand], GetActorLocation(), FRotator::ZeroRotator);
 
             // Makes sure it can only move right or down
             Direction = FMath::RandRange(1, 5);
@@ -90,6 +109,7 @@ void AProceduralGeneration::Move()
         }
         else
         {
+            // If reaches to the edge, move down
             Direction = 5;
         }
     }
@@ -97,11 +117,18 @@ void AProceduralGeneration::Move()
         // Goes to the left
     else if (Direction == 3 || Direction == 4)
     {
+        // Moves left if within bounds
         if (GetActorLocation().Y < MaxY)
         {
+            // Reset counter
             DownCounter = 0;
+
+            // Get new pose and set actor to new pos
             FVector NewPos = FVector(GetActorLocation().X, GetActorLocation().Y + MoveAmount, ZPos);
             SetActorLocation(NewPos);
+
+            // Removes the room spawner it's on top of
+            RoomSpawners.Remove(GetRoomSpawnerInPos());
 
             // Spawns a random room
             int Rand = FMath::RandRange(0, Rooms.Num() - 1);
@@ -109,7 +136,6 @@ void AProceduralGeneration::Move()
 
             // Makes sure it can only move left or down
             Direction = FMath::RandRange(3, 5);
-
             if (Direction == 1)
             {
                 Direction = 3;
@@ -121,6 +147,7 @@ void AProceduralGeneration::Move()
         }
         else
         {
+            // Else go down if at the edge
             Direction = 5;
         }
     }
@@ -129,6 +156,8 @@ void AProceduralGeneration::Move()
     else if (Direction == 5)
     {
         DownCounter++;
+
+        // If not at the bottom
         if (GetActorLocation().X < MaxX)
         {
             // Check if current room has bottom opening if not make one
@@ -141,6 +170,9 @@ void AProceduralGeneration::Move()
             int Rand = FMath::RandRange(2, 3);
             AActor* Agent = GetWorld()->SpawnActor<AActor>(Rooms[Rand], GetActorLocation(), FRotator::ZeroRotator);
 
+            // Removes the room spawner it's on top of
+            RoomSpawners.Remove(GetRoomSpawnerInPos());
+
             // Choose any new direction
             Direction = FMath::RandRange(1, 5);
         }
@@ -148,19 +180,25 @@ void AProceduralGeneration::Move()
         {
             // Stop generating
             bIsOutOfBounds = true;
+
+            // Spawns rooms in empty spaces
             SpawnEmptyRoom();
+
+            // Call generate Items and Stuffs
         }
     }
 }
 
 void AProceduralGeneration::SpawnRoomWithBottom()
 {
+    // If it goes down twice, force spawn a room with UP and DOWN doors
     if (DownCounter >= 2)
     {
         AActor* Agent = GetWorld()->SpawnActor<AActor>(Rooms[3], GetActorLocation(), FRotator::ZeroRotator);
     }
     else
     {
+        // Else spawn a room with DOWN door
         int RandBottomRoom = FMath::RandRange(1, 3);
         if (RandBottomRoom == 2)
         {
@@ -169,12 +207,20 @@ void AProceduralGeneration::SpawnRoomWithBottom()
         AActor* Agent = GetWorld()->SpawnActor<AActor
         >(Rooms[RandBottomRoom], GetActorLocation(), FRotator::ZeroRotator);
     }
+
+    // Removes the room spawner it's on top and if it is still in the list
+    ARoomSpawner* RoomSpawner = GetRoomSpawnerInPos();
+    if (RoomSpawners.Contains(RoomSpawner))
+    {
+        RoomSpawners.Remove(GetRoomSpawnerInPos());
+    }
 }
 
+// Called when generation is complete to fill empty space with rooms
 void AProceduralGeneration::SpawnEmptyRoom()
 {
     for (ARoomSpawner* RoomSpawner : RoomSpawners)
     {
-        RoomSpawner->CheckIfOnRoom();
+        RoomSpawner->SpawnRoom();
     }
 }

@@ -26,16 +26,7 @@ public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
 
-    UFUNCTION(BlueprintCallable)
     void SpawnRoom();
 
-    UFUNCTION(BlueprintImplementableEvent)
-    void CheckIfOnRoom();
-
-    UPROPERTY(BlueprintReadWrite)
-    bool bIsOnRoom;
-    
-private:
     AProceduralGeneration* ProceduralGeneration;
-    
 };
