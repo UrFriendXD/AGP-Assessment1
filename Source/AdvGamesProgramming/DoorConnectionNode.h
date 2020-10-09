@@ -18,7 +18,10 @@ protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 
-    public:
+public:
     UFUNCTION(BlueprintImplementableEvent)
-    ADoorConnectionNode* CheckForNearbyDoorNode();
+    void CheckForNearbyDoorNode();
+
+    UFUNCTION(BlueprintCallable)
+    void AddConnectionNode(ADoorConnectionNode* DoorConnectionNode);
 };
