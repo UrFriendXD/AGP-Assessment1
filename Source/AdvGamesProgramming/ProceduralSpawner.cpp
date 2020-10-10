@@ -15,7 +15,7 @@ AProceduralSpawner::AProceduralSpawner()
 void AProceduralSpawner::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	AllNodesInRoom.Empty();
 	
 }
 
@@ -32,27 +32,28 @@ void AProceduralSpawner::SpawnObjects()
 	// to randomly spawn 0-2 AI, 2-3 covers, 0-1 pickup (gun/health)
 	for (TActorIterator<ARoom> It(GetWorld()); It; ++It)
 	{
+		CurrentRoom = *It;
+		AllNodesInRoom = CurrentRoom->ListOfNavNodes;
+
 		// Randomise number of AI, covers, pickups to spawn
 		int NumCovers = FMath::FRandRange(2, 3);
 		int NumAI = FMath::FRandRange(0, 2);
 		int NumPickup = FMath::FRandRange(0, 1);
 		int NumTotalSpawns = NumAI + NumCovers + NumPickup;
 
-		// Add all NavNodes to an array, access the NavNodes thru the Room BP
-		for (TActorIterator<ANavigationNode> NavNodeItr(GetWorld()); NavNodeItr; ++NavNodeItr)
-		{
-			AllNodesInRoom.Add(*NavNodeItr);
-		}
-
 		// For each cover to spawn, pick a random node and if it's NOT a door node, spawn covers
 		for (int i = 0; i < NumTotalSpawns; i++)
 		{
+			
 			int RandomIndex = FMath::FRandRange(0, AllNodesInRoom.Num() - 1);
-			//while (AllNodesInRoom[RandomIndex]->IsA(ADoorConnectionNode::StaticClass) 
-			//	|| AllNodesInRoom[RandomIndex]->bSpawnedSomething == true)
-			//{
-			//	RandomIndex = FMath::FRandRange(0, AllNodesInRoom.Num() - 1);
-			//}
+			/*while (AllNodesInRoom[RandomIndex]->IsA(ADoorConnectionNode::StaticClass) 
+				|| AllNodesInRoom[RandomIndex]->bSpawnedSomething == true)
+			{
+				RandomIndex = FMath::FRandRange(0, AllNodesInRoom.Num() - 1);
+			}
+			*/
+
+			UE_LOG(LogTemp, Warning, TEXT("Entered spawn forloop"))
 
 			if (NumCovers != 0)
 			{
@@ -67,26 +68,45 @@ void AProceduralSpawner::SpawnObjects()
 
 					//AllNodesInRoom[RandomIndex]->bSpawnedSomething = true;
 					NumCovers--;
+					UE_LOG(LogTemp, Warning, TEXT("Cover spawned!"))
+				}
+				else 
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Cover not spawned"))
 				}
 			}
 			else if (NumAI != 0)
 			{
 				// Spawn AI
 				EnemyAI = nullptr;
-				EnemyAI = GetWorld()->SpawnActor<AEnemyCharacter>(AEnemyCharacter::StaticClass(), AllNodesInRoom[RandomIndex]->GetActorLocation(), FRotator::ZeroRotator);
+				EnemyAI = GetWorld()->SpawnActor<AEnemyCharacter>(EnemyAIBlueprint, AllNodesInRoom[RandomIndex]->GetActorLocation(), FRotator::ZeroRotator);
 				if (EnemyAI)
 				{
 					NumAI--;
+					UE_LOG(LogTemp, Warning, TEXT("AI spawned!"))
+				}
+				else
+				{
+					UE_LOG(LogTemp, Warning, TEXT("AI not spawned"))
 				}
 			}
 			else if (NumPickup != 0)
 			{
 				Pickup = nullptr;
-				Pickup = GetWorld()->SpawnActor<APickup>(APickup::StaticClass(), AllNodesInRoom[RandomIndex]->GetActorLocation(), FRotator::ZeroRotator);
+				Pickup = GetWorld()->SpawnActor<APickup>(PickupBlueprint, AllNodesInRoom[RandomIndex]->GetActorLocation(), FRotator::ZeroRotator);
 				if (Pickup)
 				{
 					NumPickup--;
+					UE_LOG(LogTemp, Warning, TEXT("Pickup spawned!"))
 				}
+				else
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Pickup not spawned"))
+				}
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Did not get to spawn anything..."))
 			}
 		}
 	}

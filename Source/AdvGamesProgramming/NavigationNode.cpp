@@ -41,7 +41,7 @@ float ANavigationNode::FScore()
 
 void ANavigationNode::AddToConnectedNodes(ANavigationNode * NavigationNode)
 {
-	if (!ConnectedNodes.Contains(NavigationNode))
+	if (!ConnectedNodes.Contains(NavigationNode) && NavigationNode->Room == Room)
 	{
 		ConnectedNodes.Add(NavigationNode);
 		NavigationNode->ConnectedNodes.Add(this);
