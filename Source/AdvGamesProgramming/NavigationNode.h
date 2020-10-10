@@ -35,4 +35,11 @@ public:
 	ANavigationNode* CameFrom;
 
 	bool bSpawnedSomething;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void CheckForNearbyNavNodes();
+
+	UFUNCTION(BlueprintCallable)
+	void AddToConnectedNodes(ANavigationNode* NavigationNode);
+	
 };

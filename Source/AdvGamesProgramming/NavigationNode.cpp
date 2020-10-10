@@ -18,6 +18,7 @@ ANavigationNode::ANavigationNode()
 void ANavigationNode::BeginPlay()
 {
 	Super::BeginPlay();
+	CheckForNearbyNavNodes();
 
 	for (auto It = ConnectedNodes.CreateConstIterator(); It; ++It)
 	{
@@ -37,4 +38,14 @@ float ANavigationNode::FScore()
 {
 	return GScore + HScore;
 }
+
+void ANavigationNode::AddToConnectedNodes(ANavigationNode * NavigationNode)
+{
+	if (!ConnectedNodes.Contains(NavigationNode))
+	{
+		ConnectedNodes.Add(NavigationNode);
+		NavigationNode->ConnectedNodes.Add(this);
+	}
+}
+
 
