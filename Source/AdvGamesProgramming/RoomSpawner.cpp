@@ -27,6 +27,7 @@ void ARoomSpawner::Tick(float DeltaTime)
 
 void ARoomSpawner::SpawnRoom()
 {
+    // Spawns a random room at it's location
     int Random = FMath::RandRange(0, ProceduralGeneration->Rooms.Num() - 1);
     GetWorld()->SpawnActor<AActor>(ProceduralGeneration->Rooms[Random], GetActorLocation(), FRotator::ZeroRotator);
 }

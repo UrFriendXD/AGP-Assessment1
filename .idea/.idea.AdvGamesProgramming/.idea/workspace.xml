@@ -7,7 +7,11 @@
   <component name="ChangeListManager">
     <list default="true" id="96ff311f-40e9-4160-837e-352234de21b4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Levels/ProceduralMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Levels/ProceduralMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/ProceduralGenerationBP.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/ProceduralGenerationBP.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/DoorConnectionNode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/DoorConnectionNode.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/RoomSpawner.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/RoomSpawner.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,14 +26,14 @@
       <list>
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/Room.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/Room.h" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.h" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/RoomSpawner.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.h" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/NavigationNode.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/RoomSpawner.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/DoorConnectionNode.h" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.h" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/RoomSpawner.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/DoorConnectionNode.cpp" />
       </list>
     </option>
@@ -279,6 +283,7 @@
       <workItem from="1602158574536" duration="2866000" />
       <workItem from="1602163124523" duration="13363000" />
       <workItem from="1602245396362" duration="1763000" />
+      <workItem from="1602312642088" duration="2672000" />
     </task>
     <servers />
   </component>
