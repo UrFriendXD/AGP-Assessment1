@@ -190,6 +190,7 @@ void AProceduralGeneration::Move()
             SpawnEmptyRoom();
 
             // Call generate Items and Stuffs
+			ProceduralSpawner->SpawnObjects();
         }
     }
 }
