@@ -48,7 +48,7 @@ void AProceduralSpawner::SpawnObjects()
 		for (int i = 0; i < NumTotalSpawns; i++)
 		{
 			int RandomIndex = FMath::FRandRange(0, AllNodesInRoom.Num() - 1);
-			//while (AllNodesInRoom[RandomIndex]->IsA(ADoorNode::StaticClass) 
+			//while (AllNodesInRoom[RandomIndex]->IsA(ADoorConnectionNode::StaticClass) 
 			//	|| AllNodesInRoom[RandomIndex]->bSpawnedSomething == true)
 			//{
 			//	RandomIndex = FMath::FRandRange(0, AllNodesInRoom.Num() - 1);
