@@ -6,6 +6,7 @@
 
 #include "RoomSpawner.h"
 #include "GameFramework/Actor.h"
+#include "ProceduralSpawner.h"
 #include "ProceduralGeneration.generated.h"
 
 UCLASS()
@@ -66,6 +67,9 @@ public:
 
     UFUNCTION(BlueprintImplementableEvent)
     ARoomSpawner* GetRoomSpawnerInPos();
+
+	UPROPERTY(EditAnywhere)
+	AProceduralSpawner* ProceduralSpawner;
 
 private:
     void ChooseStartingPoint();

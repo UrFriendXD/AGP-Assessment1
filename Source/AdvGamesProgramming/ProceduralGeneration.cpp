@@ -36,6 +36,11 @@ void AProceduralGeneration::BeginPlay()
         It->ProceduralGeneration = this;
         RoomSpawners.Add(*It);
     }
+
+	for (TActorIterator<AProceduralSpawner> It(GetWorld()); It; ++It)
+	{
+		ProceduralSpawner = *It;
+	}
 }
 
 // Called every frame
