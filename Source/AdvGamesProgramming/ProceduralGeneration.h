@@ -66,7 +66,10 @@ public:
     TArray<ARoomSpawner*> RoomSpawners;
 
     UFUNCTION(BlueprintImplementableEvent)
-    ARoomSpawner* GetRoomSpawnerInPos();
+    void GetRoomSpawnerInPos();
+
+    UFUNCTION(BlueprintCallable)
+    void RemoveRoomSpawner(ARoomSpawner* RoomSpawner);
 
 	UPROPERTY(EditAnywhere)
 	AProceduralSpawner* ProceduralSpawner;

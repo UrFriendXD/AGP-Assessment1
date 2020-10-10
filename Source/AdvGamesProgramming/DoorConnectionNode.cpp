@@ -19,6 +19,7 @@ void ADoorConnectionNode::BeginPlay()
 
 void ADoorConnectionNode::AddConnectionNode(ADoorConnectionNode* DoorConnectionNode)
 {
+    // Add connection if not added. Could be removed later
     if (!ConnectedNodes.Contains(DoorConnectionNode))
     {
         ConnectedNodes.Add(DoorConnectionNode);

@@ -57,7 +57,11 @@ void AProceduralGeneration::Tick(float DeltaTime)
     {
         if (TimeBetweenRoom <= 0)
         {
+            // Removes the room spawner it's on top of
+            GetRoomSpawnerInPos();
+            
             Move();
+            
             TimeBetweenRoom = StartTimeBetweenRoom;
         }
         else
@@ -67,15 +71,20 @@ void AProceduralGeneration::Tick(float DeltaTime)
     }
 }
 
+void AProceduralGeneration::RemoveRoomSpawner(ARoomSpawner* RoomSpawner)
+{
+    if (RoomSpawners.Contains(RoomSpawner))
+    {
+        RoomSpawners.Remove(RoomSpawner);
+    }
+}
+
 void AProceduralGeneration::ChooseStartingPoint()
 {
     int RandStartingPos = FMath::RandRange(0, StartingLocations.Num() - 1);
     SetActorLocation(StartingLocations[RandStartingPos]->GetActorLocation());
     AActor* Agent = GetWorld()->SpawnActor<AActor>(Rooms[0], GetActorLocation(), FRotator(0.f, 0.f, 0.f));
     bChooseNewStartingPoint = false;
-
-    // Removes the room spawner it's on top of
-    RoomSpawners.Remove(GetRoomSpawnerInPos());
 }
 
 void AProceduralGeneration::Move()
@@ -92,10 +101,6 @@ void AProceduralGeneration::Move()
             // Get new pose and set actor to new pos
             FVector NewPos = FVector(GetActorLocation().X, GetActorLocation().Y - MoveAmount, ZPos);
             SetActorLocation(NewPos);
-            //ARoomSpawner* RoomSpawner = GetRoomSpawnerInPos();
-            //RoomSpawner->bRoomExists = true;
-            // Removes the room spawner it's on top of
-            RoomSpawners.Remove(GetRoomSpawnerInPos());
 
             // Spawns a random room
             int Rand = FMath::RandRange(0, Rooms.Num() - 1);
@@ -124,17 +129,14 @@ void AProceduralGeneration::Move()
     {
         // Moves left if within bounds
         if (GetActorLocation().Y < MaxY)
-        {
+        {    
             // Reset counter
             DownCounter = 0;
 
             // Get new pose and set actor to new pos
             FVector NewPos = FVector(GetActorLocation().X, GetActorLocation().Y + MoveAmount, ZPos);
             SetActorLocation(NewPos);
-
-            // Removes the room spawner it's on top of
-            RoomSpawners.Remove(GetRoomSpawnerInPos());
-
+            
             // Spawns a random room
             int Rand = FMath::RandRange(0, Rooms.Num() - 1);
             AActor* Agent = GetWorld()->SpawnActor<AActor>(Rooms[Rand], GetActorLocation(), FRotator::ZeroRotator);
@@ -175,14 +177,12 @@ void AProceduralGeneration::Move()
             int Rand = FMath::RandRange(2, 3);
             AActor* Agent = GetWorld()->SpawnActor<AActor>(Rooms[Rand], GetActorLocation(), FRotator::ZeroRotator);
 
-            // Removes the room spawner it's on top of
-            RoomSpawners.Remove(GetRoomSpawnerInPos());
-
             // Choose any new direction
             Direction = FMath::RandRange(1, 5);
         }
         else
         {
+            
             // Stop generating
             bIsOutOfBounds = true;
 
@@ -211,13 +211,6 @@ void AProceduralGeneration::SpawnRoomWithBottom()
         }
         AActor* Agent = GetWorld()->SpawnActor<AActor
         >(Rooms[RandBottomRoom], GetActorLocation(), FRotator::ZeroRotator);
-    }
-
-    // Removes the room spawner it's on top and if it is still in the list
-    ARoomSpawner* RoomSpawner = GetRoomSpawnerInPos();
-    if (RoomSpawners.Contains(RoomSpawner))
-    {
-        RoomSpawners.Remove(GetRoomSpawnerInPos());
     }
 }
 
