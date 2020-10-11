@@ -3,3 +3,7 @@
 
 #include "CoverNode.h"
 
+void ACoverNode::BeginPlay()
+{
+	Super::BeginPlay();
+}

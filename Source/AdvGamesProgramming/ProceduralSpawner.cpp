@@ -36,10 +36,9 @@ void AProceduralSpawner::SpawnObjects()
 		AllNodesInRoom = CurrentRoom->ListOfNavNodes;
 
 		// Randomise number of AI, covers, pickups to spawn
-		int NumCovers = FMath::FRandRange(2, 3);
 		int NumAI = FMath::FRandRange(0, 2);
 		int NumPickup = FMath::FRandRange(0, 1);
-		int NumTotalSpawns = NumAI + NumCovers + NumPickup;
+		int NumTotalSpawns = NumAI + NumPickup;
 
 		// For each cover to spawn, pick a random node and if it's NOT a door node, spawn covers
 		for (int i = 0; i < NumTotalSpawns; i++)
@@ -53,29 +52,7 @@ void AProceduralSpawner::SpawnObjects()
 			}
 			*/
 
-			UE_LOG(LogTemp, Warning, TEXT("Entered spawn forloop"))
-
-			if (NumCovers != 0)
-			{
-				Cover = nullptr;
-				Cover = GetWorld()->SpawnActor<ACover>(CoverBlueprint, AllNodesInRoom[RandomIndex]->GetActorLocation(), FRotator::ZeroRotator);
-				if (Cover)
-				{
-					// Destroy NavNodes under Cover
-					AllNodesInRoom[RandomIndex]->Destroy();
-					// Connect cover nodes to NavNodes via CoverBP
-					Cover->CheckForNavNodes();
-
-					//AllNodesInRoom[RandomIndex]->bSpawnedSomething = true;
-					NumCovers--;
-					UE_LOG(LogTemp, Warning, TEXT("Cover spawned!"))
-				}
-				else 
-				{
-					UE_LOG(LogTemp, Warning, TEXT("Cover not spawned"))
-				}
-			}
-			else if (NumAI != 0)
+			if (NumAI != 0)
 			{
 				// Spawn AI
 				EnemyAI = nullptr;
