@@ -28,6 +28,8 @@ void ARoomSpawner::Tick(float DeltaTime)
 void ARoomSpawner::SpawnRoom()
 {
     // Spawns a random room at it's location
-    int Random = FMath::RandRange(0, ProceduralGeneration->Rooms.Num() - 1);
-    GetWorld()->SpawnActor<AActor>(ProceduralGeneration->Rooms[Random], GetActorLocation(), FRotator::ZeroRotator);
+    int RandTemplateIndex = FMath::RandRange(0, ProceduralGeneration->RoomTemplates.Num() - 1);
+    int RandIndex = FMath::RandRange(0, ProceduralGeneration->RoomTemplates[RandTemplateIndex].GetDefaultObject()->Rooms.Num() - 1);
+    GetWorld()->SpawnActor<ARoom>(ProceduralGeneration->RoomTemplates[RandTemplateIndex].GetDefaultObject()->Rooms[RandIndex],
+                                  GetActorLocation(), FRotator::ZeroRotator);
 }

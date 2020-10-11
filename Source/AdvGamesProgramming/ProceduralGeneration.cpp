@@ -37,10 +37,10 @@ void AProceduralGeneration::BeginPlay()
         RoomSpawners.Add(*It);
     }
 
-	for (TActorIterator<AProceduralSpawner> It(GetWorld()); It; ++It)
-	{
-		ProceduralSpawner = *It;
-	}
+    for (TActorIterator<AProceduralSpawner> It(GetWorld()); It; ++It)
+    {
+        ProceduralSpawner = *It;
+    }
 }
 
 // Called every frame
@@ -59,9 +59,9 @@ void AProceduralGeneration::Tick(float DeltaTime)
         {
             // Removes the room spawner it's on top of
             GetRoomSpawnerInPos();
-            
+
             Move();
-            
+
             TimeBetweenRoom = StartTimeBetweenRoom;
         }
         else
@@ -83,7 +83,11 @@ void AProceduralGeneration::ChooseStartingPoint()
 {
     int RandStartingPos = FMath::RandRange(0, StartingLocations.Num() - 1);
     SetActorLocation(StartingLocations[RandStartingPos]->GetActorLocation());
-    AActor* Agent = GetWorld()->SpawnActor<AActor>(Rooms[0], GetActorLocation(), FRotator(0.f, 0.f, 0.f));
+    int RandTemplateIndex = FMath::RandRange(0, RoomTemplates.Num() - 1);
+    int RandIndex = FMath::RandRange(0, RoomTemplates[RandTemplateIndex].GetDefaultObject()->Rooms.Num() - 1);
+    AActor* Room = GetWorld()->SpawnActor<AActor>(
+        RoomTemplates[RandTemplateIndex].GetDefaultObject()->Rooms[RandIndex], GetActorLocation(),
+        FRotator(0.f, 0.f, 0.f));
     bChooseNewStartingPoint = false;
 }
 
@@ -103,8 +107,10 @@ void AProceduralGeneration::Move()
             SetActorLocation(NewPos);
 
             // Spawns a random room
-            int Rand = FMath::RandRange(0, Rooms.Num() - 1);
-            GetWorld()->SpawnActor<ARoom>(Rooms[Rand], GetActorLocation(), FRotator::ZeroRotator);
+            int RandTemplateIndex = FMath::RandRange(0, RoomTemplates.Num() - 1);
+            int RandIndex = FMath::RandRange(0, RoomTemplates[RandTemplateIndex].GetDefaultObject()->Rooms.Num() - 1);
+            GetWorld()->SpawnActor<ARoom>(RoomTemplates[RandTemplateIndex].GetDefaultObject()->Rooms[RandIndex],
+                                          GetActorLocation(), FRotator::ZeroRotator);
 
             // Makes sure it can only move right or down
             Direction = FMath::RandRange(1, 5);
@@ -129,17 +135,19 @@ void AProceduralGeneration::Move()
     {
         // Moves left if within bounds
         if (GetActorLocation().Y < MaxY)
-        {    
+        {
             // Reset counter
             DownCounter = 0;
 
             // Get new pose and set actor to new pos
             FVector NewPos = FVector(GetActorLocation().X, GetActorLocation().Y + MoveAmount, ZPos);
             SetActorLocation(NewPos);
-            
+
             // Spawns a random room
-            int Rand = FMath::RandRange(0, Rooms.Num() - 1);
-            AActor* Agent = GetWorld()->SpawnActor<AActor>(Rooms[Rand], GetActorLocation(), FRotator::ZeroRotator);
+            int RandTemplateIndex = FMath::RandRange(0, RoomTemplates.Num() - 1);
+            int RandIndex = FMath::RandRange(0, RoomTemplates[RandTemplateIndex].GetDefaultObject()->Rooms.Num() - 1);
+            GetWorld()->SpawnActor<ARoom>(RoomTemplates[RandTemplateIndex].GetDefaultObject()->Rooms[RandIndex],
+                                          GetActorLocation(), FRotator::ZeroRotator);
 
             // Makes sure it can only move left or down
             Direction = FMath::RandRange(3, 5);
@@ -175,33 +183,34 @@ void AProceduralGeneration::Move()
 
             // Spawns a random that has a top opening
             int Rand = FMath::RandRange(2, 3);
-            AActor* Agent = GetWorld()->SpawnActor<AActor>(Rooms[Rand], GetActorLocation(), FRotator::ZeroRotator);
+            int RandIndex = FMath::RandRange(0, RoomTemplates[Rand].GetDefaultObject()->Rooms.Num() - 1);
+            GetWorld()->SpawnActor<ARoom>(RoomTemplates[Rand].GetDefaultObject()->Rooms[RandIndex], GetActorLocation(),
+                                          FRotator::ZeroRotator);
 
             // Choose any new direction
             Direction = FMath::RandRange(1, 5);
         }
         else
         {
-            
             // Stop generating
             bIsOutOfBounds = true;
 
             // Spawns rooms in empty spaces
             SpawnEmptyRoom();
 
-			// Populate nodes for AI to access
-			for (TActorIterator<AAIManager> It(GetWorld()); It; ++It)
-			{
-				AIManager = *It;
-				if (AIManager)
-				{
-					AIManager->PopulateNodes();
-					AIManager->PopulateCovers();
-				}
-			}
+            // Populate nodes for AI to access
+            for (TActorIterator<AAIManager> It(GetWorld()); It; ++It)
+            {
+                AIManager = *It;
+                if (AIManager)
+                {
+                    AIManager->PopulateNodes();
+                    AIManager->PopulateCovers();
+                }
+            }
 
             // Call generate AI and Pickups
-			ProceduralSpawner->SpawnObjects();
+            ProceduralSpawner->SpawnObjects();
         }
     }
 }
@@ -211,7 +220,9 @@ void AProceduralGeneration::SpawnRoomWithBottom()
     // If it goes down twice, force spawn a room with UP and DOWN doors
     if (DownCounter >= 2)
     {
-        AActor* Agent = GetWorld()->SpawnActor<AActor>(Rooms[3], GetActorLocation(), FRotator::ZeroRotator);
+        int RandIndex = FMath::RandRange(0, RoomTemplates[3].GetDefaultObject()->Rooms.Num() - 1);
+        GetWorld()->SpawnActor<ARoom>(RoomTemplates[3].GetDefaultObject()->Rooms[RandIndex], GetActorLocation(),
+                                      FRotator::ZeroRotator);
     }
     else
     {
@@ -221,8 +232,9 @@ void AProceduralGeneration::SpawnRoomWithBottom()
         {
             RandBottomRoom = 1;
         }
-        AActor* Agent = GetWorld()->SpawnActor<AActor
-        >(Rooms[RandBottomRoom], GetActorLocation(), FRotator::ZeroRotator);
+        int RandIndex = FMath::RandRange(0, RoomTemplates[RandBottomRoom].GetDefaultObject()->Rooms.Num() - 1);
+        GetWorld()->SpawnActor<ARoom>(RoomTemplates[RandBottomRoom].GetDefaultObject()->Rooms[RandIndex],
+                                      GetActorLocation(), FRotator::ZeroRotator);
     }
 }
 
