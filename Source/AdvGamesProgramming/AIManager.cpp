@@ -121,7 +121,12 @@ void AAIManager::PopulateCovers()
 	
 	for (TActorIterator<ACover> It(GetWorld()); It; ++It)
 	{
-		AllCovers.Add(*It);
+		ACover* CurrentCover = *It;
+		AllCovers.Add(CurrentCover);
+		for (int i = 0; i < CurrentCover->AttachedNodes.Num(); i++)
+		{
+			AllCoverNodes.Add(CurrentCover->AttachedNodes[i]);
+		}
 	}
 	UE_LOG(LogTemp, Error, TEXT("Covers added to AllCovers: %i"), AllCovers.Num());
 }
