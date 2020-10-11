@@ -25,6 +25,7 @@ void ARoom::Tick(float DeltaTime)
 
 }
 
+// Just destroy that's it
 void ARoom::RoomDestruction()
 {
 	Destroy();

@@ -4,15 +4,11 @@
     <projectFile>Intermediate/ProjectFiles/AdvGamesProgramming.vcxproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/UE4.vcxproj</projectFile>
   </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="96ff311f-40e9-4160-837e-352234de21b4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/Mannequin/AnimStarterPack/EnemyAnimBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Mannequin/AnimStarterPack/EnemyAnimBlueprint.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/EnemyCharacterBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/EnemyCharacterBlueprint.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/WeaponPickupBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/WeaponPickupBlueprint.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.h" afterDir="false" />
-    </list>
+    <list default="true" id="96ff311f-40e9-4160-837e-352234de21b4" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,18 +20,18 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/Room.cpp" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/Room.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/NavigationNode.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/RoomSpawner.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/DoorConnectionNode.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/DoorConnectionNode.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/RoomTemplates.h" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/RoomSpawner.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.h" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.h" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/Room.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/Room.h" />
       </list>
     </option>
   </component>
@@ -286,7 +282,7 @@
       <workItem from="1602245396362" duration="1763000" />
       <workItem from="1602312642088" duration="2672000" />
       <workItem from="1602415533781" duration="4689000" />
-      <workItem from="1602421378849" duration="4307000" />
+      <workItem from="1602421378849" duration="7093000" />
     </task>
     <servers />
   </component>
@@ -299,10 +295,14 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1602425426063">
+    <state x="-1400" y="143" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1602427488435">
       <screen x="-1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1602425426063" />
+    <state x="-1400" y="143" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1602427488435" />
+    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1602428496994">
+      <screen x="-1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1602428496994" />
     <state x="623" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080/-1920.0.1920.1080@0.0.1920.1080" timestamp="1602231430122" />
     <state x="682" y="453" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1602147697220">
       <screen x="0" y="0" width="1920" height="1080" />

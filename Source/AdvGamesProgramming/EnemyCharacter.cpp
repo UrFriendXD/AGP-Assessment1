@@ -30,6 +30,7 @@ void AEnemyCharacter::BeginPlay()
     bCanHearPlayer = false;
     HealTimer = HealDelay;
     ReviveTimer = ReviveDelay;
+    FindNewCoverTimer = FindNewCoverDelay;
     for (TActorIterator<AAIManager> It(GetWorld()); It; ++It)
     {
         Manager = *It;
@@ -46,30 +47,30 @@ void AEnemyCharacter::Tick(float DeltaTime)
     switch (CurrentAgentState)
     {
         // Patrol taken out as they can shoot but most of the time try to stay in cover
-    //     // Patrol normally
-    // case AgentState::PATROL:
-    //     AgentPatrol();
-    //     // Change to healing state if healing
-    //     if (bHealingOthers)
-    //     {
-    //         CurrentAgentState = AgentState::HEALINGAGENTS;
-    //         Path.Empty();
-    //     }
-    //
-    //     // Change to engage state if healthy
-    //     if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() >= 0.4f)
-    //     {
-    //         CurrentAgentState = AgentState::ENGAGE;
-    //         Path.Empty();
-    //     }
-    //
-    //     // Change to Cover state if low
-    //     if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() <= 0.4f)
-    //     {
-    //         CurrentAgentState = AgentState::COVER;
-    //         Path.Empty();
-    //     }
-    //     break;
+        //     // Patrol normally
+        // case AgentState::PATROL:
+        //     AgentPatrol();
+        //     // Change to healing state if healing
+        //     if (bHealingOthers)
+        //     {
+        //         CurrentAgentState = AgentState::HEALINGAGENTS;
+        //         Path.Empty();
+        //     }
+        //
+        //     // Change to engage state if healthy
+        //     if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() >= 0.4f)
+        //     {
+        //         CurrentAgentState = AgentState::ENGAGE;
+        //         Path.Empty();
+        //     }
+        //
+        //     // Change to Cover state if low
+        //     if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() <= 0.4f)
+        //     {
+        //         CurrentAgentState = AgentState::COVER;
+        //         Path.Empty();
+        //     }
+        //     break;
 
         // Engage state
     case AgentState::ENGAGE:
@@ -80,6 +81,9 @@ void AEnemyCharacter::Tick(float DeltaTime)
         {
             CurrentAgentState = AgentState::COVER;
             Path.Empty();
+            Path = Manager->GeneratePath(CurrentNode,
+                                         Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
+            FindNewCoverTimer = FindNewCoverDelay;
         }
 
         // Change to Cover state if low
@@ -87,6 +91,9 @@ void AEnemyCharacter::Tick(float DeltaTime)
         {
             CurrentAgentState = AgentState::COVER;
             Path.Empty();
+            Path = Manager->GeneratePath(CurrentNode,
+                                         Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
+            FindNewCoverTimer = FindNewCoverDelay;
         }
         break;
 
@@ -108,12 +115,18 @@ void AEnemyCharacter::Tick(float DeltaTime)
             bBehindCover = false;
         }*/
 
-            // Change to Engage state if healthy and sees player
+        // Change to Engage state if healthy and sees player
         if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() >= 0.4f && bHasAmmo)
         {
             CurrentAgentState = AgentState::ENGAGE;
             Path.Empty();
             bBehindCover = false;
+        }
+
+        // If under cover and healthy, start timer
+        if (bUnderCover && FindNewCoverTimer > 0 && HealthComponent->HealthPercentageRemaining() >= 1.0f)
+        {
+            FindNewCoverTimer -= DeltaTime;
         }
         break;
 
@@ -134,7 +147,11 @@ void AEnemyCharacter::Tick(float DeltaTime)
     case AgentState::REVIVING:
         if (ReviveTimer <= 0)
         {
-            CurrentAgentState = AgentState::PATROL;
+            CurrentAgentState = AgentState::COVER;
+            Path.Empty();
+            Path = Manager->GeneratePath(CurrentNode,
+                                         Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
+            FindNewCoverTimer = FindNewCoverDelay;
             ReviveTimer = ReviveDelay;
         }
         else
@@ -166,13 +183,14 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
     Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void AEnemyCharacter::AgentPatrol()
-{
-    if (Path.Num() == 0 && Manager != nullptr)
-    {
-        Path = Manager->GeneratePath(CurrentNode, Manager->AllNodes[FMath::RandRange(0, Manager->AllNodes.Num() - 1)]);
-    }
-}
+// Disabled
+// void AEnemyCharacter::AgentPatrol()
+// {
+//     if (Path.Num() == 0 && Manager != nullptr)
+//     {
+//         Path = Manager->GeneratePath(CurrentNode, Manager->AllNodes[FMath::RandRange(0, Manager->AllNodes.Num() - 1)]);
+//     }
+// }
 
 void AEnemyCharacter::AgentEngage()
 {
@@ -183,7 +201,8 @@ void AEnemyCharacter::AgentEngage()
         FaceDirection = DirectionToTarget.Rotation();
         if (Path.Num() == 0)
         {
-            Path = Manager->GeneratePath(CurrentNode, Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
+            Path = Manager->GeneratePath(CurrentNode,
+                                         Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
         }
     }
 }
@@ -206,10 +225,22 @@ void AEnemyCharacter::AgentEvade()
 // Replaces Evade function
 void AEnemyCharacter::AgentCover()
 {
-    // Generates a path to the furthest cover node from the Player
-    if (bCanSeePlayer && Path.Num() == 0)
+    // If can see player shoot or get new path
+    if (bCanSeePlayer)
     {
-        Path = Manager->GeneratePath(CurrentNode, Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
+        // Shoots player if they have ammo
+        if (bHasAmmo)
+        {
+            FVector DirectionToTarget = DetectedActor->GetActorLocation() - GetActorLocation();
+            Fire(DirectionToTarget);
+        }
+        // If path empty get new path
+        if (Path.Num() == 0)
+        {
+            Path = Manager->GeneratePath(CurrentNode,
+                                         Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
+            FindNewCoverTimer = FindNewCoverDelay;
+        }
         //UE_LOG(LogTemp, Error, TEXT("Generated new path to FurthestCoverNode"));
     }
         // Only heals if it's behind cover and cannot see the Player
@@ -384,9 +415,15 @@ void AEnemyCharacter::Heal()
         FaceDirection.Pitch = 0.0f;
         SetActorRotation(FaceDirection);
 
-        // // Clears path and make new one far away
-        // Path.Empty();
-        // Path = Manager->GeneratePath(CurrentNode, Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
+        // If the player is close, run!
+        float Distance = FVector::Distance(DetectedActor->GetActorLocation(), GetActorLocation());
+        if (Distance < 100.0f)
+        {
+            // Clears path and make new one far away
+            Path.Empty();
+            Path = Manager->GeneratePath(CurrentNode,
+                                         Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
+        }
     }
         // Else if AI cannot sense the player through sight or sound, start healing
     else if (HealthComponent->HealthPercentageRemaining() < 1)

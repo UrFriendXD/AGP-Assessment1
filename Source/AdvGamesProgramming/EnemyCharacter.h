@@ -63,8 +63,8 @@ public:
 
     UHealthComponent* HealthComponent;
 
-    UFUNCTION(BlueprintCallable)
-    void AgentPatrol();
+    // UFUNCTION(BlueprintCallable)
+    // void AgentPatrol();
     UFUNCTION(BlueprintCallable)
     void AgentEngage();
     // UFUNCTION(BlueprintCallable)
@@ -111,14 +111,21 @@ private:
     UPROPERTY(VisibleAnywhere)
     bool bHealingOthers;
     
-
+    // Healing timer
     UPROPERTY(VisibleAnywhere)
     float HealTimer;
 
     FRotator FaceDirection;
 
+    // Reviver timers
     UPROPERTY(VisibleAnywhere)
     float ReviveTimer;
     UPROPERTY(EditAnywhere)
     float ReviveDelay;
+
+    // Finding new cover timers
+    UPROPERTY(VisibleAnywhere)
+    float FindNewCoverTimer;
+    UPROPERTY(EditAnywhere)
+    float FindNewCoverDelay;
 };

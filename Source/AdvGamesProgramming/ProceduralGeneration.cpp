@@ -37,6 +37,7 @@ void AProceduralGeneration::BeginPlay()
         RoomSpawners.Add(*It);
     }
 
+    // Find the procedural spawner in the level and assign variable
     for (TActorIterator<AProceduralSpawner> It(GetWorld()); It; ++It)
     {
         ProceduralSpawner = *It;
@@ -48,11 +49,13 @@ void AProceduralGeneration::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
+    // Choose new starting point if enabled. For debug purposes
     if (bChooseNewStartingPoint)
     {
         ChooseStartingPoint();
     }
 
+    // If in bounds generate map
     if (!bIsOutOfBounds)
     {
         if (TimeBetweenRoom <= 0)
@@ -71,6 +74,7 @@ void AProceduralGeneration::Tick(float DeltaTime)
     }
 }
 
+// Removes room spawner from list
 void AProceduralGeneration::RemoveRoomSpawner(ARoomSpawner* RoomSpawner)
 {
     if (RoomSpawners.Contains(RoomSpawner))
@@ -79,6 +83,7 @@ void AProceduralGeneration::RemoveRoomSpawner(ARoomSpawner* RoomSpawner)
     }
 }
 
+// Choose a random starting point for the generation
 void AProceduralGeneration::ChooseStartingPoint()
 {
     int RandStartingPos = FMath::RandRange(0, StartingLocations.Num() - 1);
@@ -102,11 +107,11 @@ void AProceduralGeneration::Move()
             // Reset counter
             DownCounter = 0;
 
-            // Get new pose and set actor to new pos
+            // Move the procedural generation object by move amount in the Right direction
             FVector NewPos = FVector(GetActorLocation().X, GetActorLocation().Y - MoveAmount, ZPos);
             SetActorLocation(NewPos);
 
-            // Spawns a random room
+            // Spawns a random room of a room shape variant
             int RandTemplateIndex = FMath::RandRange(0, RoomTemplates.Num() - 1);
             int RandIndex = FMath::RandRange(0, RoomTemplates[RandTemplateIndex].GetDefaultObject()->Rooms.Num() - 1);
             GetWorld()->SpawnActor<ARoom>(RoomTemplates[RandTemplateIndex].GetDefaultObject()->Rooms[RandIndex],
@@ -139,11 +144,11 @@ void AProceduralGeneration::Move()
             // Reset counter
             DownCounter = 0;
 
-            // Get new pose and set actor to new pos
+            // Move the procedural generation object by move amount in the Left direction
             FVector NewPos = FVector(GetActorLocation().X, GetActorLocation().Y + MoveAmount, ZPos);
             SetActorLocation(NewPos);
 
-            // Spawns a random room
+            // Spawns a random room of a room shape variant
             int RandTemplateIndex = FMath::RandRange(0, RoomTemplates.Num() - 1);
             int RandIndex = FMath::RandRange(0, RoomTemplates[RandTemplateIndex].GetDefaultObject()->Rooms.Num() - 1);
             GetWorld()->SpawnActor<ARoom>(RoomTemplates[RandTemplateIndex].GetDefaultObject()->Rooms[RandIndex],
@@ -178,6 +183,7 @@ void AProceduralGeneration::Move()
             // Check if current room has bottom opening if not make one
             CheckRoom();
 
+            // Move the procedural generation object by move amount in the Down direction
             FVector NewPos = FVector(GetActorLocation().X + MoveAmount, GetActorLocation().Y, ZPos);
             SetActorLocation(NewPos);
 
@@ -238,7 +244,7 @@ void AProceduralGeneration::SpawnRoomWithBottom()
     }
 }
 
-// Called when generation is complete to fill empty space with rooms
+// Called when generation is complete to fill empty space with rooms. Should have all room spawners that it didn't touch along the path generation
 void AProceduralGeneration::SpawnEmptyRoom()
 {
     for (ARoomSpawner* RoomSpawner : RoomSpawners)
