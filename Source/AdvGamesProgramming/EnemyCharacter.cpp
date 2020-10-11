@@ -28,6 +28,11 @@ void AEnemyCharacter::BeginPlay()
     bCanSeePlayer = false;
     bCanHearPlayer = false;
     HealTimer = HealDelay;
+	for (TActorIterator<AAIManager> It(GetWorld()); It; ++It)
+	{
+		Manager = *It;
+		UE_LOG(LogTemp, Warning, TEXT("AIManager assigned"))
+	}
 }
 
 // Called every frame

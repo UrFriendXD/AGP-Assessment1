@@ -20,9 +20,7 @@ void AAIManager::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	PopulateNodes();
-	CreateAgents();
-	PopulateCovers();
+	//CreateAgents();
 }
 
 // Called every frame
@@ -74,15 +72,18 @@ TArray<ANavigationNode*> AAIManager::GeneratePath(ANavigationNode* StartNode, AN
 
 		for (ANavigationNode* ConnectedNode : CurrentNode->ConnectedNodes)
 		{
-			float TentativeGScore = CurrentNode->GScore + FVector::Distance(CurrentNode->GetActorLocation(), ConnectedNode->GetActorLocation());
-			if (TentativeGScore < ConnectedNode->GScore)
+			if (ConnectedNode)
 			{
-				ConnectedNode->CameFrom = CurrentNode;
-				ConnectedNode->GScore = TentativeGScore;
-				ConnectedNode->HScore = FVector::Distance(ConnectedNode->GetActorLocation(), EndNode->GetActorLocation());
-				if (!OpenSet.Contains(ConnectedNode))
+				float TentativeGScore = CurrentNode->GScore + FVector::Distance(CurrentNode->GetActorLocation(), ConnectedNode->GetActorLocation());
+				if (TentativeGScore < ConnectedNode->GScore)
 				{
-					OpenSet.Add(ConnectedNode);
+					ConnectedNode->CameFrom = CurrentNode;
+					ConnectedNode->GScore = TentativeGScore;
+					ConnectedNode->HScore = FVector::Distance(ConnectedNode->GetActorLocation(), EndNode->GetActorLocation());
+					if (!OpenSet.Contains(ConnectedNode))
+					{
+						OpenSet.Add(ConnectedNode);
+					}
 				}
 			}
 		}
@@ -101,6 +102,7 @@ void AAIManager::PopulateNodes()
 	}
 }
 
+/* Disabled
 void AAIManager::CreateAgents()
 {
 	for (int32 i = 0; i < NumAI; i++)
@@ -112,6 +114,7 @@ void AAIManager::CreateAgents()
 		AllAgents.Add(Agent);
 	}
 }
+*/
 
 void AAIManager::PopulateCovers()
 {

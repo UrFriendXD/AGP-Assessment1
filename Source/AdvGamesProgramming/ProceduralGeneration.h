@@ -7,6 +7,7 @@
 #include "RoomSpawner.h"
 #include "GameFramework/Actor.h"
 #include "ProceduralSpawner.h"
+#include "AIManager.h"
 #include "ProceduralGeneration.generated.h"
 
 UCLASS()
@@ -73,6 +74,10 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	AProceduralSpawner* ProceduralSpawner;
+
+	UPROPERTY(EditAnywhere)
+	AAIManager* AIManager;
+
 
 private:
     void ChooseStartingPoint();
