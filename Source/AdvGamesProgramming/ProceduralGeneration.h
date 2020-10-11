@@ -44,6 +44,7 @@ public:
     UPROPERTY(EditAnywhere)
     float MoveAmount;
 
+    // Z pos of where the rooms should spawn at Default 150f
     UPROPERTY(EditAnywhere)
     float ZPos;
 
@@ -59,18 +60,18 @@ public:
     UPROPERTY(EditAnywhere)
     float MaxX;
 
-    UPROPERTY(EditAnywhere)
-    TArray<TEnumAsByte<EObjectTypeQuery>> ActorsToCheck;
-    UClass* ActorClass;
-
+    // Calls to blueprint to cast overlap sphere and check the room type
     UFUNCTION(BlueprintImplementableEvent)
     void CheckRoom();
 
+    // Array of all room spawners in the world
     TArray<ARoomSpawner*> RoomSpawners;
 
+    // Uses BP to get the roomspawner it's ontop of
     UFUNCTION(BlueprintImplementableEvent)
     void GetRoomSpawnerInPos();
 
+    // Removes the room spawner it's ontop of in the RoomSpawners array
     UFUNCTION(BlueprintCallable)
     void RemoveRoomSpawner(ARoomSpawner* RoomSpawner);
 

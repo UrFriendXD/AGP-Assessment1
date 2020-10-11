@@ -15,7 +15,6 @@ enum class AgentState : uint8
 {
     PATROL,
     ENGAGE,
-    EVADE,
     HEALINGAGENTS,
     DEAD,
     COVER,
@@ -94,6 +93,10 @@ public:
     UPROPERTY(EditAnywhere)
     float HealDelay;
 
+    // This property is used for healing animation
+    UPROPERTY(BlueprintReadOnly)
+    bool bIsHealingOthers;
+
 private:
 
     UFUNCTION(BlueprintCallable)
@@ -104,6 +107,7 @@ private:
 
     UPROPERTY(VisibleAnywhere)
     bool bHealingOthers;
+    
 
     UPROPERTY(VisibleAnywhere)
     float HealTimer;

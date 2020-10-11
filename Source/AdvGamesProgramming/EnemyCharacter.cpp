@@ -248,12 +248,14 @@ void AEnemyCharacter::AgentHealing()
         if (!Cast<AEnemyCharacter>(DetectedActor)->bEnemyHealing)
         {
             Cast<AEnemyCharacter>(DetectedActor)->bEnemyHealing = true;
+            bIsHealingOthers = true;
         }
 
         // If they're full on HP, go back to patrol
         if (Cast<AEnemyCharacter>(DetectedActor)->HealthComponent->HealthPercentageRemaining() >= 1.0f)
         {
             bHealingOthers = false;
+            bIsHealingOthers = false;
             Cast<AEnemyCharacter>(DetectedActor)->bEnemyHealing = false;
             CurrentAgentState = AgentState::PATROL;
         }
