@@ -28,6 +28,7 @@ void AEnemyCharacter::BeginPlay()
     bBehindCover = false;
     bCanSeePlayer = false;
     bCanHearPlayer = false;
+    bHasAmmo = true;
     HealTimer = HealDelay;
     ReviveTimer = ReviveDelay;
     FindNewCoverTimer = FindNewCoverDelay;

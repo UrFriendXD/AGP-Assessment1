@@ -8,7 +8,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="96ff311f-40e9-4160-837e-352234de21b4" name="Default Changelist" comment="" />
+    <list default="true" id="96ff311f-40e9-4160-837e-352234de21b4" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/CoverBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/CoverBlueprint.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/PlayerCharacterBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/PlayerCharacterBlueprint.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Levels/ProceduralMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Levels/ProceduralMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/CoverNode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/CoverNode.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -27,11 +34,12 @@
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/RoomTemplates.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/RoomSpawner.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.h" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/Room.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/Room.h" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/CoverNode.cpp" />
       </list>
     </option>
   </component>
@@ -299,10 +307,10 @@
       <screen x="-1920" y="0" width="1920" height="1080" />
     </state>
     <state x="-1400" y="143" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1602427488435" />
-    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1602428496994">
+    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1602429780436">
       <screen x="-1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1602428496994" />
+    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1602429780436" />
     <state x="623" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080/-1920.0.1920.1080@0.0.1920.1080" timestamp="1602231430122" />
     <state x="682" y="453" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1602147697220">
       <screen x="0" y="0" width="1920" height="1080" />
