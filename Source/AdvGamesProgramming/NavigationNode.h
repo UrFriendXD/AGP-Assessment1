@@ -4,7 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Room.h"
 #include "NavigationNode.generated.h"
+
+class ARoom;
+class ANavigationNode;
 
 UCLASS()
 class ADVGAMESPROGRAMMING_API ANavigationNode : public AActor
@@ -42,4 +46,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddToConnectedNodes(ANavigationNode* NavigationNode);
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	ARoom* Room;
+
 };

@@ -12,6 +12,7 @@
 #include "EngineUtils.h"
 #include "EnemyCharacter.h"
 #include "Pickup.h"
+#include "DoorConnectionNode.h"
 #include "ProceduralSpawner.generated.h"
 
 UCLASS()
@@ -22,8 +23,7 @@ class ADVGAMESPROGRAMMING_API AProceduralSpawner : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AProceduralSpawner();
-	TArray<ANavigationNode*> AllNodesInRoom;
-	TSubclassOf<ACover> CoverBlueprint;
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -34,9 +34,22 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<ANavigationNode*> AllNodesInRoom;
+	UPROPERTY(EditAnywhere)
+	AAIManager* AIManager;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<class ACover> CoverBlueprint;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<class AEnemyCharacter> EnemyAIBlueprint;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<class APickup> PickupBlueprint;
+
 	ACover* Cover;
 	AEnemyCharacter* EnemyAI;
 	APickup* Pickup;
+
+	ARoom* CurrentRoom;
 
 	//UFUNCTION(BlueprintImplementableEvent)
 	//void CheckCoverNodeCollisions(FVector NodeLoc);

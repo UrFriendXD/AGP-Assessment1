@@ -189,7 +189,19 @@ void AProceduralGeneration::Move()
             // Spawns rooms in empty spaces
             SpawnEmptyRoom();
 
-            // Call generate Items and Stuffs
+			// Populate nodes for AI to access
+			for (TActorIterator<AAIManager> It(GetWorld()); It; ++It)
+			{
+				AIManager = *It;
+				if (AIManager)
+				{
+					AIManager->PopulateNodes();
+					AIManager->PopulateCovers();
+				}
+			}
+
+            // Call generate AI and Pickups
+			ProceduralSpawner->SpawnObjects();
         }
     }
 }
