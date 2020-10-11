@@ -18,7 +18,8 @@ enum class AgentState : uint8
     EVADE,
     HEALINGAGENTS,
     DEAD,
-    COVER
+    COVER,
+    REVIVING
 };
 
 UCLASS()
@@ -108,4 +109,9 @@ private:
     float HealTimer;
 
     FRotator FaceDirection;
+
+    UPROPERTY(VisibleAnywhere)
+    float ReviveTimer;
+    UPROPERTY(EditAnywhere)
+    float ReviveDelay;
 };

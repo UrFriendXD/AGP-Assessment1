@@ -10,6 +10,7 @@ AEnemyCharacter::AEnemyCharacter()
     // Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
     CurrentAgentState = AgentState::PATROL;
+    ReviveDelay = 2.0f;
 }
 
 // Called when the game starts or when spawned
@@ -28,11 +29,12 @@ void AEnemyCharacter::BeginPlay()
     bCanSeePlayer = false;
     bCanHearPlayer = false;
     HealTimer = HealDelay;
-	for (TActorIterator<AAIManager> It(GetWorld()); It; ++It)
-	{
-		Manager = *It;
-		UE_LOG(LogTemp, Warning, TEXT("AIManager assigned"))
-	}
+    ReviveTimer = ReviveDelay;
+    for (TActorIterator<AAIManager> It(GetWorld()); It; ++It)
+    {
+        Manager = *It;
+        UE_LOG(LogTemp, Warning, TEXT("AIManager assigned"))
+    }
 }
 
 // Called every frame
@@ -118,7 +120,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
         // Revive if full HP
         if (HealthComponent->HealthPercentageRemaining() >= 1.0f)
         {
-            CurrentAgentState = AgentState::PATROL;
+            CurrentAgentState = AgentState::REVIVING;
         }
         break;
 
@@ -126,6 +128,16 @@ void AEnemyCharacter::Tick(float DeltaTime)
     case AgentState::HEALINGAGENTS:
         AgentHealing();
         break;
+
+    case AgentState::REVIVING:
+        if (ReviveTimer <= 0)
+        {
+            CurrentAgentState = AgentState::PATROL;
+            ReviveTimer = ReviveDelay;
+        }
+        else
+            ReviveTimer -= DeltaTime;
+
     default: ;
     }
 
@@ -229,7 +241,7 @@ void AEnemyCharacter::AgentHealing()
     //UE_LOG(LogTemp, Warning, TEXT("Distance %f"), Distance);
 
     // If distance of enemy and dead enemy < X, heal the enemy
-    if (Distance < 300.0f)
+    if (Distance < 200.0f)
     {
         //UE_LOG(LogTemp, Warning, TEXT("Helping Friend"));
         Path.Empty();
@@ -282,7 +294,7 @@ void AEnemyCharacter::SensePlayer(AActor* SensedActor, FAIStimulus Stimulus)
 
                     // If enemy is dead and not healing set healing others to true and enter healingAgents state
                     if (Cast<AEnemyCharacter>(SensedActor)->HealthComponent->HealthPercentageRemaining() == 0 && !
-                        bHealingOthers)
+                        bHealingOthers && !Cast<AEnemyCharacter>(SensedActor)->bEnemyHealing)
                     {
                         bHealingOthers = true;
                         CurrentAgentState = AgentState::HEALINGAGENTS;
