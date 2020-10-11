@@ -24,6 +24,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, Category = "Attached Nodes")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attached Nodes")
 	TArray<ACoverNode*> AttachedNodes;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void CheckForNavNodes();
 };
