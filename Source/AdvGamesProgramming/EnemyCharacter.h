@@ -67,8 +67,8 @@ public:
     void AgentPatrol();
     UFUNCTION(BlueprintCallable)
     void AgentEngage();
-    UFUNCTION(BlueprintCallable)
-    void AgentEvade();
+    // UFUNCTION(BlueprintCallable)
+    // void AgentEvade();
     UFUNCTION(BlueprintCallable)
     void AgentHealing();
     UFUNCTION(BlueprintCallable)
@@ -96,6 +96,9 @@ public:
     // This property is used for healing animation
     UPROPERTY(BlueprintReadOnly)
     bool bIsHealingOthers;
+
+    UPROPERTY(BlueprintReadWrite)
+    bool bHasAmmo;
 
 private:
 
