@@ -3,19 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "Room.h"
 #include "GameFramework/Actor.h"
-#include "CoverNode.h"
-#include "NavigationNode.h"
-#include "Cover.generated.h"
+#include "RoomTemplates.generated.h"
 
 UCLASS()
-class ADVGAMESPROGRAMMING_API ACover : public AActor
+class ADVGAMESPROGRAMMING_API ARoomTemplates : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ACover();
+	ARoomTemplates();
 
 protected:
 	// Called when the game starts or when spawned
@@ -25,9 +25,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attached Nodes")
-	TArray<ANavigationNode*> AttachedNodes;
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void CheckForNavNodes();
+	UPROPERTY(EditAnywhere, Category = "Rooms")
+	TArray<TSubclassOf<ARoom>> Rooms;
 };

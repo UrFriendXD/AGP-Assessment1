@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Room.h"
+#include "RoomTemplates.h"
 
 // Sets default values
-ARoom::ARoom()
+ARoomTemplates::ARoomTemplates()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -12,22 +12,16 @@ ARoom::ARoom()
 }
 
 // Called when the game starts or when spawned
-void ARoom::BeginPlay()
+void ARoomTemplates::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void ARoom::Tick(float DeltaTime)
+void ARoomTemplates::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-}
-
-// Just destroy that's it
-void ARoom::RoomDestruction()
-{
-	Destroy();
 }
 

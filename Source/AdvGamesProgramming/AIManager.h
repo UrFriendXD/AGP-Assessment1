@@ -36,7 +36,7 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Covers")
 	TArray<ACover*> AllCovers;
 	UPROPERTY(VisibleAnywhere, Category = "Cover Nodes")
-	TArray<ACoverNode*> AllCoverNodes;
+	TArray<ANavigationNode*> AllCoverNodes;
 
 	UPROPERTY(VisibleAnywhere, Category = "Agents")
 	TArray<AEnemyCharacter*> AllAgents;
@@ -59,7 +59,7 @@ public:
 	ANavigationNode* FindFurthestNode(const FVector& Location);
 
 	// Finds the furthest cover node from the given location
-	ACoverNode* FindFurthestCoverNode(const FVector& Location);
+	ANavigationNode* FindFurthestCoverNode(const FVector& Location);
 
 	void PopulateNodes();
 	void CreateAgents();

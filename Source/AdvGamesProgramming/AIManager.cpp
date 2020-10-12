@@ -20,9 +20,7 @@ void AAIManager::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	PopulateNodes();
-	CreateAgents();
-	PopulateCovers();
+	//CreateAgents();
 }
 
 // Called every frame
@@ -74,15 +72,18 @@ TArray<ANavigationNode*> AAIManager::GeneratePath(ANavigationNode* StartNode, AN
 
 		for (ANavigationNode* ConnectedNode : CurrentNode->ConnectedNodes)
 		{
-			float TentativeGScore = CurrentNode->GScore + FVector::Distance(CurrentNode->GetActorLocation(), ConnectedNode->GetActorLocation());
-			if (TentativeGScore < ConnectedNode->GScore)
+			if (ConnectedNode)
 			{
-				ConnectedNode->CameFrom = CurrentNode;
-				ConnectedNode->GScore = TentativeGScore;
-				ConnectedNode->HScore = FVector::Distance(ConnectedNode->GetActorLocation(), EndNode->GetActorLocation());
-				if (!OpenSet.Contains(ConnectedNode))
+				float TentativeGScore = CurrentNode->GScore + FVector::Distance(CurrentNode->GetActorLocation(), ConnectedNode->GetActorLocation());
+				if (TentativeGScore < ConnectedNode->GScore)
 				{
-					OpenSet.Add(ConnectedNode);
+					ConnectedNode->CameFrom = CurrentNode;
+					ConnectedNode->GScore = TentativeGScore;
+					ConnectedNode->HScore = FVector::Distance(ConnectedNode->GetActorLocation(), EndNode->GetActorLocation());
+					if (!OpenSet.Contains(ConnectedNode))
+					{
+						OpenSet.Add(ConnectedNode);
+					}
 				}
 			}
 		}
@@ -101,6 +102,7 @@ void AAIManager::PopulateNodes()
 	}
 }
 
+/* Disabled
 void AAIManager::CreateAgents()
 {
 	for (int32 i = 0; i < NumAI; i++)
@@ -112,13 +114,19 @@ void AAIManager::CreateAgents()
 		AllAgents.Add(Agent);
 	}
 }
+*/
 
 void AAIManager::PopulateCovers()
 {
 	
 	for (TActorIterator<ACover> It(GetWorld()); It; ++It)
 	{
-		AllCovers.Add(*It);
+		ACover* CurrentCover = *It;
+		AllCovers.Add(CurrentCover);
+		for (int i = 0; i < CurrentCover->AttachedNodes.Num(); i++)
+		{
+			AllCoverNodes.Add(CurrentCover->AttachedNodes[i]);
+		}
 	}
 	UE_LOG(LogTemp, Error, TEXT("Covers added to AllCovers: %i"), AllCovers.Num());
 }
@@ -161,10 +169,10 @@ ANavigationNode* AAIManager::FindFurthestNode(const FVector& Location)
 }
 
 
-ACoverNode* AAIManager::FindFurthestCoverNode(const FVector & Location)
+ANavigationNode* AAIManager::FindFurthestCoverNode(const FVector & Location)
 {
 	ACover* FurthestCover = nullptr;
-	ACoverNode* FurthestCoverNode = nullptr;
+	ANavigationNode* FurthestCoverNode = nullptr;
 	float FurthestDistance = 0.0f;
 
 	// Finds the furthest Cover from the Player
@@ -180,7 +188,7 @@ ACoverNode* AAIManager::FindFurthestCoverNode(const FVector & Location)
 	}
 
 	// Then finds the furthest Cover Node attached to that Cover
-	for (ACoverNode* CurrentNode : FurthestCover->AttachedNodes)
+	for (ANavigationNode* CurrentNode : FurthestCover->AttachedNodes)
 	{
 		
 		float CurrentNodeDistance = FVector::Distance(Location, CurrentNode->GetActorLocation());

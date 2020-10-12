@@ -27,12 +27,14 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Room type determines what opening it has
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int RoomType;
 
 	UFUNCTION(BlueprintCallable)
 	void RoomDestruction();
 
+	// List of all nav nodes in the room
 	UPROPERTY(EditAnywhere, Category = "Nav Nodes", BlueprintReadWrite)
 	TArray<ANavigationNode*> ListOfNavNodes;
 };

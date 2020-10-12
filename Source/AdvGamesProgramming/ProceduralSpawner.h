@@ -35,6 +35,8 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<ANavigationNode*> AllNodesInRoom;
+	UPROPERTY(EditAnywhere)
+	AAIManager* AIManager;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<class ACover> CoverBlueprint;

@@ -7,6 +7,9 @@
 #include "RoomSpawner.h"
 #include "GameFramework/Actor.h"
 #include "ProceduralSpawner.h"
+#include "AIManager.h"
+#include "RoomTemplates.h"
+
 #include "ProceduralGeneration.generated.h"
 
 UCLASS()
@@ -34,13 +37,14 @@ public:
     UPROPERTY(EditAnywhere)
     bool bChooseNewStartingPoint;
 
-    UPROPERTY(EditAnywhere, Category = "Rooms")
-    TArray<TSubclassOf<AActor>> Rooms; // index 0 --> LR, index 1 --> LRB, index 2 --> LRT, index 3 --> LRBT
+    UPROPERTY(EditAnywhere, Category = "RoomTemplates")
+    TArray<TSubclassOf<ARoomTemplates>> RoomTemplates; // index 0 --> LR, index 1 --> LRB, index 2 --> LRT, index 3 --> LRBT
 
     // Move room amount
     UPROPERTY(EditAnywhere)
     float MoveAmount;
 
+    // Z pos of where the rooms should spawn at Default 150f
     UPROPERTY(EditAnywhere)
     float ZPos;
 
@@ -56,23 +60,27 @@ public:
     UPROPERTY(EditAnywhere)
     float MaxX;
 
-    UPROPERTY(EditAnywhere)
-    TArray<TEnumAsByte<EObjectTypeQuery>> ActorsToCheck;
-    UClass* ActorClass;
-
+    // Calls to blueprint to cast overlap sphere and check the room type
     UFUNCTION(BlueprintImplementableEvent)
     void CheckRoom();
 
+    // Array of all room spawners in the world
     TArray<ARoomSpawner*> RoomSpawners;
 
+    // Uses BP to get the roomspawner it's ontop of
     UFUNCTION(BlueprintImplementableEvent)
     void GetRoomSpawnerInPos();
 
+    // Removes the room spawner it's ontop of in the RoomSpawners array
     UFUNCTION(BlueprintCallable)
     void RemoveRoomSpawner(ARoomSpawner* RoomSpawner);
 
 	UPROPERTY(EditAnywhere)
 	AProceduralSpawner* ProceduralSpawner;
+
+	UPROPERTY(EditAnywhere)
+	AAIManager* AIManager;
+
 
 private:
     void ChooseStartingPoint();
