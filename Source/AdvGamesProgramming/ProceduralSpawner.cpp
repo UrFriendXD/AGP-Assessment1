@@ -44,6 +44,7 @@ void AProceduralSpawner::SpawnObjects()
 		if (EnemyAI)
 		{
 			EnemyAI->CurrentNode = AIManager->AllNodes[RandomIndex];
+			EnemyAI->Path = AIManager->GeneratePath(EnemyAI->CurrentNode, AIManager->AllCoverNodes[FMath::RandRange(0, AIManager->AllCoverNodes.Num() - 1)]);
 			UE_LOG(LogTemp, Warning, TEXT("AI spawned!"))
 		}
 		else

@@ -31,6 +31,8 @@ void AEnemyCharacter::BeginPlay()
     bHasAmmo = true;
     HealTimer = HealDelay;
     ReviveTimer = ReviveDelay;
+
+    FindNewCoverDelay = 10.0f;
     FindNewCoverTimer = FindNewCoverDelay;
     for (TActorIterator<AAIManager> It(GetWorld()); It; ++It)
     {
@@ -38,6 +40,10 @@ void AEnemyCharacter::BeginPlay()
         Manager->AllAgents.Add(this);
         UE_LOG(LogTemp, Warning, TEXT("AIManager assigned"))
     }
+    // if (IsValid(Manager) && Path.Num() == 0)
+    // {
+    //     Path = Manager->GeneratePath(CurrentNode, Manager->AllCoverNodes[FMath::RandRange(0, Manager->AllCoverNodes.Num() - 1)]);
+    // }
 }
 
 // Called every frame
@@ -82,9 +88,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
         {
             CurrentAgentState = AgentState::COVER;
             Path.Empty();
-            Path = Manager->GeneratePath(CurrentNode,
-                                         Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
-            FindNewCoverTimer = FindNewCoverDelay;
+            bTransitioningIntoCover = true;
         }
 
         // Change to Cover state if low
@@ -92,14 +96,23 @@ void AEnemyCharacter::Tick(float DeltaTime)
         {
             CurrentAgentState = AgentState::COVER;
             Path.Empty();
-            Path = Manager->GeneratePath(CurrentNode,
-                                         Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
-            FindNewCoverTimer = FindNewCoverDelay;
+            bTransitioningIntoCover = true;
         }
         break;
 
         // Cover state when HP is < 40%
     case AgentState::COVER:
+        if (bTransitioningIntoCover)
+        {
+            if (Path.Num() == 0)
+            {
+                Path = Manager->GeneratePath(CurrentNode,
+                                             Manager->AllCoverNodes[FMath::RandRange(
+                                                 0, Manager->AllCoverNodes.Num() - 1)]);
+                FindNewCoverTimer = FindNewCoverDelay;
+                bTransitioningIntoCover = false;
+            }
+        }
         AgentCover();
 
         // Change to healing state if healing
@@ -125,9 +138,16 @@ void AEnemyCharacter::Tick(float DeltaTime)
         }
 
         // If under cover and healthy, start timer
-        if (bUnderCover && FindNewCoverTimer > 0 && HealthComponent->HealthPercentageRemaining() >= 1.0f)
+        if (bBehindCover)
         {
             FindNewCoverTimer -= DeltaTime;
+        }
+
+        if (FindNewCoverTimer <= 0 && Path.Num() == 0)
+        {
+            Path = Manager->GeneratePath(CurrentNode,
+                                         Manager->AllCoverNodes[FMath::RandRange(0, Manager->AllCoverNodes.Num() - 1)]);
+            FindNewCoverTimer = FindNewCoverDelay;
         }
         break;
 
@@ -137,6 +157,10 @@ void AEnemyCharacter::Tick(float DeltaTime)
         if (HealthComponent->HealthPercentageRemaining() >= 1.0f)
         {
             CurrentAgentState = AgentState::REVIVING;
+        }
+        if (bHealingOthers)
+        {
+            bIsHealingOthers = false;
         }
         break;
 
@@ -150,9 +174,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
         {
             CurrentAgentState = AgentState::COVER;
             Path.Empty();
-            Path = Manager->GeneratePath(CurrentNode,
-                                         Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
-            FindNewCoverTimer = FindNewCoverDelay;
+            bTransitioningIntoCover = true;
             ReviveTimer = ReviveDelay;
         }
         else
@@ -294,7 +316,9 @@ void AEnemyCharacter::AgentHealing()
             bHealingOthers = false;
             bIsHealingOthers = false;
             Cast<AEnemyCharacter>(DetectedActor)->bEnemyHealing = false;
-            CurrentAgentState = AgentState::PATROL;
+            CurrentAgentState = AgentState::COVER;
+            Path.Empty();
+            bTransitioningIntoCover = true;
         }
     }
 
@@ -418,7 +442,7 @@ void AEnemyCharacter::Heal()
 
         // If the player is close, run!
         float Distance = FVector::Distance(DetectedActor->GetActorLocation(), GetActorLocation());
-        if (Distance < 100.0f)
+        if (Distance < 200.0f)
         {
             // Clears path and make new one far away
             Path.Empty();

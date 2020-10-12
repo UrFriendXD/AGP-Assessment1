@@ -97,7 +97,7 @@ public:
     UPROPERTY(BlueprintReadOnly)
     bool bIsHealingOthers;
 
-    UPROPERTY(BlueprintReadWrite)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite )
     bool bHasAmmo;
 
 private:
@@ -114,6 +114,8 @@ private:
     // Healing timer
     UPROPERTY(VisibleAnywhere)
     float HealTimer;
+    
+    bool bTransitioningIntoCover;
 
     FRotator FaceDirection;
 
