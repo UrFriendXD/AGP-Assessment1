@@ -10,23 +10,9 @@
   <component name="ChangeListManager">
     <list default="true" id="96ff311f-40e9-4160-837e-352234de21b4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/Mannequin/AnimStarterPack/EnemyAnimBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Mannequin/AnimStarterPack/EnemyAnimBlueprint.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/CoverBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/CoverBlueprint.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/EnemyCharacterBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/EnemyCharacterBlueprint.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/GunBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/GunBlueprint.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/RoomFourWay_LRTB_BP1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/RoomFourWay_LRTB_BP1.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/RoomFourWay_LRTB_BP2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/RoomFourWay_LRTB_BP2.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/RoomThreeWay_LRB_BP1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/RoomThreeWay_LRB_BP1.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/RoomThreeWay_LRB_BP2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/RoomThreeWay_LRB_BP2.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/RoomThreeWay_LRT_BP1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/RoomThreeWay_LRT_BP1.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/RoomThreeWay_LRT_BP2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/RoomThreeWay_LRT_BP2.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/RoomTwoWay_LR_BP1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/RoomTwoWay_LR_BP1.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/RoomTwoWay_LR_BP2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/RoomTwoWay_LR_BP2.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/WeaponPickupBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/WeaponPickupBlueprint.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Levels/ProceduralMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Levels/ProceduralMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralSpawner.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralSpawner.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/WeaponPickup.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/WeaponPickup.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +40,7 @@
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/AIManager.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/WeaponPickup.h" />
       </list>
     </option>
   </component>
@@ -306,6 +293,7 @@
       <workItem from="1602415533781" duration="4689000" />
       <workItem from="1602421378849" duration="7093000" />
       <workItem from="1602475592934" duration="4279000" />
+      <workItem from="1602499957647" duration="1962000" />
     </task>
     <servers />
   </component>

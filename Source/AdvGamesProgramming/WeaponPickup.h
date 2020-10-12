@@ -9,49 +9,49 @@
 UENUM(BlueprintType)
 enum class WeaponPickupRarity : uint8
 {
-	//NONE UMETA(DisplayName = "No Pattern"),
+    //NONE UMETA(DisplayName = "No Pattern"),
     LEGENDARY = 3,
     MASTER = 2,
-	RARE = 1,
-	COMMON = 0,
-	
-	Num UMETA(Hidden)
+    RARE = 1,
+    COMMON = 0,
+
+    Num UMETA(Hidden)
 };
 
 UCLASS()
 class ADVGAMESPROGRAMMING_API AWeaponPickup : public APickup
 {
-	GENERATED_BODY()
-	protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+    GENERATED_BODY()
+protected:
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
 
 public:
-	AWeaponPickup();
-	
-	UFUNCTION(BlueprintImplementableEvent)
-	void OnPickup(AActor* ActorThatPickedUp) override;
+    AWeaponPickup();
 
-	UFUNCTION(BlueprintCallable)
-	void OnGenerate() override;
+    UFUNCTION(BlueprintImplementableEvent)
+    void OnPickup(AActor* ActorThatPickedUp) override;
 
-	void ChooseGoodStats();
-	void GenerateStats();
+    UFUNCTION(BlueprintCallable)
+    void OnGenerate() override;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	float BulletDamage;
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	float MuzzleVelocity;
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	int32 MagazineSize;
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	float WeaponAccuracy;
+    void ChooseGoodStats();
+    void GenerateStats();
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	WeaponPickupRarity Rarity;
+    UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+    float BulletDamage;
+    UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+    float MuzzleVelocity;
+    UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+    int32 MagazineSize;
+    UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+    float WeaponAccuracy;
 
-UPROPERTY(VisibleAnywhere)
-	TArray<int> GoodStatPool = {0,1,2,3};
-	UPROPERTY(VisibleAnywhere)
-	TMap<FName, int> StatQualities;
+    UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+    WeaponPickupRarity Rarity;
+
+    UPROPERTY(VisibleAnywhere)
+    TArray<int> GoodStatPool = {0, 1, 2, 3};
+    UPROPERTY(VisibleAnywhere)
+    TMap<FName, int> StatQualities;
 };
