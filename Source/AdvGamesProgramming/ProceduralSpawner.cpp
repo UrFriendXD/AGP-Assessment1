@@ -54,7 +54,7 @@ void AProceduralSpawner::SpawnObjects()
 	}
 
 	// Iterate over all rooms to iterate over all navnodes in that room
-	// to randomly spawn pickups (gun/health)
+	// to randomly spawn pickups (gun only, health pickups yet to be implemented)
 	for (TActorIterator<ARoom> It(GetWorld()); It; ++It)
 	{
 		CurrentRoom = *It;
@@ -70,7 +70,6 @@ void AProceduralSpawner::SpawnObjects()
 			Pickup = GetWorld()->SpawnActor<APickup>(PickupBlueprint, AllNodesInRoom[RandomIndex]->GetActorLocation(), FRotator::ZeroRotator);
 			if (Pickup)
 			{
-				NumPickup--;
 				UE_LOG(LogTemp, Warning, TEXT("Pickup spawned!"))
 			}
 			else
