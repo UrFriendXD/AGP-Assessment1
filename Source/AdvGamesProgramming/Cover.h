@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "CoverNode.h"
+#include "NavigationNode.h"
 #include "Cover.generated.h"
 
 UCLASS()
@@ -24,6 +25,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, Category = "Attached Nodes")
-	TArray<ACoverNode*> AttachedNodes;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attached Nodes")
+	TArray<ANavigationNode*> AttachedNodes;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void CheckForNavNodes();
 };

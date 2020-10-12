@@ -1854,6 +1854,7 @@
                 <e p="framework_traits.h" t="Include" />
                 <e p="guards.h" t="Include" />
                 <e p="hashing.h" t="Include" />
+                <e p="thread_util.h" t="Include" />
               </e>
               <e p="wire" t="Include">
                 <e p="ByteBufferAsyncProcessor.h" t="Include" />
@@ -2004,6 +2005,7 @@
                     <e p="clsocket.lib" t="Include" />
                     <e p="rd_core_cpp.lib" t="Include" />
                     <e p="rd_framework_cpp.lib" t="Include" />
+                    <e p="rd_framework_cpp_util.lib" t="Include" />
                     <e p="spdlog.lib" t="Include" />
                   </e>
                 </e>
@@ -2018,6 +2020,7 @@
                     <e p="clsocket.lib" t="Include" />
                     <e p="rd_core_cpp.lib" t="Include" />
                     <e p="rd_framework_cpp.lib" t="Include" />
+                    <e p="rd_framework_cpp_util.lib" t="Include" />
                     <e p="spdlog.lib" t="Include" />
                   </e>
                 </e>
@@ -40848,16 +40851,32 @@
           <e p="Cover.h" t="Include" />
           <e p="CoverNode.cpp" t="Include" />
           <e p="CoverNode.h" t="Include" />
+          <e p="DoorConnectionNode.cpp" t="Include" />
+          <e p="DoorConnectionNode.h" t="Include" />
           <e p="EnemyCharacter.cpp" t="Include" />
           <e p="EnemyCharacter.h" t="Include" />
           <e p="HealthComponent.cpp" t="Include" />
           <e p="HealthComponent.h" t="Include" />
           <e p="NavigationNode.cpp" t="Include" />
           <e p="NavigationNode.h" t="Include" />
+          <e p="Pickup.cpp" t="Include" />
+          <e p="Pickup.h" t="Include" />
           <e p="PickupRotator.cpp" t="Include" />
           <e p="PickupRotator.h" t="Include" />
           <e p="PlayerCharacter.cpp" t="Include" />
           <e p="PlayerCharacter.h" t="Include" />
+          <e p="ProceduralGeneration.cpp" t="Include" />
+          <e p="ProceduralGeneration.h" t="Include" />
+          <e p="ProceduralSpawner.cpp" t="Include" />
+          <e p="ProceduralSpawner.h" t="Include" />
+          <e p="Room.cpp" t="Include" />
+          <e p="Room.h" t="Include" />
+          <e p="RoomSpawner.cpp" t="Include" />
+          <e p="RoomSpawner.h" t="Include" />
+          <e p="RoomTemplates.cpp" t="Include" />
+          <e p="RoomTemplates.h" t="Include" />
+          <e p="WeaponPickup.cpp" t="Include" />
+          <e p="WeaponPickup.h" t="Include" />
         </e>
         <e p="AdvGamesProgramming.Target.cs" t="Include" />
         <e p="AdvGamesProgrammingEditor.Target.cs" t="Include" />

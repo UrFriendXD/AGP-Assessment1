@@ -13,5 +13,9 @@ UCLASS()
 class ADVGAMESPROGRAMMING_API ACoverNode : public ANavigationNode
 {
 	GENERATED_BODY()
-	
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 };
