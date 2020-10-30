@@ -2,6 +2,7 @@
 
 
 #include "WeaponPickup.h"
+#include "Net/UnrealNetwork.h"
 
 AWeaponPickup::AWeaponPickup()
 {
@@ -174,5 +175,16 @@ void AWeaponPickup::GenerateStats()
         WeaponAccuracy = FMath::RandRange(700.0f, 1000.0f);
         break;
     default: ;
-    }
+    } 
+}
+
+void AWeaponPickup::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AWeaponPickup, Rarity);
+	DOREPLIFETIME(AWeaponPickup, BulletDamage);
+	DOREPLIFETIME(AWeaponPickup, MuzzleVelocity);
+	DOREPLIFETIME(AWeaponPickup, MagazineSize);
+	DOREPLIFETIME(AWeaponPickup, WeaponAccuracy);
 }

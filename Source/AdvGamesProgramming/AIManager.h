@@ -27,21 +27,24 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
 	UPROPERTY(EditAnywhere, Category="AI Properties")
 	int32 NumAI;
-	UPROPERTY(VisibleAnywhere, Category = "Navigation Nodes")
+	UPROPERTY(Replicated, VisibleAnywhere, Category = "Navigation Nodes")
 	TArray<ANavigationNode*> AllNodes;
-
-	UPROPERTY(VisibleAnywhere, Category = "Covers")
+	UPROPERTY(Replicated, VisibleAnywhere, Category = "Covers")
 	TArray<ACover*> AllCovers;
-	UPROPERTY(VisibleAnywhere, Category = "Cover Nodes")
+	UPROPERTY(Replicated, VisibleAnywhere, Category = "Cover Nodes")
 	TArray<ANavigationNode*> AllCoverNodes;
 
 	UPROPERTY(VisibleAnywhere, Category = "Agents")
 	TArray<AEnemyCharacter*> AllAgents;
 	UPROPERTY(EditAnywhere, Category = "Agents")
 	TSubclassOf<AEnemyCharacter> AgentToSpawn;
+
+	UPROPERTY(Replicated, VisibleAnywhere)
+	bool bTest;
 
 	TArray<ANavigationNode*> GeneratePath(ANavigationNode* StartNode, ANavigationNode* EndNode);
 
@@ -61,7 +64,14 @@ public:
 	// Finds the furthest cover node from the given location
 	ANavigationNode* FindFurthestCoverNode(const FVector& Location);
 
+	//void CreateAgents();
 	void PopulateNodes();
-	void CreateAgents();
+
+	// UFUNCTION(Server, Reliable)
+	// void ServerPopulateNodes();
+	
 	void PopulateCovers();
+
+	// UFUNCTION(Server, Reliable)
+	// void ServerPopulateCovers();
 };

@@ -78,7 +78,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	AProceduralSpawner* ProceduralSpawner;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 	AAIManager* AIManager;
 
 

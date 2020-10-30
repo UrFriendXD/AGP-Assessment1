@@ -4,6 +4,7 @@
 #include "PlayerCharacter.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "HealthComponent.h"
 #include "Engine/World.h"
 
 // Sets default values
@@ -12,7 +13,7 @@ APlayerCharacter::APlayerCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	AutoPossessPlayer = EAutoReceiveInput::Player0;
+	//AutoPossessPlayer = EAutoReceiveInput::Player0;
 	bUseControllerRotationPitch = true;
 
 	LookSensitivity = 75.0f;
@@ -24,7 +25,12 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	Camera = FindComponentByClass<UCameraComponent>();
+	HealthComponent = FindComponentByClass<UHealthComponent>();
+	if (HealthComponent)
+	{
+		HealthComponent->SetIsReplicated(true);
+	}
 }
 
 // Called every frame

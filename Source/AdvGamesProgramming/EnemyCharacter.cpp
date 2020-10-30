@@ -81,7 +81,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
 
         // Engage state
     case AgentState::ENGAGE:
-        AgentEngage();
+        //AgentEngage();
 
         // Change to patrol state if lost player
         if (!bCanSeePlayer || !bHasAmmo)
@@ -104,16 +104,16 @@ void AEnemyCharacter::Tick(float DeltaTime)
     case AgentState::COVER:
         if (bTransitioningIntoCover)
         {
-            if (Path.Num() == 0)
-            {
-                Path = Manager->GeneratePath(CurrentNode,
-                                             Manager->AllCoverNodes[FMath::RandRange(
-                                                 0, Manager->AllCoverNodes.Num() - 1)]);
-                FindNewCoverTimer = FindNewCoverDelay;
-                bTransitioningIntoCover = false;
-            }
+            // if (Path.Num() == 0)
+            // {
+            //     Path = Manager->GeneratePath(CurrentNode,
+            //                                  Manager->AllCoverNodes[FMath::RandRange(
+            //                                      0, Manager->AllCoverNodes.Num() - 1)]);
+            //     FindNewCoverTimer = FindNewCoverDelay;
+            //     bTransitioningIntoCover = false;
+            // }
         }
-        AgentCover();
+        //AgentCover();
 
         // Change to healing state if healing
         if (bHealingOthers)
@@ -145,9 +145,9 @@ void AEnemyCharacter::Tick(float DeltaTime)
 
         if (FindNewCoverTimer <= 0 && Path.Num() == 0)
         {
-            Path = Manager->GeneratePath(CurrentNode,
-                                         Manager->AllCoverNodes[FMath::RandRange(0, Manager->AllCoverNodes.Num() - 1)]);
-            FindNewCoverTimer = FindNewCoverDelay;
+            // Path = Manager->GeneratePath(CurrentNode,
+            //                              Manager->AllCoverNodes[FMath::RandRange(0, Manager->AllCoverNodes.Num() - 1)]);
+            // FindNewCoverTimer = FindNewCoverDelay;
         }
         break;
 
@@ -166,7 +166,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
 
         // Healing other agents state
     case AgentState::HEALINGAGENTS:
-        AgentHealing();
+        //AgentHealing();
         break;
 
     case AgentState::REVIVING:
@@ -197,7 +197,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
     {
         HealTimer -= GetWorld()->GetDeltaSeconds();
     }
-    MoveAlongPath();
+    //MoveAlongPath();
 }
 
 // Called to bind functionality to input

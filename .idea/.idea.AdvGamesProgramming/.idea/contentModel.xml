@@ -13736,7 +13736,7 @@
               </e>
               <e p="IDisplayClusterRenderManager.h" t="Include" />
               <e p="PostProcess" t="Include">
-                <e p="IDisplayClusterPostprocess.h" t="Include" />
+                <e p="IDisplayClusterPostProcess.h" t="Include" />
               </e>
               <e p="Projection" t="Include">
                 <e p="IDisplayClusterProjectionPolicy.h" t="Include" />
@@ -13841,7 +13841,7 @@
             </e>
           </e>
           <e p="Public" t="Include">
-            <e p="IDisplayClusterPostprocess.h" t="Include" />
+            <e p="IDisplayClusterPostProcess.h" t="Include" />
           </e>
         </e>
         <e p="DisplayClusterProjection" t="Include">
@@ -40857,6 +40857,8 @@
           <e p="EnemyCharacter.h" t="Include" />
           <e p="HealthComponent.cpp" t="Include" />
           <e p="HealthComponent.h" t="Include" />
+          <e p="MultiplayerGameMode.cpp" t="Include" />
+          <e p="MultiplayerGameMode.h" t="Include" />
           <e p="NavigationNode.cpp" t="Include" />
           <e p="NavigationNode.h" t="Include" />
           <e p="Pickup.cpp" t="Include" />

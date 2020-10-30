@@ -28,6 +28,8 @@ protected:
 
 public:
     AWeaponPickup();
+    
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
     UFUNCTION(BlueprintImplementableEvent)
     void OnPickup(AActor* ActorThatPickedUp) override;
@@ -38,16 +40,16 @@ public:
     void ChooseGoodStats();
     void GenerateStats();
 
-    UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+    UPROPERTY(Replicated, BlueprintReadOnly, VisibleAnywhere)
     float BulletDamage;
-    UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+    UPROPERTY(Replicated, BlueprintReadOnly, VisibleAnywhere)
     float MuzzleVelocity;
-    UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+    UPROPERTY(Replicated, BlueprintReadOnly, VisibleAnywhere)
     int32 MagazineSize;
-    UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+    UPROPERTY(Replicated, BlueprintReadOnly, VisibleAnywhere)
     float WeaponAccuracy;
 
-    UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+    UPROPERTY(Replicated, BlueprintReadOnly, VisibleAnywhere)
     WeaponPickupRarity Rarity;
 
     UPROPERTY(VisibleAnywhere)

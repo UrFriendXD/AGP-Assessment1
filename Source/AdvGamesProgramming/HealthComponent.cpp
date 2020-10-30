@@ -2,7 +2,8 @@
 
 
 #include "HealthComponent.h"
-
+#include "Net/UnrealNetwork.h"
+#include "PlayerCharacter.h"
 #include "EnemyCharacter.h"
 
 // Sets default values for this component's properties
@@ -36,6 +37,13 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// ...
 }
 
+void UHealthComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UHealthComponent, CurrentHealth);
+}
+
 void UHealthComponent::OnTakeDamage(float Damage)
 {
 	if (CurrentHealth > 0)
@@ -55,11 +63,19 @@ void UHealthComponent::OnDeath()
 	AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetOwner());
 
 	// If agent isn't already dead, set it to dead and clear current path
+	if (EnemyCharacter){
 	if (EnemyCharacter->CurrentAgentState != AgentState::DEAD)
 	{
 		EnemyCharacter->CurrentAgentState = AgentState::DEAD;
 		EnemyCharacter->Path.Empty();
 	}
+	}
+	
+	APlayerCharacter* OwningPlayerCharacter = Cast<APlayerCharacter>(GetOwner());
+    	if (OwningPlayerCharacter)
+    	{
+    		//OwningPlayerCharacter->OnDeath();
+    	}
 }
 
 float UHealthComponent::HealthPercentageRemaining()

@@ -6,13 +6,14 @@
 #include "EnemyCharacter.h"
 #include "Engine/World.h"
 #include "Math/UnrealMathUtility.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AAIManager::AAIManager()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	bReplicates = true;
 }
 
 // Called when the game starts or when spawned
@@ -28,6 +29,16 @@ void AAIManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AAIManager::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AAIManager, AllNodes);
+	DOREPLIFETIME(AAIManager, AllCovers);
+	DOREPLIFETIME(AAIManager, AllCoverNodes);
+	DOREPLIFETIME(AAIManager, bTest);
 }
 
 TArray<ANavigationNode*> AAIManager::GeneratePath(ANavigationNode* StartNode, ANavigationNode* EndNode)
@@ -129,6 +140,7 @@ void AAIManager::PopulateCovers()
 		}
 	}
 	UE_LOG(LogTemp, Error, TEXT("Covers added to AllCovers: %i"), AllCovers.Num());
+	bTest = true;
 }
 
 ANavigationNode* AAIManager::FindNearestNode(const FVector& Location)

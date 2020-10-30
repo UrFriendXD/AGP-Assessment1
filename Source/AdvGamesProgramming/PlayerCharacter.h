@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
@@ -34,6 +36,8 @@ public:
 	void SprintStart();
 	void SprintEnd();
 
+	class UHealthComponent* HealthComponent;
+
 private:
 	UPROPERTY(EditInstanceOnly)
 	float LookSensitivity;
@@ -43,4 +47,6 @@ private:
 
 	UPROPERTY(EditInstanceOnly)
 	float SprintMultiplier;
+
+	UCameraComponent* Camera;
 };
