@@ -112,7 +112,7 @@ void APlayerCharacter::OnDeath()
 		AMultiplayerGameMode* GameMode = Cast<AMultiplayerGameMode>(GetWorld()->GetAuthGameMode());
 		if (GameMode)
 		{
-			GameMode->Respawn(GetController());
+			//GameMode->Respawn(GetController());
 		}
 	}
 
