@@ -40857,6 +40857,8 @@
           <e p="EnemyCharacter.h" t="Include" />
           <e p="HealthComponent.cpp" t="Include" />
           <e p="HealthComponent.h" t="Include" />
+          <e p="MultiplayerGameMode.cpp" t="Include" />
+          <e p="MultiplayerGameMode.h" t="Include" />
           <e p="NavigationNode.cpp" t="Include" />
           <e p="NavigationNode.h" t="Include" />
           <e p="Pickup.cpp" t="Include" />

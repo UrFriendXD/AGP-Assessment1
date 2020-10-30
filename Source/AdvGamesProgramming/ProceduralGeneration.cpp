@@ -27,20 +27,23 @@ void AProceduralGeneration::BeginPlay()
 {
     Super::BeginPlay();
 
-    Direction = FMath::RandRange(1, 5);
-    ChooseStartingPoint();
-
-    // Get procedural generation and add this to the RoomSpawners Array
-    for (TActorIterator<ARoomSpawner> It(GetWorld()); It; ++It)
+    if (GetLocalRole() == ROLE_Authority)
     {
-        It->ProceduralGeneration = this;
-        RoomSpawners.Add(*It);
-    }
+        Direction = FMath::RandRange(1, 5);
+        ChooseStartingPoint();
 
-    // Find the procedural spawner in the level and assign variable
-    for (TActorIterator<AProceduralSpawner> It(GetWorld()); It; ++It)
-    {
-        ProceduralSpawner = *It;
+        // Get procedural generation and add this to the RoomSpawners Array
+        for (TActorIterator<ARoomSpawner> It(GetWorld()); It; ++It)
+        {
+            It->ProceduralGeneration = this;
+            RoomSpawners.Add(*It);
+        }
+
+        // Find the procedural spawner in the level and assign variable
+        for (TActorIterator<AProceduralSpawner> It(GetWorld()); It; ++It)
+        {
+            ProceduralSpawner = *It;
+        }
     }
 }
 
@@ -49,27 +52,30 @@ void AProceduralGeneration::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    // Choose new starting point if enabled. For debug purposes
-    if (bChooseNewStartingPoint)
+    if (GetLocalRole() == ROLE_Authority)
     {
-        ChooseStartingPoint();
-    }
-
-    // If in bounds generate map
-    if (!bIsOutOfBounds)
-    {
-        if (TimeBetweenRoom <= 0)
+        // Choose new starting point if enabled. For debug purposes
+        if (bChooseNewStartingPoint)
         {
-            // Removes the room spawner it's on top of
-            GetRoomSpawnerInPos();
-
-            Move();
-
-            TimeBetweenRoom = StartTimeBetweenRoom;
+            ChooseStartingPoint();
         }
-        else
+
+        // If in bounds generate map
+        if (!bIsOutOfBounds)
         {
-            TimeBetweenRoom -= DeltaTime;
+            if (TimeBetweenRoom <= 0)
+            {
+                // Removes the room spawner it's on top of
+                GetRoomSpawnerInPos();
+
+                Move();
+
+                TimeBetweenRoom = StartTimeBetweenRoom;
+            }
+            else
+            {
+                TimeBetweenRoom -= DeltaTime;
+            }
         }
     }
 }
