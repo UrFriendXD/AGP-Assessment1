@@ -38,6 +38,7 @@ public:
 	void SprintStart();
 	void SprintEnd();
 
+	class UHealthComponent* HealthComponent;
 
 	void OnDeath();
 

@@ -18,10 +18,12 @@ APlayerHUD::APlayerHUD()
 	//Make sure the PlayerHUD class was found correctly
 	if (PlayerHUDClass)
 	{
+		UE_LOG(LogTemp, Error, TEXT("PlayerHUD was found."))
 		//Need to check that the widget was created successfully
 		CurrentPlayerHUDWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClass);
 		if (CurrentPlayerHUDWidget)
 		{
+			UE_LOG(LogTemp, Error, TEXT("Widget was created successfully."))
 			//Draw the hud to the player controllers viewport
 			CurrentPlayerHUDWidget->AddToViewport();
 			//Find the health bar and the ammo text block
@@ -29,6 +31,14 @@ APlayerHUD::APlayerHUD()
 			AmmoTextBlock = Cast<UTextBlock>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("TextAmmo")));
 			CrosshairImageBlock = Cast<UImage>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("ImgCrosshair")));
 		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Widget was not created."))
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("PlayerHUD was NOT found."))
 	}
 }
 
