@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Camera/CameraComponent.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
@@ -18,6 +19,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	float NormalMovementSpeed;
+	float SprintMovementSpeed;
 
 public:	
 	// Called every frame
@@ -34,13 +38,39 @@ public:
 	void SprintStart();
 	void SprintEnd();
 
+
+	void OnDeath();
+
+	/**
+	 * Will adjust the movement speed of the server character to sprinting
+	 */
+	UFUNCTION(Server, Reliable)
+		void ServerSprintStart();
+
+	/**
+	 * Will adjust the movement speed of the server character to normal walking speed
+	 */
+	UFUNCTION(Server, Reliable)
+		void ServerSprintEnd();
+
+	/**
+	 * Client function that will hide or show the hud.
+	 * @param bSetHudVisibility: Whether the hud should be hidden or shown.
+	 */
+	UFUNCTION(Client, Reliable)
+		void HidePlayerHUD(bool bSetHUDVisibility);
+
+
 private:
-	UPROPERTY(EditInstanceOnly)
+	UPROPERTY(EditInstanceOnly, meta = (ClampMin = "0.0", ClampMax = "2.0", UIMin = "0.0", UIMax = "2.0"))
 	float LookSensitivity;
 
-	UPROPERTY(EditInstanceOnly)
-	float MoveSpeed;
+	//UPROPERTY(EditInstanceOnly)
+	//float MoveSpeed;
 
 	UPROPERTY(EditInstanceOnly)
 	float SprintMultiplier;
+
+	UCameraComponent* Camera;
+
 };
