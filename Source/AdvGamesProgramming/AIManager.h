@@ -3,13 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "CoverNode.h"
+
 #include "Cover.h"
+#include "GameFramework/Actor.h"
 #include "NavigationNode.h"
+//#include "ProceduralGeneration.h"
+
 #include "AIManager.generated.h"
 
 class AEnemyCharacter;
+class AProceduralGeneration;
 
 UCLASS()
 class ADVGAMESPROGRAMMING_API AAIManager : public AActor
@@ -27,17 +30,18 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UPROPERTY(EditAnywhere, Category="AI Properties")
 	int32 NumAI;
-	UPROPERTY(VisibleAnywhere, Category = "Navigation Nodes")
+	UPROPERTY(Replicated, VisibleAnywhere, Category = "Navigation Nodes")
 	TArray<ANavigationNode*> AllNodes;
 
-	UPROPERTY(VisibleAnywhere, Category = "Covers")
+	UPROPERTY(Replicated, VisibleAnywhere, Category = "Covers")
 	TArray<ACover*> AllCovers;
-	UPROPERTY(VisibleAnywhere, Category = "Cover Nodes")
+	UPROPERTY(Replicated, VisibleAnywhere, Category = "Cover Nodes")
 	TArray<ANavigationNode*> AllCoverNodes;
-
+	
 	UPROPERTY(VisibleAnywhere, Category = "Agents")
 	TArray<AEnemyCharacter*> AllAgents;
 	UPROPERTY(EditAnywhere, Category = "Agents")
@@ -58,10 +62,21 @@ public:
 	*/
 	ANavigationNode* FindFurthestNode(const FVector& Location);
 
-	// Finds the furthest cover node from the given location
-	ANavigationNode* FindFurthestCoverNode(const FVector& Location);
-
 	void PopulateNodes();
-	void CreateAgents();
+	//void CreateAgents();
 	void PopulateCovers();
+
+	AProceduralGeneration* ProceduralGeneration;
+
+	bool bHasSpawned;
+
+	FTimerHandle CoverSpawnTimer;
+	FTimerHandle NodesSpawnTimer;
+	USceneComponent* LocationComponent;
+	//void GenerateNodes(const TArray<FVector>& Vertices, int32 Width, int32 Height);
+	//void AddConnection(ANavigationNode* FromNode, ANavigationNode* ToNode);
+	//UPROPERTY(EditAnywhere)
+	//float AllowedAngle;
+
+	
 };

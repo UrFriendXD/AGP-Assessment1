@@ -38,7 +38,7 @@ public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere)
     TArray<ANavigationNode*> Path;
     UPROPERTY(VisibleAnywhere)
     ANavigationNode* CurrentNode;
@@ -52,82 +52,41 @@ public:
     AgentState CurrentAgentState;
     UPROPERTY(VisibleAnywhere)
     AActor* DetectedActor;
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    bool bCanSeePlayer;
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    bool bCanHearPlayer;
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    bool bCanSeeEnemy;
     UPROPERTY(VisibleAnywhere)
-    bool bBehindCover;
+    bool bCanSeeActor;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+    bool bOutOfAmmo;
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+    bool bIsReloading;
 
     UHealthComponent* HealthComponent;
 
-    // UFUNCTION(BlueprintCallable)
-    // void AgentPatrol();
-    UFUNCTION(BlueprintCallable)
+    UPROPERTY(EditAnywhere, meta = (UIMin = "10.0", UIMax = "1000.0", ClampMin = "10.0", ClampMax = "1000.0"))
+    float PathfindingNodeAccuracy;
+
+    UFUNCTION()
+    void AgentPatrol();
+    UFUNCTION()
     void AgentEngage();
-    // UFUNCTION(BlueprintCallable)
+    // UFUNCTION()
     // void AgentEvade();
-    UFUNCTION(BlueprintCallable)
-    void AgentHealing();
-    UFUNCTION(BlueprintCallable)
-    void AgentCover();
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION()
     void SensePlayer(AActor* ActorSensed, FAIStimulus Stimulus);
     UFUNCTION(BlueprintImplementableEvent)
     void Fire(FVector FireDirection);
+    UFUNCTION(BlueprintImplementableEvent)
+    void Reload();
+
 
     // Called to bind functionality to input
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-    UPROPERTY(EditAnywhere, Category=Behavior)
-    class UBehaviorTree* EnemyCharacterBehavior;
-
-    UFUNCTION()
-    void Heal();
-
-    UPROPERTY(EditAnywhere)
-    bool bEnemyHealing;
-
-    UPROPERTY(EditAnywhere)
-    float HealDelay;
 
     // This property is used for healing animation
     UPROPERTY(BlueprintReadOnly)
     bool bIsHealingOthers;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite )
-    bool bHasAmmo;
-
 private:
 
-    UFUNCTION(BlueprintCallable)
     void MoveAlongPath();
-
-    UPROPERTY(EditAnywhere)
-    bool bUnderCover;
-
-    UPROPERTY(VisibleAnywhere)
-    bool bHealingOthers;
-    
-    // Healing timer
-    UPROPERTY(VisibleAnywhere)
-    float HealTimer;
-    
-    bool bTransitioningIntoCover;
-
-    FRotator FaceDirection;
-
-    // Reviver timers
-    UPROPERTY(VisibleAnywhere)
-    float ReviveTimer;
-    UPROPERTY(EditAnywhere)
-    float ReviveDelay;
-
-    // Finding new cover timers
-    UPROPERTY(VisibleAnywhere)
-    float FindNewCoverTimer;
-    UPROPERTY(EditAnywhere)
-    float FindNewCoverDelay;
 };

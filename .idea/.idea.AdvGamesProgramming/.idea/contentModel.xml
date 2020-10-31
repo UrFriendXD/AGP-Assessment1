@@ -40818,9 +40818,8 @@
       <e p="UE4Game.Target.cs" t="Include" />
     </e>
     <e p="C:\Users\Sam\AppData\Local\JetBrains\Rider2020.2\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\Sam\AppData\Local\JetBrains\Rider2020.2\resharper-host\Local\Transient\Rider\v202\SolutionCaches\_AdvGamesProgramming.1731751765.00" t="ExcludeRecursive" />
-    <e p="C:\Users\Sam\Desktop\Uni\2020\AGP\Assessments\AGP-Assessment2" t="IncludeFlat">
-      <e p=".gitignore" t="Include" />
+    <e p="C:\Users\Sam\AppData\Local\JetBrains\Rider2020.2\resharper-host\Local\Transient\Rider\v202\SolutionCaches\_AdvGamesProgramming.-883434783.00" t="ExcludeRecursive" />
+    <e p="C:\Users\Sam\Desktop\Uni\2020\AGP\Migration" t="IncludeFlat">
       <e p="AdvGamesProgramming.sln" t="IncludeFlat" />
       <e p="AdvGamesProgramming.uproject" t="Include" />
       <e p="Config" t="Include">
@@ -40837,7 +40836,6 @@
         <e p="UE4.vcxproj" t="IncludeRecursive" />
       </e>
       <e p="packages" t="ExcludeRecursive" />
-      <e p="README.md" t="Include" />
       <e p="Source" t="Include">
         <e p="AdvGamesProgramming" t="Include">
           <e p="AdvGamesProgramming.Build.cs" t="Include" />
@@ -40857,18 +40855,28 @@
           <e p="EnemyCharacter.h" t="Include" />
           <e p="HealthComponent.cpp" t="Include" />
           <e p="HealthComponent.h" t="Include" />
+          <e p="MainGameInstance.cpp" t="Include" />
+          <e p="MainGameInstance.h" t="Include" />
+          <e p="MainMenuWidget.cpp" t="Include" />
+          <e p="MainMenuWidget.h" t="Include" />
           <e p="MultiplayerGameMode.cpp" t="Include" />
           <e p="MultiplayerGameMode.h" t="Include" />
           <e p="NavigationNode.cpp" t="Include" />
           <e p="NavigationNode.h" t="Include" />
           <e p="Pickup.cpp" t="Include" />
           <e p="Pickup.h" t="Include" />
+          <e p="PickupManager.cpp" t="Include" />
+          <e p="PickupManager.h" t="Include" />
           <e p="PickupRotator.cpp" t="Include" />
           <e p="PickupRotator.h" t="Include" />
           <e p="PlayerCharacter.cpp" t="Include" />
           <e p="PlayerCharacter.h" t="Include" />
+          <e p="PlayerHUD.cpp" t="Include" />
+          <e p="PlayerHUD.h" t="Include" />
           <e p="ProceduralGeneration.cpp" t="Include" />
           <e p="ProceduralGeneration.h" t="Include" />
+          <e p="ProcedurallyGeneratedMap.cpp" t="Include" />
+          <e p="ProcedurallyGeneratedMap.h" t="Include" />
           <e p="ProceduralSpawner.cpp" t="Include" />
           <e p="ProceduralSpawner.h" t="Include" />
           <e p="Room.cpp" t="Include" />
@@ -40877,6 +40885,8 @@
           <e p="RoomSpawner.h" t="Include" />
           <e p="RoomTemplates.cpp" t="Include" />
           <e p="RoomTemplates.h" t="Include" />
+          <e p="WeaponFiringType.cpp" t="Include" />
+          <e p="WeaponFiringType.h" t="Include" />
           <e p="WeaponPickup.cpp" t="Include" />
           <e p="WeaponPickup.h" t="Include" />
         </e>

@@ -8,47 +8,42 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="96ff311f-40e9-4160-837e-352234de21b4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" afterDir="false" />
-    </list>
+    <list default="true" id="f1eeaa14-3621-4771-8653-c97f68f11eef" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/../Assessments/AGP-Assessment2/Source/AdvGamesProgramming/MultiplayerGameMode.h" />
+        <option value="$PROJECT_DIR$/../Assessments/AGP-Assessment2/Source/AdvGamesProgramming/MultiplayerGameMode.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/MainGameInstance.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/NavigationNode.h" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/RoomSpawner.h" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/DoorConnectionNode.h" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/DoorConnectionNode.cpp" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/RoomTemplates.h" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/RoomSpawner.cpp" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.h" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/Room.cpp" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/Room.h" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/CoverNode.cpp" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralSpawner.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/NavigationNode.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProcedurallyGeneratedMap.h" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProcedurallyGeneratedMap.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/MultiplayerGameMode.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/MultiplayerGameMode.h" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/AIManager.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/AIManager.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/WeaponPickup.h" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/AIManager.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.h" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralSpawner.cpp" />
       </list>
     </option>
   </component>
-  <component name="ProjectId" id="1iVJI7EXJ8xEdZTB7hzDQvJmHpk" />
+  <component name="ProjectId" id="1jb4eq3q45BYacSTApzmhS7hrS0" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.34994584" />
+    <property name="DebuggerViewTab_PTCS_LastProportionKey" value="0.30010834" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="node.js.detected.package.eslint" value="true" />
@@ -277,23 +272,17 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="96ff311f-40e9-4160-837e-352234de21b4" name="Default Changelist" comment="" />
-      <created>1601986746161</created>
+      <changelist id="f1eeaa14-3621-4771-8653-c97f68f11eef" name="Default Changelist" comment="" />
+      <created>1604059558280</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1601986746161</updated>
-      <workItem from="1601986755973" duration="3197000" />
-      <workItem from="1602055186920" duration="5739000" />
-      <workItem from="1602140677463" duration="12761000" />
-      <workItem from="1602158574536" duration="2866000" />
-      <workItem from="1602163124523" duration="13363000" />
-      <workItem from="1602245396362" duration="1763000" />
-      <workItem from="1602312642088" duration="2672000" />
-      <workItem from="1602415533781" duration="4689000" />
-      <workItem from="1602421378849" duration="7093000" />
-      <workItem from="1602475592934" duration="4279000" />
-      <workItem from="1602499957647" duration="1962000" />
-      <workItem from="1604067177165" duration="2337000" />
+      <updated>1604059558280</updated>
+      <workItem from="1604059595073" duration="1044000" />
+      <workItem from="1604063959298" duration="2971000" />
+      <workItem from="1604068425089" duration="939000" />
+      <workItem from="1604069486514" duration="176000" />
+      <workItem from="1604106549949" duration="1636000" />
+      <workItem from="1604108572962" duration="8681000" />
     </task>
     <servers />
   </component>
@@ -306,18 +295,81 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="-1400" y="143" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1602427488435">
+    <state width="477" height="464" key="DebuggerActiveHint" timestamp="1604107486345">
       <screen x="-1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="-1400" y="143" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1602427488435" />
-    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1604069535630">
+    <state width="477" height="464" key="DebuggerActiveHint/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604107486345" />
+    <state width="1877" height="390" key="GridCell.Tab.0.bottom" timestamp="1604108195481">
+      <screen x="-1920" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="390" key="GridCell.Tab.0.bottom/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604108195481" />
+    <state width="1877" height="390" key="GridCell.Tab.0.center" timestamp="1604108195481">
+      <screen x="-1920" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="390" key="GridCell.Tab.0.center/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604108195481" />
+    <state width="1877" height="390" key="GridCell.Tab.0.left" timestamp="1604108195481">
+      <screen x="-1920" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="390" key="GridCell.Tab.0.left/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604108195481" />
+    <state width="1877" height="390" key="GridCell.Tab.0.right" timestamp="1604108195481">
+      <screen x="-1920" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="390" key="GridCell.Tab.0.right/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604108195481" />
+    <state width="1877" height="390" key="GridCell.Tab.1.bottom" timestamp="1604108195482">
+      <screen x="-1920" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="390" key="GridCell.Tab.1.bottom/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604108195482" />
+    <state width="1877" height="390" key="GridCell.Tab.1.center" timestamp="1604108195481">
+      <screen x="-1920" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="390" key="GridCell.Tab.1.center/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604108195481" />
+    <state width="1877" height="390" key="GridCell.Tab.1.left" timestamp="1604108195481">
+      <screen x="-1920" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="390" key="GridCell.Tab.1.left/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604108195481" />
+    <state width="1877" height="390" key="GridCell.Tab.1.right" timestamp="1604108195482">
+      <screen x="-1920" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="390" key="GridCell.Tab.1.right/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604108195482" />
+    <state width="1877" height="390" key="GridCell.Tab.2.bottom" timestamp="1604108195482">
+      <screen x="-1920" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="390" key="GridCell.Tab.2.bottom/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604108195482" />
+    <state width="1877" height="390" key="GridCell.Tab.2.center" timestamp="1604108195482">
+      <screen x="-1920" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="390" key="GridCell.Tab.2.center/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604108195482" />
+    <state width="1877" height="390" key="GridCell.Tab.2.left" timestamp="1604108195482">
+      <screen x="-1920" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="390" key="GridCell.Tab.2.left/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604108195482" />
+    <state width="1877" height="390" key="GridCell.Tab.2.right" timestamp="1604108195482">
+      <screen x="-1920" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="390" key="GridCell.Tab.2.right/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604108195482" />
+    <state width="1877" height="390" key="GridCell.Tab.3.bottom" timestamp="1604108195482">
+      <screen x="-1920" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="390" key="GridCell.Tab.3.bottom/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604108195482" />
+    <state width="1877" height="390" key="GridCell.Tab.3.center" timestamp="1604108195482">
+      <screen x="-1920" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="390" key="GridCell.Tab.3.center/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604108195482" />
+    <state width="1877" height="390" key="GridCell.Tab.3.left" timestamp="1604108195482">
+      <screen x="-1920" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="390" key="GridCell.Tab.3.left/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604108195482" />
+    <state width="1877" height="390" key="GridCell.Tab.3.right" timestamp="1604108195482">
+      <screen x="-1920" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="390" key="GridCell.Tab.3.right/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604108195482" />
+    <state x="0" y="0" width="1893" height="1066" key="dock-window-1" timestamp="1604060644930">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1602475853517" />
-    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080/-1920.0.1920.1080@0.0.1920.1080" timestamp="1604069535630" />
-    <state x="682" y="453" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1602147697220">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="0" y="0" width="1893" height="1066" key="dock-window-1/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604060644930" />
+    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1604120278132">
+      <screen x="-1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="682" y="453" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.0.1920.1080/-1920.0.1920.1080@0.0.1920.1080" timestamp="1602147697220" />
+    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604120278132" />
   </component>
 </project>

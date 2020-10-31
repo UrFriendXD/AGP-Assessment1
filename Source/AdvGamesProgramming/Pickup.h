@@ -3,9 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
-#include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
+#include "Components/BoxComponent.h"
 #include "Pickup.generated.h"
 
 UCLASS()
@@ -13,7 +12,7 @@ class ADVGAMESPROGRAMMING_API APickup : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
+public:
 	// Sets default values for this actor's properties
 	APickup();
 
@@ -25,12 +24,14 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	USceneComponent* PickupSceneComponent;
-
-	UBoxComponent* PickupRoundingBox;
-
-	UFUNCTION()virtual void OnEnterPickup(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
 	virtual void OnPickup(AActor* ActorThatPickedUp);
 	virtual void OnGenerate();
+	UFUNCTION()
+	virtual void OnEnterPickup(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UPROPERTY()
+	USceneComponent* PickupSceneComponent;
+	UPROPERTY()
+	UBoxComponent* PickupBoundingBox;
+
 };

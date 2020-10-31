@@ -4,12 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Room.h"
 #include "NavigationNode.generated.h"
 
 class ARoom;
-class ANavigationNode;
-
 UCLASS()
 class ADVGAMESPROGRAMMING_API ANavigationNode : public AActor
 {
@@ -27,7 +24,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, Category = "Connected Nodes", BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, Category = "Connected Nodes")
 	TArray<ANavigationNode*> ConnectedNodes;
 
 	USceneComponent* LocationComponent;
@@ -35,18 +32,14 @@ public:
 	float GScore;
 	float HScore;
 	float FScore();
-
-	ANavigationNode* CameFrom;
-
-	bool bSpawnedSomething;
-
 	UFUNCTION(BlueprintImplementableEvent)
-	void CheckForNearbyNavNodes();
+    void CheckForNearbyNavNodes();
 
 	UFUNCTION(BlueprintCallable)
-	void AddToConnectedNodes(ANavigationNode* NavigationNode);
+    void AddToConnectedNodes(ANavigationNode* NavigationNode);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ARoom* Room;
 
+	ANavigationNode* CameFrom;
 };

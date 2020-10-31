@@ -75,15 +75,20 @@ public:
     UFUNCTION(BlueprintCallable)
     void RemoveRoomSpawner(ARoomSpawner* RoomSpawner);
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(Replicated, EditAnywhere)
 	AProceduralSpawner* ProceduralSpawner;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(Replicated, EditAnywhere)
 	AAIManager* AIManager;
 
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+    UPROPERTY(Replicated, VisibleAnywhere)
+    bool bIsOutOfBounds;
 
 private:
     void ChooseStartingPoint();
+    void PopulateAIManager();
 
     UPROPERTY(VisibleAnywhere)
     int Direction;
@@ -92,9 +97,10 @@ private:
     void Move();
 
     float TimeBetweenRoom;
+    
 
-    UPROPERTY(VisibleAnywhere)
-    bool bIsOutOfBounds;
+    UPROPERTY(Replicated, VisibleAnywhere)
+    bool bIsEverythingSpawned;
 
     UFUNCTION(BlueprintCallable)
     void SpawnRoomWithBottom();

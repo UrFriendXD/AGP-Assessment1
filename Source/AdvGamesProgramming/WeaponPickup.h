@@ -9,49 +9,48 @@
 UENUM(BlueprintType)
 enum class WeaponPickupRarity : uint8
 {
-    //NONE UMETA(DisplayName = "No Pattern"),
-    LEGENDARY = 3,
-    MASTER = 2,
-    RARE = 1,
-    COMMON = 0,
-
-    Num UMETA(Hidden)
+	LEGENDARY,
+	MASTER,
+	RARE,
+	COMMON
 };
 
+/**
+ * 
+ */
 UCLASS()
 class ADVGAMESPROGRAMMING_API AWeaponPickup : public APickup
 {
-    GENERATED_BODY()
-protected:
-    // Called when the game starts or when spawned
-    virtual void BeginPlay() override;
-
+	GENERATED_BODY()
+	
 public:
-    AWeaponPickup();
 
-    UFUNCTION(BlueprintImplementableEvent)
-    void OnPickup(AActor* ActorThatPickedUp) override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-    UFUNCTION(BlueprintCallable)
-    void OnGenerate() override;
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnPickup(AActor* ActorThatPickedUp) override;
+	UFUNCTION(BlueprintCallable)
+	void OnGenerate() override;
 
-    void ChooseGoodStats();
-    void GenerateStats();
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
+	WeaponPickupRarity Rarity;
 
-    UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-    float BulletDamage;
-    UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-    float MuzzleVelocity;
-    UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-    int32 MagazineSize;
-    UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-    float WeaponAccuracy;
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
+	float BulletDamage;
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
+	float MuzzleVelocity;
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
+	int32 MagazineSize;
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
+	float WeaponAccuracy;
 
-    UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-    WeaponPickupRarity Rarity;
+private:
+	
+	/** Will generate an array of a given length with a certain number of true values.
+	 *	@param ArrayLength: The length of the wanted array.
+	 *	@param NumTrue: The number of true values that are wanted in the array.
+	 *	@param RandBoolArray: The random array that will be populated with values
+	*/
+	void GenerateRandBooleanArray(int32 ArrayLength, int32 NumTrue, TArray<bool>& RandBoolArray);
 
-    UPROPERTY(VisibleAnywhere)
-    TArray<int> GoodStatPool = {0, 1, 2, 3};
-    UPROPERTY(VisibleAnywhere)
-    TMap<FName, int> StatQualities;
 };

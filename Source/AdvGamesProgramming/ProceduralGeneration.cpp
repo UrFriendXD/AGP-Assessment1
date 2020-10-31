@@ -8,12 +8,15 @@
 #include "Room.h"
 #include "Engine/World.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AProceduralGeneration::AProceduralGeneration()
 {
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
+
+    bReplicates = true;
 
     LocationComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Location Component"));
     RootComponent = LocationComponent;
@@ -78,6 +81,28 @@ void AProceduralGeneration::Tick(float DeltaTime)
             }
         }
     }
+
+    // if (bIsOutOfBounds && !bIsEverythingSpawned)
+    // {
+    //     // Populate nodes for AI to access
+    //     PopulateAIManager();
+    //
+    //     //GetWorld()->SpawnActor<AAIManager>(GetActorLocation(), FRotator::ZeroRotator);
+    //     
+    //     if (GetLocalRole() == ROLE_Authority)
+    //     {
+    //         // Call generate AI and Pickups
+    //         ProceduralSpawner->SpawnObjects();
+    //     }
+    //
+    //     UE_LOG(LogTemp, Warning, TEXT("Manager"))
+    //     if (GetLocalRole() == ROLE_AutonomousProxy)
+    //     {
+    //         UE_LOG(LogTemp, Warning, TEXT("Autonomous"))
+    //     }
+    //
+    //     bIsEverythingSpawned = true;
+    // }
 }
 
 // Removes room spawner from list
@@ -87,6 +112,16 @@ void AProceduralGeneration::RemoveRoomSpawner(ARoomSpawner* RoomSpawner)
     {
         RoomSpawners.Remove(RoomSpawner);
     }
+}
+
+void AProceduralGeneration::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+    DOREPLIFETIME(AProceduralGeneration, bIsOutOfBounds);
+    DOREPLIFETIME(AProceduralGeneration, bIsEverythingSpawned);
+    DOREPLIFETIME(AProceduralGeneration, AIManager);
+    DOREPLIFETIME(AProceduralGeneration, ProceduralSpawner);
 }
 
 // Choose a random starting point for the generation
@@ -101,6 +136,7 @@ void AProceduralGeneration::ChooseStartingPoint()
         FRotator(0.f, 0.f, 0.f));
     bChooseNewStartingPoint = false;
 }
+
 
 void AProceduralGeneration::Move()
 {
@@ -209,18 +245,11 @@ void AProceduralGeneration::Move()
 
             // Spawns rooms in empty spaces
             SpawnEmptyRoom();
-
+            
             // Populate nodes for AI to access
-            for (TActorIterator<AAIManager> It(GetWorld()); It; ++It)
-            {
-                AIManager = *It;
-                if (AIManager)
-                {
-                    AIManager->PopulateNodes();
-                    AIManager->PopulateCovers();
-                }
-            }
-
+            PopulateAIManager();
+            
+            ProceduralSpawner->AIManager = AIManager;
             // Call generate AI and Pickups
             ProceduralSpawner->SpawnObjects();
         }
@@ -256,5 +285,18 @@ void AProceduralGeneration::SpawnEmptyRoom()
     for (ARoomSpawner* RoomSpawner : RoomSpawners)
     {
         RoomSpawner->SpawnRoom();
+    }
+}
+
+void AProceduralGeneration::PopulateAIManager()
+{
+    for (TActorIterator<AAIManager> It(GetWorld()); It; ++It)
+    {
+        AIManager = *It;
+        if (AIManager)
+        {
+            AIManager->PopulateNodes();
+            AIManager->PopulateCovers();
+        }
     }
 }
