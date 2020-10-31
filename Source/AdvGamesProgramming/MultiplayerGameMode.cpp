@@ -91,8 +91,10 @@ void AMultiplayerGameMode::TriggerRespawn(AController* Controller)
 	}
 }
 
+/*
 void AMultiplayerGameMode::StartMatch()
 {
 	auto test = GetWorld()->GetGameState();
 	test->PlayerArray[0];
 }
+*/
