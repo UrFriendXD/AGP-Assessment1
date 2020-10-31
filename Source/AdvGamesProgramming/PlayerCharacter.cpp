@@ -26,6 +26,9 @@ APlayerCharacter::APlayerCharacter()
 	NormalMovementSpeed = GetCharacterMovement()->MaxWalkSpeed;
 	SprintMovementSpeed = GetCharacterMovement()->MaxWalkSpeed * SprintMultiplier;
 
+	// Role
+	PlayerRole = PlayerRole::HIDER;
+
 }
 
 // Called when the game starts or when spawned
@@ -62,19 +65,35 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &APlayerCharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Sprint"), EInputEvent::IE_Pressed, this, &APlayerCharacter::SprintStart);
 	PlayerInputComponent->BindAction(TEXT("Sprint"), EInputEvent::IE_Released, this, &APlayerCharacter::SprintEnd);
+	PlayerInputComponent->BindAction(TEXT("Interact"), EInputEvent::IE_Pressed, this, &APlayerCharacter::InteractStart);
+	PlayerInputComponent->BindAction(TEXT("Interact"), EInputEvent::IE_Released, this, &APlayerCharacter::InteractEnd);
+}
+
+void APlayerCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(APlayerCharacter, PlayerRole);
+	DOREPLIFETIME(APlayerCharacter, bIsInteracting);
 }
 
 void APlayerCharacter::MoveForward(float Value)
 {
-	FRotator ForwardRotation = GetControlRotation();
-	ForwardRotation.Roll = 0.0f;
-	ForwardRotation.Pitch = 0.0f;
-	AddMovementInput(ForwardRotation.Vector(), Value);
+	if (!bIsInteracting)
+	{
+		FRotator ForwardRotation = GetControlRotation();
+		ForwardRotation.Roll = 0.0f;
+		ForwardRotation.Pitch = 0.0f;
+		AddMovementInput(ForwardRotation.Vector(), Value);
+	}
 }
 
 void APlayerCharacter::Strafe(float Value)
 {
-	AddMovementInput(GetActorRightVector(), Value);
+	if (!bIsInteracting)
+	{
+		AddMovementInput(GetActorRightVector(), Value);
+	}
 }
 
 void APlayerCharacter::LookUp(float Value)
@@ -103,14 +122,38 @@ void APlayerCharacter::Turn(float Value)
 
 void APlayerCharacter::SprintStart()
 {
-	GetCharacterMovement()->MaxWalkSpeed = SprintMovementSpeed;
-	ServerSprintStart();
+	if (!bIsInteracting)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = SprintMovementSpeed;
+		ServerSprintStart();
+	}
 }
 
 void APlayerCharacter::SprintEnd()
 {
-	GetCharacterMovement()->MaxWalkSpeed = NormalMovementSpeed;
-	ServerSprintEnd();
+	if (!bIsInteracting)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = NormalMovementSpeed;
+		ServerSprintEnd();
+	}
+}
+
+void APlayerCharacter::InteractStart()
+{
+	if (PlayerRole == PlayerRole::HIDER)
+	{
+		bIsInteracting = true;
+		UE_LOG(LogTemp, Warning, TEXT("Interact pressed"))
+	}
+}
+
+void APlayerCharacter::InteractEnd()
+{
+	if (PlayerRole == PlayerRole::HIDER)
+	{
+		bIsInteracting = false;
+		UE_LOG(LogTemp, Warning, TEXT("Interact Released"))
+	}
 }
 
 void APlayerCharacter::OnDeath()

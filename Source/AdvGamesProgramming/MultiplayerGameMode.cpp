@@ -9,6 +9,8 @@
 #include "GameFramework/HUD.h"
 #include "TimerManager.h"
 #include "PlayerHUD.h"
+#include "Engine/World.h"
+#include "GameFramework/GameState.h"
 #include "PlayerCharacter.h"
 
 void AMultiplayerGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessages)
@@ -62,6 +64,8 @@ void AMultiplayerGameMode::Respawn(AController* Controller)
 
 		GetWorldTimerManager().SetTimer(RespawnTimer, RespawnDelegate, 5.0f, false);
 	}
+	//int test;
+	
 }
 
 void AMultiplayerGameMode::TriggerRespawn(AController* Controller)
@@ -85,4 +89,10 @@ void AMultiplayerGameMode::TriggerRespawn(AController* Controller)
 			}
 		}
 	}
+}
+
+void AMultiplayerGameMode::StartMatch()
+{
+	auto test = GetWorld()->GetGameState();
+	test->PlayerArray[0];
 }

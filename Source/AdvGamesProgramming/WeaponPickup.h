@@ -9,10 +9,12 @@
 UENUM(BlueprintType)
 enum class WeaponPickupRarity : uint8
 {
-	LEGENDARY,
-	MASTER,
-	RARE,
-	COMMON
+    LEGENDARY = 3,
+    MASTER = 2,
+    RARE = 1,
+    COMMON = 0,
+
+    Num UMETA(Hidden)
 };
 
 /**
@@ -21,36 +23,46 @@ enum class WeaponPickupRarity : uint8
 UCLASS()
 class ADVGAMESPROGRAMMING_API AWeaponPickup : public APickup
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
+protected:
+    virtual void BeginPlay() override;
+    
 public:
+    AWeaponPickup();
 
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void OnPickup(AActor* ActorThatPickedUp) override;
-	UFUNCTION(BlueprintCallable)
-	void OnGenerate() override;
+    UFUNCTION(BlueprintImplementableEvent)
+    void OnPickup(AActor* ActorThatPickedUp) override;
+    UFUNCTION(BlueprintCallable)
+    void OnGenerate() override;
 
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
-	WeaponPickupRarity Rarity;
+    UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
+    WeaponPickupRarity Rarity;
 
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
-	float BulletDamage;
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
-	float MuzzleVelocity;
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
-	int32 MagazineSize;
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
-	float WeaponAccuracy;
+    UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
+    float BulletDamage;
+    UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
+    float MuzzleVelocity;
+    UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
+    int32 MagazineSize;
+    UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
+    float WeaponAccuracy;
 
 private:
-	
-	/** Will generate an array of a given length with a certain number of true values.
-	 *	@param ArrayLength: The length of the wanted array.
-	 *	@param NumTrue: The number of true values that are wanted in the array.
-	 *	@param RandBoolArray: The random array that will be populated with values
-	*/
-	void GenerateRandBooleanArray(int32 ArrayLength, int32 NumTrue, TArray<bool>& RandBoolArray);
 
+    /** Will generate an array of a given length with a certain number of true values.
+     *	@param ArrayLength: The length of the wanted array.
+     *	@param NumTrue: The number of true values that are wanted in the array.
+     *	@param RandBoolArray: The random array that will be populated with values
+    */
+    //void GenerateRandBooleanArray(int32 ArrayLength, int32 NumTrue, TArray<bool>& RandBoolArray);
+
+    UPROPERTY(VisibleAnywhere)
+    TArray<int> GoodStatPool = {0, 1, 2, 3};
+    UPROPERTY(VisibleAnywhere)
+    TMap<FName, int> StatQualities;
+
+    void ChooseGoodStats();
+    void GenerateStats();
 };

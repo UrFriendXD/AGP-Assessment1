@@ -8,11 +8,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f1eeaa14-3621-4771-8653-c97f68f11eef" name="Default Changelist" comment="" />
+    <list default="true" id="f1eeaa14-3621-4771-8653-c97f68f11eef" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/contentModel.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultInput.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultInput.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/MultiplayerGameModeBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/MultiplayerGameModeBlueprint.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/PlayerCharacterBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/PlayerCharacterBlueprint.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/WeaponPickupBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/WeaponPickupBlueprint.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Levels/ProceduralMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Levels/ProceduralMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/MultiplayerGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/MultiplayerGameMode.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/MultiplayerGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/MultiplayerGameMode.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/PlayerCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/PlayerCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/PlayerCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/PlayerCharacter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/WeaponPickup.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/WeaponPickup.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/WeaponPickup.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/WeaponPickup.h" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -24,8 +42,6 @@
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/NavigationNode.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProcedurallyGeneratedMap.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProcedurallyGeneratedMap.cpp" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/MultiplayerGameMode.cpp" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/MultiplayerGameMode.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/AIManager.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/AIManager.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.h" />
@@ -33,6 +49,14 @@
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralSpawner.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/HiderPlayerCharacter.h" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/HiderPlayerCharacter.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/PlayerCharacter.h" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/PlayerCharacter.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/WeaponPickup.h" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/WeaponPickup.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/MultiplayerGameMode.h" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/MultiplayerGameMode.cpp" />
       </list>
     </option>
   </component>
@@ -283,6 +307,7 @@
       <workItem from="1604069486514" duration="176000" />
       <workItem from="1604106549949" duration="1636000" />
       <workItem from="1604108572962" duration="8681000" />
+      <workItem from="1604125424129" duration="5227000" />
     </task>
     <servers />
   </component>
@@ -367,9 +392,9 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="0" y="0" width="1893" height="1066" key="dock-window-1/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604060644930" />
-    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1604120278132">
+    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1604127948784">
       <screen x="-1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604120278132" />
+    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604127948784" />
   </component>
 </project>

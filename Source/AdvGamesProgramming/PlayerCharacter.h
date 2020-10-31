@@ -7,6 +7,13 @@
 #include "Camera/CameraComponent.h"
 #include "PlayerCharacter.generated.h"
 
+UENUM()
+enum class PlayerRole : uint8
+{
+	SEEKER,
+	HIDER
+};
+
 UCLASS()
 class ADVGAMESPROGRAMMING_API APlayerCharacter : public ACharacter
 {
@@ -30,6 +37,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	void MoveForward(float Value);
 	void Strafe(float Value);
 	void LookUp(float Value);
@@ -37,6 +46,9 @@ public:
 
 	void SprintStart();
 	void SprintEnd();
+
+	void InteractStart();
+	void InteractEnd();
 
 	class UHealthComponent* HealthComponent;
 
@@ -60,6 +72,12 @@ public:
 	 */
 	UFUNCTION(Client, Reliable)
 	void HidePlayerHUD(bool bSetHUDVisibility);
+
+	UPROPERTY(Replicated)
+	PlayerRole PlayerRole;
+
+	UPROPERTY(Replicated, BlueprintReadOnly)
+	bool bIsInteracting;
 
 private:
 	UPROPERTY(EditInstanceOnly, meta = (ClampMin="0.0", ClampMax="2.0", UIMin ="0.0", UIMax="2.0"))
