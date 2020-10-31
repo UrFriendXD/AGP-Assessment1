@@ -39,6 +39,8 @@ public:
 	TSubclassOf<class AProceduralGeneration> ProceduralGenerationClass;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AProceduralSpawner> ProceduralSpawnerClass;
+
+	void StartMatch() override;
 	
 private:
 
@@ -46,4 +48,5 @@ private:
 	class AProcedurallyGeneratedMap* ProceduralMap;
 	class APickupManager* PickupManager;
 
+	//int 
 };
