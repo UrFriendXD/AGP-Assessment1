@@ -34,13 +34,16 @@ void AEnemyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (CurrentAgentState == AgentState::PATROL)
+	if (GetLocalRole() == ROLE_Authority)
 	{
-		AgentPatrol();
-		if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() >= 0.4f)
+		if (CurrentAgentState == AgentState::PATROL)
 		{
-			CurrentAgentState = AgentState::ENGAGE;
-			Path.Empty();
+			AgentPatrol();
+			if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() >= 0.4f)
+			{
+				CurrentAgentState = AgentState::ENGAGE;
+				Path.Empty();
+			}
 		}
 	}
 	// 	else if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() < 0.4f)
@@ -76,12 +79,15 @@ void AEnemyCharacter::Tick(float DeltaTime)
 	// 	}
 	// }
 
-	if (bOutOfAmmo && !bIsReloading)
+	if (GetLocalRole() == ROLE_Authority)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Reloading"))
-		Reload();
+		if (bOutOfAmmo && !bIsReloading)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Reloading"))
+			Reload();
+		}
+		MoveAlongPath();
 	}
-	MoveAlongPath();
 }
 
 // Called to bind functionality to input

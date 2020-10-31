@@ -30,55 +30,58 @@ void AProceduralSpawner::Tick(float DeltaTime)
 
 void AProceduralSpawner::SpawnObjects()
 {
-    //Ai spawning uncomment to renable
-    // Randomise number of AI to spawn
-    // int NumAI = FMath::FRandRange(5, 8);
-    // UE_LOG(LogTemp, Warning, TEXT("NumAI to be spawned: %i"), NumAI)
-    // for (int i = 0; i < NumAI; i++)
-    // {
-    //     int RandomIndex = FMath::FRandRange(0, AIManager->AllNodes.Num() - 1);
-    //     // Spawn AI
-    //     EnemyAI = nullptr;
-    //     EnemyAI = GetWorld()->SpawnActor<AEnemyCharacter>(EnemyAIBlueprint,
-    //                                                       AIManager->AllNodes[RandomIndex]->GetActorLocation(),
-    //                                                       FRotator::ZeroRotator);
-    //     if (EnemyAI)
-    //     {
-    //         EnemyAI->CurrentNode = AIManager->AllNodes[RandomIndex];
-    //         EnemyAI->Path = AIManager->GeneratePath(EnemyAI->CurrentNode,
-    //                                                 AIManager->AllCoverNodes[FMath::RandRange(
-    //                                                     0, AIManager->AllCoverNodes.Num() - 1)]);
-    //         UE_LOG(LogTemp, Warning, TEXT("AI spawned!"))
-    //     }
-    //     else
-    //     {
-    //         UE_LOG(LogTemp, Warning, TEXT("AI not spawned"))
-    //     }
-    // }
-
-    // Iterate over all rooms to iterate over all navnodes in that room
-    // to randomly spawn pickups (gun only, health pickups yet to be implemented)
-    for (TActorIterator<ARoom> It(GetWorld()); It; ++It)
+    if (GetLocalRole() == ROLE_Authority)
     {
-        CurrentRoom = *It;
-        AllNodesInRoom = CurrentRoom->ListOfNavNodes;
+        //Ai spawning uncomment to renable
+        // Randomise number of AI to spawn
+        // int NumAI = FMath::FRandRange(5, 8);
+        // UE_LOG(LogTemp, Warning, TEXT("NumAI to be spawned: %i"), NumAI)
+        // for (int i = 0; i < NumAI; i++)
+        // {
+        //     int RandomIndex = FMath::FRandRange(0, AIManager->AllNodes.Num() - 1);
+        //     // Spawn AI
+        //     EnemyAI = nullptr;
+        //     EnemyAI = GetWorld()->SpawnActor<AEnemyCharacter>(EnemyAIBlueprint,
+        //                                                       AIManager->AllNodes[RandomIndex]->GetActorLocation(),
+        //                                                       FRotator::ZeroRotator);
+        //     if (EnemyAI)
+        //     {
+        //         EnemyAI->CurrentNode = AIManager->AllNodes[RandomIndex];
+        //         EnemyAI->Path = AIManager->GeneratePath(EnemyAI->CurrentNode,
+        //                                                 AIManager->AllCoverNodes[FMath::RandRange(
+        //                                                     0, AIManager->AllCoverNodes.Num() - 1)]);
+        //         UE_LOG(LogTemp, Warning, TEXT("AI spawned!"))
+        //     }
+        //     else
+        //     {
+        //         UE_LOG(LogTemp, Warning, TEXT("AI not spawned"))
+        //     }
+        // }
 
-        // Randomise number of pickups to spawn
-        int NumPickup = FMath::FRandRange(0, 2);
-        for (int i = 0; i < NumPickup; i++)
+        // Iterate over all rooms to iterate over all navnodes in that room
+        // to randomly spawn pickups (gun only, health pickups yet to be implemented)
+        for (TActorIterator<ARoom> It(GetWorld()); It; ++It)
         {
-            int RandomIndex = FMath::FRandRange(0, AllNodesInRoom.Num() - 1);
-            // Spawn pickups
-            Pickup = nullptr;
-            Pickup = GetWorld()->SpawnActor<APickup>(PickupBlueprint, AllNodesInRoom[RandomIndex]->GetActorLocation(),
-                                                     FRotator::ZeroRotator);
-            if (Pickup)
+            CurrentRoom = *It;
+            AllNodesInRoom = CurrentRoom->ListOfNavNodes;
+
+            // Randomise number of pickups to spawn
+            int NumPickup = FMath::FRandRange(0, 2);
+            for (int i = 0; i < NumPickup; i++)
             {
-                UE_LOG(LogTemp, Warning, TEXT("Pickup spawned!"))
-            }
-            else
-            {
-                UE_LOG(LogTemp, Warning, TEXT("Pickup not spawned"))
+                int RandomIndex = FMath::FRandRange(0, AllNodesInRoom.Num() - 1);
+                // Spawn pickups
+                Pickup = nullptr;
+                Pickup = GetWorld()->SpawnActor<APickup>(PickupBlueprint, AllNodesInRoom[RandomIndex]->GetActorLocation(),
+                                                         FRotator::ZeroRotator);
+                if (Pickup)
+                {
+                    UE_LOG(LogTemp, Warning, TEXT("Pickup spawned!"))
+                }
+                else
+                {
+                    UE_LOG(LogTemp, Warning, TEXT("Pickup not spawned"))
+                }
             }
         }
     }
