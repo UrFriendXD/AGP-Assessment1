@@ -80,11 +80,15 @@ public:
 	bool bIsInteracting;
 
 private:
-	UPROPERTY(EditInstanceOnly, meta = (ClampMin="0.0", ClampMax="2.0", UIMin ="0.0", UIMax="2.0"))
+	UPROPERTY(EditInstanceOnly, meta = (ClampMin = "0.0", ClampMax = "2.0", UIMin = "0.0", UIMax = "2.0"))
 	float LookSensitivity;
+
+	UPROPERTY(EditInstanceOnly)
+	float MoveSpeed;
 
 	UPROPERTY(EditInstanceOnly)
 	float SprintMultiplier;
 
 	UCameraComponent* Camera;
+
 };

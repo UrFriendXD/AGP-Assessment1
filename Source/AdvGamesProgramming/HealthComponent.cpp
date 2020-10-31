@@ -8,6 +8,7 @@
 #include "PlayerHUD.h"
 #include "PlayerCharacter.h"
 #include "GameFramework/Actor.h"
+#include "EnemyCharacter.h"
 
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
@@ -18,6 +19,8 @@ UHealthComponent::UHealthComponent()
 	
 	MaxHealth = 100.0f;
 
+	MaxHealth = 100.0f;
+	// ...
 }
 
 
@@ -27,7 +30,8 @@ void UHealthComponent::BeginPlay()
 	Super::BeginPlay();
 
 	CurrentHealth = MaxHealth;
-
+	// ...
+	
 }
 
 
@@ -70,8 +74,16 @@ void UHealthComponent::OnTakeDamage(float Damage)
 
 void UHealthComponent::OnDeath()
 {
+	// Get enemy char script on agent 
+	AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetOwner());
 	APlayerCharacter* OwningPlayerCharacter = Cast<APlayerCharacter>(GetOwner());
-	if (OwningPlayerCharacter)
+
+	// If agent isn't already dead, set it to dead and clear current path
+	if (EnemyCharacter->CurrentAgentState != AgentState::DEAD)
+	{
+		OwningPlayerCharacter->OnDeath();
+	}
+	else if (OwningPlayerCharacter)
 	{
 		OwningPlayerCharacter->OnDeath();
 	}

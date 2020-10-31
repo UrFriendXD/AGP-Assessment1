@@ -6,9 +6,6 @@
 #include "GameFramework/HUD.h"
 #include "PlayerHUD.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class ADVGAMESPROGRAMMING_API APlayerHUD : public AHUD
 {
@@ -30,6 +27,9 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	void SetAmmoText(int32 RoundsRemaining, int32 MagazineSize);
+	void SetRoleText();
+	void SetHidingTimerText(int32 TimeLeft);
+	void SetTimeLeftTimerText(int32 TimeLeft);
 
 	/**
 	 * Hides or shows the widgets in the hud.
@@ -44,4 +44,8 @@ private:
 	class UProgressBar* HealthProgressBar;
 	class UTextBlock* AmmoTextBlock;
 	class UImage* CrosshairImageBlock;
+
+	class UTextBlock* RoleTextBlock;
+	class UTextBlock* TimerTextBlock;
+
 };

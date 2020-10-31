@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-	#include "MainGameInstance.h"
+#include "MainGameInstance.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
 #include "MainMenuWidget.h"
@@ -123,7 +123,7 @@ void UMainGameInstance::OnCreateSessionComplete(FName SessionName, bool bSuccess
 		{
 			FInputModeGameOnly InputState;
 			GetFirstLocalPlayerController()->SetInputMode(InputState);
-			World->ServerTravel(TEXT("/Game/Levels/MultiplayerMap?listen"));
+			World->ServerTravel(TEXT("/Game/Levels/ProceduralMap?listen"));
 		}
 		//FindSession();
 	}
