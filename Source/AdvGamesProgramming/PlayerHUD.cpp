@@ -1,3 +1,7 @@
+#include "PlayerHUD.h"
+#include "PlayerHUD.h"
+#include "PlayerHUD.h"
+#include "PlayerHUD.h"
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
@@ -30,6 +34,9 @@ APlayerHUD::APlayerHUD()
 			HealthProgressBar = Cast<UProgressBar>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("ProgHealthBar")));
 			AmmoTextBlock = Cast<UTextBlock>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("TextAmmo")));
 			CrosshairImageBlock = Cast<UImage>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("ImgCrosshair")));
+			RoleTextBlock = Cast<UTextBlock>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("TextRole")));
+			TimerTextBlock = Cast<UTextBlock>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("TextTimer")));
+
 		}
 		else
 		{
@@ -54,6 +61,31 @@ void APlayerHUD::SetAmmoText(int32 RoundsRemaining, int32 MagazineSize)
 	if (AmmoTextBlock)
 	{
 		AmmoTextBlock->SetText(FText::FromString(FString::Printf(TEXT("%i/%i"), RoundsRemaining, MagazineSize)));
+	}
+}
+
+void APlayerHUD::SetRoleText()
+{
+	if (RoleTextBlock)
+	{
+		//RoleTextBlock->SetText(FText::FromString(FString::Printf(TEXT("%s"), *Role)));
+
+	}
+}
+
+void APlayerHUD::SetHidingTimerText(int32 TimeLeft)
+{
+	if (TimerTextBlock)
+	{
+		TimerTextBlock->SetText(FText::FromString(FString::Printf(TEXT("Hiding: %is"), TimeLeft)));
+	}
+}
+
+void APlayerHUD::SetTimeLeftTimerText(int32 TimeLeft)
+{
+	if (TimerTextBlock)
+	{
+		TimerTextBlock->SetText(FText::FromString(FString::Printf(TEXT("Time Left: %is"), TimeLeft)));
 	}
 }
 
