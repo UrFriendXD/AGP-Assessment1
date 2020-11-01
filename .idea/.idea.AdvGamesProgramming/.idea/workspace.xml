@@ -50,26 +50,10 @@
   <component name="ChangeListManager">
     <list default="true" id="f1eeaa14-3621-4771-8653-c97f68f11eef" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AdvGamesProgramming/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/Mannequin/AnimStarterPack/EnemyAnimBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Mannequin/AnimStarterPack/EnemyAnimBlueprint.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/EnemyCharacterBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/EnemyCharacterBlueprint.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/PlayerCharacterBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/PlayerCharacterBlueprint.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/WeaponPickupBlueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/WeaponPickupBlueprint.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Levels/ProceduralMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Levels/ProceduralMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/AIManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/AIManager.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/AIManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/AIManager.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/HealthComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/HealthComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/NavigationNode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/NavigationNode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/NavigationNode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/NavigationNode.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/PlayerCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/PlayerCharacter.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/PlayerCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/PlayerCharacter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralGeneration.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralSpawner.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralSpawner.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/WeaponPickup.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/WeaponPickup.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/AdvGamesProgramming/WeaponPickup.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/AdvGamesProgramming/WeaponPickup.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,14 +86,14 @@
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/NavigationNode.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/NavigationNode.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/AIManager.cpp" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/PlayerCharacter.cpp" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/PlayerCharacter.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/ProceduralSpawner.cpp" />
         <option value="$PROJECT_DIR$/../AGP-Assessment2 - Old/Source/AdvGamesProgramming/EnemyCharacter.cpp" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/HealthComponent.cpp" />
-        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/WeaponPickup.h" />
         <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/WeaponPickup.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/PlayerCharacter.h" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/EnemyCharacter.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/HealthComponent.cpp" />
+        <option value="$PROJECT_DIR$/Source/AdvGamesProgramming/PlayerCharacter.cpp" />
       </list>
     </option>
   </component>
@@ -364,6 +348,7 @@
       <workItem from="1604147764264" duration="1419000" />
       <workItem from="1604229776915" duration="12417000" />
       <workItem from="1604243417482" duration="644000" />
+      <workItem from="1604247026080" duration="1865000" />
     </task>
     <servers />
   </component>
@@ -460,9 +445,9 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="0" y="0" width="1893" height="734" maximized="true" key="dock-window-1/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604240953687" />
-    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1604242286448">
+    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1604248007051">
       <screen x="-1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604242286448" />
+    <state x="-1297" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1604248007051" />
   </component>
 </project>

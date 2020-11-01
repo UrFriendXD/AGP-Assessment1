@@ -92,6 +92,30 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// If being healed, heal
+	if (bIsPlayerHealing)
+	{
+		if (HealTimer <= 0)
+		{
+			Heal();
+		}
+	}
+
+	// Timer
+	if (HealTimer > 0)
+	{
+		HealTimer -= GetWorld()->GetDeltaSeconds();
+	}
+
+	if (bIsDead)
+	{
+		if (HealthComponent->HealthPercentageRemaining() >= 1.0f)
+		{
+			bIsDead = false;
+			EnableInput(Cast<APlayerController>(GetController()));
+		}
+	}
+
 }
 
 // Called to bind functionality to input
@@ -202,13 +226,24 @@ void APlayerCharacter::OnDeath()
 {
 	if (GetLocalRole() == ROLE_Authority)
 	{
-		AMultiplayerGameMode* GameMode = Cast<AMultiplayerGameMode>(GetWorld()->GetAuthGameMode());
-		if (GameMode)
-		{
-			GameMode->Respawn(GetController());
-		}
+		// AMultiplayerGameMode* GameMode = Cast<AMultiplayerGameMode>(GetWorld()->GetAuthGameMode());
+		// if (GameMode)
+		// {
+		// 	GameMode->Respawn(GetController());
+		// }
+
+		bIsDead = true;
+		DisableInput(Cast<APlayerController>(GetController()));
 	}
 
+}
+
+void APlayerCharacter::Heal()
+{
+	HealthComponent->CurrentHealth += 3.0f;
+	FMath::Clamp(HealthComponent->CurrentHealth, 0.0f, 100.0f);
+	HealTimer = HealDelay;
+	UE_LOG(LogTemp, Display, TEXT("Healed"));
 }
 
 void APlayerCharacter::HidePlayerHUD_Implementation(bool bSetHUDVisibility)

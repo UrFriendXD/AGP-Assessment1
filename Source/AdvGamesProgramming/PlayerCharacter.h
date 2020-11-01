@@ -84,6 +84,8 @@ public:
 	APlayerState* HostState;
 
 	bool bIsHost;
+	bool bIsPlayerHealing;
+	bool bIsDead;
 
 private:
 	UPROPERTY(EditInstanceOnly, meta = (ClampMin = "0.0", ClampMax = "2.0", UIMin = "0.0", UIMax = "2.0"))
@@ -96,5 +98,13 @@ private:
 	float SprintMultiplier;
 
 	UCameraComponent* Camera;
+
+	// Healing timer
+	UPROPERTY(VisibleAnywhere)
+	float HealTimer;
+	UPROPERTY(EditAnywhere)
+	float HealDelay;
+
+	void Heal();
 
 };
