@@ -10,6 +10,7 @@
 #include "MultiplayerGameMode.h"
 #include "PlayerHUD.h"
 
+
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
@@ -29,6 +30,9 @@ APlayerCharacter::APlayerCharacter()
 	// Role
 	PlayerRole = PlayerRole::HIDER;
 
+	GameState = Cast<AMultiplayerGameState>(GetWorld()->GetGameState());
+	//HostState = GameState->PlayerArray[0];
+	
 }
 
 // Called when the game starts or when spawned
@@ -40,6 +44,37 @@ void APlayerCharacter::BeginPlay()
 	if (HealthComponent)
 	{
 		HealthComponent->SetIsReplicated(true);
+	}
+
+	// If is host, set host HUD to 1/4 Players to begin with, no RoleText, hide TimerText - have a StartGame button in place
+	if (GetLocalRole() == ROLE_Authority && IsLocallyControlled())
+	{
+		if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+		{
+			if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+			{
+				HUD->SetNumPlayersText(1);
+				HUD->SetRoleText(TEXT(""));
+				HUD->SetHideTimerText(true);
+				HUD->SetHideStartGameButton(false);
+			}
+		}
+	}
+	else
+	{
+		if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+		{
+			if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+			{
+				int32 NumPlayers = GameState->PlayerArray.Num();
+
+				HUD->SetNumPlayersText(NumPlayers);
+				HUD->SetRoleText(TEXT(""));
+				HUD->SetHideTimerText(false);
+				HUD->SetWaitingForHostTimerText();
+				HUD->SetHideStartGameButton(true);
+			}
+		}
 	}
 
 	//Set the rounds remaining and health hud components

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
+#include "MultiplayerGameState.h"
 #include "PlayerCharacter.generated.h"
 
 UENUM()
@@ -78,6 +79,10 @@ public:
 
 	UPROPERTY(Replicated, BlueprintReadOnly)
 	bool bIsInteracting;
+
+
+	AMultiplayerGameState* GameState;
+	APlayerState* HostState;
 
 private:
 	UPROPERTY(EditInstanceOnly, meta = (ClampMin = "0.0", ClampMax = "2.0", UIMin = "0.0", UIMax = "2.0"))

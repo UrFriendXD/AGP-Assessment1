@@ -27,9 +27,15 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	void SetAmmoText(int32 RoundsRemaining, int32 MagazineSize);
-	void SetRoleText();
+	void SetRoleText(FString Role);
+	void SetNumPlayersText(int32 NumPlayers);
+
+	void SetWaitingForHostTimerText(int32 TimeLeft);
 	void SetHidingTimerText(int32 TimeLeft);
 	void SetTimeLeftTimerText(int32 TimeLeft);
+	void SetHideTimerText(bool bIsHidden);
+
+	void SetHideStartGameButton(bool bIsHidden);
 
 	/**
 	 * Hides or shows the widgets in the hud.
@@ -45,7 +51,9 @@ private:
 	class UTextBlock* AmmoTextBlock;
 	class UImage* CrosshairImageBlock;
 
+	class UTextBlock* NumPlayersTextBlock;
 	class UTextBlock* RoleTextBlock;
 	class UTextBlock* TimerTextBlock;
+	class UButton* StartGameButton;
 
 };

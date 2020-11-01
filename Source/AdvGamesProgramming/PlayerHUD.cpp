@@ -5,6 +5,7 @@
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 #include "Components/Image.h"
+#include "Components/Button.h"
 #include "PlayerCharacter.h"
 
 APlayerHUD::APlayerHUD()
@@ -30,6 +31,7 @@ APlayerHUD::APlayerHUD()
 			CrosshairImageBlock = Cast<UImage>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("ImgCrosshair")));
 			RoleTextBlock = Cast<UTextBlock>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("TextRole")));
 			TimerTextBlock = Cast<UTextBlock>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("TextTimer")));
+			StartGameButton = Cast<UButton>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("StartGameButton")));
 
 		}
 		else
@@ -58,12 +60,29 @@ void APlayerHUD::SetAmmoText(int32 RoundsRemaining, int32 MagazineSize)
 	}
 }
 
-void APlayerHUD::SetRoleText()
+void APlayerHUD::SetRoleText(FString Role)
 {
 	if (RoleTextBlock)
 	{
 		//RoleTextBlock->SetText(FText::FromString(FString::Printf(TEXT("%s"), *Role)));
 
+	}
+}
+
+void APlayerHUD::SetNumPlayersText(int32 NumPlayers)
+{
+	if (NumPlayersTextBlock)
+	{
+		NumPlayersTextBlock->SetText(FText::FromString(FString::Printf(TEXT("%i/4 Players"), NumPlayers)));
+
+	}
+}
+
+void APlayerHUD::SetWaitingForHostTimerText()
+{
+	if (TimerTextBlock)
+	{
+		TimerTextBlock->SetText(FText::FromString(FString::Printf(TEXT("Waiting for host to start..."))));
 	}
 }
 
@@ -83,6 +102,37 @@ void APlayerHUD::SetTimeLeftTimerText(int32 TimeLeft)
 	}
 }
 
+void APlayerHUD::SetHideTimerText(bool bIsHidden)
+{
+	if (TimerTextBlock)
+	{
+		if (bIsHidden)
+		{
+			TimerTextBlock->SetVisibility(ESlateVisibility::Hidden);
+		}
+		else
+		{
+			TimerTextBlock->SetVisibility(ESlateVisibility::Visible);
+		}
+	}
+}
+
+void APlayerHUD::SetHideStartGameButton(bool bIsHidden)
+{
+	if (StartGameButton)
+	{
+
+		if (bIsHidden)
+		{
+			StartGameButton->SetVisibility(ESlateVisibility::Hidden);
+		}
+		else
+		{
+			StartGameButton->SetVisibility(ESlateVisibility::Visible);
+		}
+	}
+}
+
 void APlayerHUD::SetHideWidgets(bool bIsHidden)
 {
 	if (bIsHidden)
@@ -93,6 +143,7 @@ void APlayerHUD::SetHideWidgets(bool bIsHidden)
 			AmmoTextBlock->SetVisibility(ESlateVisibility::Hidden);
 		if (CrosshairImageBlock)
 			CrosshairImageBlock->SetVisibility(ESlateVisibility::Hidden);
+		// Don't want to hide RoleText, TimerText, NumPlayersText, or StartButton
 	}
 	else
 	{
