@@ -27,7 +27,7 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	void SetAmmoText(int32 RoundsRemaining, int32 MagazineSize);
-	void SetRoleText(FString Role);
+	void SetRoleText(FString PlayerRole);
 	void SetNumPlayersText(int32 NumPlayers);
 
 	void SetWaitingForHostTimerText();

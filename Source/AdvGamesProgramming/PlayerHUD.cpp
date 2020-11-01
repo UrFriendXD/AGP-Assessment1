@@ -60,7 +60,7 @@ void APlayerHUD::SetAmmoText(int32 RoundsRemaining, int32 MagazineSize)
 	}
 }
 
-void APlayerHUD::SetRoleText(FString Role)
+void APlayerHUD::SetRoleText(FString PlayerRole)
 {
 	if (RoleTextBlock)
 	{

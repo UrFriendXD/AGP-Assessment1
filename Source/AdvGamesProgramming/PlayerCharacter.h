@@ -80,9 +80,10 @@ public:
 	UPROPERTY(Replicated, BlueprintReadOnly)
 	bool bIsInteracting;
 
-
 	AMultiplayerGameState* GameState;
 	APlayerState* HostState;
+
+	bool bIsHost;
 
 private:
 	UPROPERTY(EditInstanceOnly, meta = (ClampMin = "0.0", ClampMax = "2.0", UIMin = "0.0", UIMax = "2.0"))
