@@ -42,4 +42,5 @@ public:
 	ARoom* Room;
 
 	ANavigationNode* CameFrom;
+
 };

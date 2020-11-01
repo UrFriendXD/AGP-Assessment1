@@ -3,174 +3,510 @@
 
 #include "EnemyCharacter.h"
 #include "EngineUtils.h"
+#include "PlayerCharacter.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	CurrentAgentState = AgentState::PATROL;
-	PathfindingNodeAccuracy = 100.0f;
-	bOutOfAmmo = false;
-	bIsReloading = false;
+    // Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+    PrimaryActorTick.bCanEverTick = true;
+    PathfindingNodeAccuracy = 100.0f;
+    bOutOfAmmo = false;
+    bIsReloading = false;
+
+    CurrentAgentState = AgentState::COVER;
+    ReviveDelay = 2.0f;
+    HealDelay = 0.3f;
+    FindNewCoverDelay = 10.0f;
 }
 
 // Called when the game starts or when spawned
 void AEnemyCharacter::BeginPlay()
 {
-	Super::BeginPlay();
-	
-	PerceptionComponent = FindComponentByClass<UAIPerceptionComponent>();
-	if (!PerceptionComponent) { UE_LOG(LogTemp, Error, TEXT("NO PERCEPTION COMPONENT FOUND")) }
-	PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyCharacter::SensePlayer);
-	
-	HealthComponent = FindComponentByClass<UHealthComponent>();
-	DetectedActor = nullptr;
-	bCanSeeActor = false;
+    Super::BeginPlay();
+
+    if (GetLocalRole() == ROLE_Authority)
+    {
+        PerceptionComponent = FindComponentByClass<UAIPerceptionComponent>();
+        if (!PerceptionComponent) { UE_LOG(LogTemp, Error, TEXT("NO PERCEPTION COMPONENT FOUND")) }
+        PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyCharacter::SensePlayer);
+
+        // Initialise variables
+        HealthComponent = FindComponentByClass<UHealthComponent>();
+        DetectedActor = nullptr;
+        bCanSeePlayer = false;
+        bBehindCover = false;
+        bCanHearPlayer = false;
+        HealTimer = HealDelay;
+        ReviveTimer = ReviveDelay;
+
+        FindNewCoverTimer = FindNewCoverDelay;
+        for (TActorIterator<AAIManager> It(GetWorld()); It; ++It)
+        {
+            Manager = *It;
+            Manager->AllAgents.Add(this);
+            UE_LOG(LogTemp, Warning, TEXT("AIManager assigned"))
+        }
+    }
 }
 
 // Called every frame
 void AEnemyCharacter::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+    Super::Tick(DeltaTime);
 
-	if (GetLocalRole() == ROLE_Authority)
-	{
-		if (CurrentAgentState == AgentState::PATROL)
-		{
-			AgentPatrol();
-			if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() >= 0.4f)
-			{
-				CurrentAgentState = AgentState::ENGAGE;
-				Path.Empty();
-			}
-		}
-	}
-	// 	else if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() < 0.4f)
-	// 	{
-	// 		CurrentAgentState = AgentState::EVADE;
-	// 		Path.Empty();
-	// 	}
-	// }
-	// else if (CurrentAgentState == AgentState::ENGAGE)
-	// {
-	// 	AgentEngage();
-	// 	if (!bCanSeeActor)
-	// 	{
-	// 		CurrentAgentState = AgentState::PATROL;
-	// 	}
-	// 	else if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() < 0.4f)
-	// 	{
-	// 		CurrentAgentState = AgentState::EVADE;
-	// 		Path.Empty();
-	// 	}
-	// }
-	// else if (CurrentAgentState == AgentState::EVADE)
-	// {
-	// 	AgentEvade();
-	// 	if (!bCanSeeActor)
-	// 	{
-	// 		CurrentAgentState = AgentState::PATROL;
-	// 	}
-	// 	else if (bCanSeeActor && HealthComponent->HealthPercentageRemaining() >= 0.4f)
-	// 	{
-	// 		CurrentAgentState = AgentState::ENGAGE;
-	// 		Path.Empty();
-	// 	}
-	// }
+    if (GetLocalRole() == ROLE_Authority)
+    {
+        switch (CurrentAgentState)
+        {
+            // Patrol taken out as they can shoot but most of the time try to stay in cover
+            //     // Patrol normally
+            // case AgentState::PATROL:
+            //     AgentPatrol();
+            //     // Change to healing state if healing
+            //     if (bHealingOthers)
+            //     {
+            //         CurrentAgentState = AgentState::HEALINGAGENTS;
+            //         Path.Empty();
+            //     }
+            //
+            //     // Change to engage state if healthy
+            //     if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() >= 0.4f)
+            //     {
+            //         CurrentAgentState = AgentState::ENGAGE;
+            //         Path.Empty();
+            //     }
+            //
+            //     // Change to Cover state if low
+            //     if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() <= 0.4f)
+            //     {
+            //         CurrentAgentState = AgentState::COVER;
+            //         Path.Empty();
+            //     }
+            //     break;
 
-	if (GetLocalRole() == ROLE_Authority)
-	{
-		if (bOutOfAmmo && !bIsReloading)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Reloading"))
-			Reload();
-		}
-		MoveAlongPath();
-	}
+            // Engage state
+        case AgentState::ENGAGE:
+            AgentEngage();
+
+            // Change to cover state if can't see player or out of ammo
+            if (!bCanSeePlayer || bOutOfAmmo)
+            {
+                CurrentAgentState = AgentState::COVER;
+                Path.Empty();
+                bTransitioningIntoCover = true;
+            }
+
+            // Change to Cover state if low
+            if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() <= 0.2f)
+            {
+                CurrentAgentState = AgentState::COVER;
+                Path.Empty();
+                bTransitioningIntoCover = true;
+            }
+            break;
+
+            // Cover state when HP is < 40%
+        case AgentState::COVER:
+            if (bTransitioningIntoCover)
+            {
+                if (Path.Num() == 0)
+                {
+                    Path = Manager->GeneratePath(CurrentNode,
+                                                 Manager->AllCoverNodes[FMath::RandRange(
+                                                     0, Manager->AllCoverNodes.Num() - 1)]);
+                    FindNewCoverTimer = FindNewCoverDelay;
+                    bTransitioningIntoCover = false;
+                }
+            }
+            AgentCover();
+
+            // Change to healing state if healing
+            if (bHealingOthers)
+            {
+                CurrentAgentState = AgentState::HEALINGAGENTS;
+                Path.Empty();
+            }
+
+            /*// Change to patrol state if healthy
+            if (!bCanSeePlayer && HealthComponent->HealthPercentageRemaining() >= 0.9f)
+            {
+            //CurrentAgentState = AgentState::PATROL;
+            bBehindCover = false;
+            }*/
+
+            // Change to Engage state if healthy and sees player
+            if (bCanSeePlayer && HealthComponent->HealthPercentageRemaining() >= 0.4f && !bOutOfAmmo)
+            {
+                CurrentAgentState = AgentState::ENGAGE;
+                Path.Empty();
+                bBehindCover = false;
+            }
+
+            // If under cover and healthy, start timer
+            if (bBehindCover)
+            {
+                FindNewCoverTimer -= DeltaTime;
+            }
+
+            if (FindNewCoverTimer <= 0 && Path.Num() == 0)
+            {
+                Path = Manager->GeneratePath(CurrentNode,
+                                             Manager->AllCoverNodes[FMath::RandRange(
+                                                 0, Manager->AllCoverNodes.Num() - 1)]);
+                FindNewCoverTimer = FindNewCoverDelay;
+            }
+            break;
+
+            // Dead state
+        case AgentState::DEAD:
+            if (bUnderCover || bBehindCover)
+            {
+                bUnderCover = false;
+                bBehindCover = false;
+            }
+            // Revive if full HP
+            if (HealthComponent->HealthPercentageRemaining() >= 1.0f)
+            {
+                CurrentAgentState = AgentState::REVIVING;
+            }
+            if (bHealingOthers)
+            {
+                bIsHealingOthers = false;
+            }
+            break;
+
+            // Healing other agents state
+        case AgentState::HEALINGAGENTS:
+            AgentHealing();
+            break;
+
+        case AgentState::REVIVING:
+            if (ReviveTimer <= 0)
+            {
+                CurrentAgentState = AgentState::COVER;
+                Path.Empty();
+                bTransitioningIntoCover = true;
+                ReviveTimer = ReviveDelay;
+            }
+            else
+                ReviveTimer -= DeltaTime;
+
+        default: ;
+        }
+
+        // If being healed, heal
+        if (bEnemyHealing)
+        {
+            if (HealTimer <= 0)
+            {
+                Heal();
+            }
+        }
+
+        // Timer
+        if (HealTimer > 0)
+        {
+            HealTimer -= GetWorld()->GetDeltaSeconds();
+        }
+        MoveAlongPath();
+
+        // if (bOutOfAmmo)
+        // {
+        //     UE_LOG(LogTemp, Warning, TEXT("Reloading"))
+        //     //Reload();
+        // }
+    }
+}
+
+void AEnemyCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+    DOREPLIFETIME(AEnemyCharacter, Manager);
+    DOREPLIFETIME(AEnemyCharacter, CurrentAgentState);
+    DOREPLIFETIME(AEnemyCharacter, CurrentNode);
 }
 
 // Called to bind functionality to input
 void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+    Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
 void AEnemyCharacter::AgentPatrol()
 {
-	if (Path.Num() == 0 && Manager != NULL)
-	{
-		Path = Manager->GeneratePath(CurrentNode, Manager->AllNodes[FMath::RandRange(0, Manager->AllNodes.Num() - 1)]);
-	}
+    if (Path.Num() == 0 && Manager != NULL)
+    {
+        Path = Manager->GeneratePath(CurrentNode, Manager->AllNodes[FMath::RandRange(0, Manager->AllNodes.Num() - 1)]);
+    }
 }
 
 void AEnemyCharacter::AgentEngage()
 {
-	if (bCanSeeActor)
-	{
-		FVector DirectionToTarget = DetectedActor->GetActorLocation() - GetActorLocation();
-		Fire(DirectionToTarget);
-		if (Path.Num() == 0)
-		{
-			Path = Manager->GeneratePath(CurrentNode, Manager->FindNearestNode(DetectedActor->GetActorLocation()));
-		}
-	}
-	
+    if (bCanSeePlayer)
+    {
+        FVector DirectionToTarget = DetectedActor->GetActorLocation() - GetActorLocation();
+        Fire(DirectionToTarget);
+        FaceDirection = DirectionToTarget.Rotation();
+        if (Path.Num() == 0)
+        {
+            Path = Manager->GeneratePath(CurrentNode,
+                                         Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
+        }
+    }
 }
 
-// void AEnemyCharacter::AgentEvade()
-// {
-// 	
-// 	if (bCanSeeActor)
-// 	{
-// 		FVector DirectionToTarget = DetectedActor->GetActorLocation() - GetActorLocation();
-// 		Fire(DirectionToTarget);
-// 		if (Path.Num() == 0)
-// 		{
-// 			Path = Manager->GeneratePath(CurrentNode, Manager->FindFurthestNode(DetectedActor->GetActorLocation()));
-// 		}
-// 	}
-// }
+// Replaces Evade function
+void AEnemyCharacter::AgentCover()
+{
+    // If can see player shoot or get new path
+    if (bCanSeePlayer)
+    {
+        // Shoots player if they have ammo
+        if (!bOutOfAmmo)
+        {
+            FVector DirectionToTarget = DetectedActor->GetActorLocation() - GetActorLocation();
+            Fire(DirectionToTarget);
+        }
+        // If path empty get new path
+        if (Path.Num() == 0)
+        {
+            Path = Manager->GeneratePath(CurrentNode,
+                                         Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
+            FindNewCoverTimer = FindNewCoverDelay;
+        }
+        //UE_LOG(LogTemp, Error, TEXT("Generated new path to FurthestCoverNode"));
+    }
+        // Only heals if it's behind cover and cannot see the Player
+    else if (bBehindCover && !bCanSeePlayer)
+    {
+        // Make sure it doesn't heal too fast (not every tick)
+        if (HealTimer <= 0)
+        {
+            Heal();
+        }
+    }
+
+    // Ensuring that it's only marked as behind cover when it's not navigating
+    if (Path.Num() == 0)
+    {
+        bBehindCover = true;
+    }
+    else
+    {
+        bBehindCover = false;
+    }
+}
+
+void AEnemyCharacter::AgentHealing()
+{
+    // If can see enemy face enemy
+    if (bCanSeeEnemy)
+    {
+        const FVector DirectionToTarget = DetectedActor->GetActorLocation() - GetActorLocation();
+        FaceDirection = DirectionToTarget.Rotation();
+    }
+    float Distance = FVector::Distance(DetectedActor->GetActorLocation(), GetActorLocation());
+    //UE_LOG(LogTemp, Warning, TEXT("Distance %f"), Distance);
+
+    // If distance of enemy and dead enemy < X, heal the enemy
+    if (Distance < 200.0f)
+    {
+        //UE_LOG(LogTemp, Warning, TEXT("Helping Friend"));
+        Path.Empty();
+        // Checks if the enemy isn't being healed
+        if (!Cast<AEnemyCharacter>(DetectedActor)->bEnemyHealing)
+        {
+            Cast<AEnemyCharacter>(DetectedActor)->bEnemyHealing = true;
+            bIsHealingOthers = true;
+        }
+
+        // If they're full on HP, go back to patrol
+        if (Cast<AEnemyCharacter>(DetectedActor)->HealthComponent->HealthPercentageRemaining() >= 1.0f)
+        {
+            bHealingOthers = false;
+            bIsHealingOthers = false;
+            Cast<AEnemyCharacter>(DetectedActor)->bEnemyHealing = false;
+            CurrentAgentState = AgentState::COVER;
+            Path.Empty();
+            bTransitioningIntoCover = true;
+        }
+    }
+
+        // If path is 0, go to enemy
+    else if (Path.Num() == 0)
+    {
+        Path = Manager->GeneratePath(CurrentNode, Manager->FindNearestNode(DetectedActor->GetActorLocation()));
+    }
+}
 
 void AEnemyCharacter::SensePlayer(AActor* SensedActor, FAIStimulus Stimulus)
 {
-	if (Stimulus.WasSuccessfullySensed())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Player Detected"))
-		DetectedActor = SensedActor;
-		bCanSeeActor = true;
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Player Lost"))
-		bCanSeeActor = false;
-	}
+    // If not dead sense
+    if (CurrentAgentState != AgentState::DEAD)
+    {
+        if (Stimulus.WasSuccessfullySensed())
+        {
+            switch (Stimulus.Type)
+            {
+                // Sight sensing
+            case 0:
+                // If player is detected and this agent isn't healing, agent can see player, detectedActor = player
+                if (SensedActor->ActorHasTag(TEXT("Player")) && !bHealingOthers && Cast<APlayerCharacter>(SensedActor)->
+                    PlayerRole == PlayerRole::SEEKER)
+                {
+                    DetectedActor = SensedActor;
+                    bCanSeePlayer = true;
+                    UE_LOG(LogTemp, Warning, TEXT("Seeker Detected"))
+                }
+
+                // If enemy is detected and this agent isn't healing, agent can see an enemy, detectedActor = enemy or hiders
+                if (SensedActor->ActorHasTag(TEXT("Enemy")))
+                {
+                    DetectedActor = SensedActor;
+                    bCanSeeEnemy = true;
+                    UE_LOG(LogTemp, Warning, TEXT("Enemy Detected"))
+
+
+                    // If enemy is dead and not it isn't healing anyone else and the other dead AI isn't dead, set healing others to true and enter healingAgents state
+                    if (!bHealingOthers)
+                    {
+                        AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(SensedActor);
+
+                        if (EnemyCharacter)
+                        {
+                            if (EnemyCharacter->HealthComponent->HealthPercentageRemaining() == 0 &&
+                                !EnemyCharacter->bEnemyHealing)
+                            {
+                                bHealingOthers = true;
+                                CurrentAgentState = AgentState::HEALINGAGENTS;
+                                Path.Empty();
+                                Path = Manager->GeneratePath(CurrentNode,
+                                                             Manager->FindNearestNode(
+                                                                 DetectedActor->GetActorLocation()));
+                                UE_LOG(LogTemp, Warning, TEXT("Seeker needs help"))
+                            }
+                        }
+                    }
+
+                    if (SensedActor->ActorHasTag(TEXT("Player")) && Cast<APlayerCharacter>(SensedActor)->PlayerRole ==
+                        PlayerRole::HIDER)
+                    {
+                        DetectedActor = SensedActor;
+                        bCanSeeEnemy = true;
+                        UE_LOG(LogTemp, Warning, TEXT("Enemy Detected"))
+                        if (!bHealingOthers)
+                        {
+                            APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(SensedActor);
+                            if (PlayerCharacter)
+                            {
+                                if (PlayerCharacter->HealthComponent->HealthPercentageRemaining() == 0 && !
+                                    PlayerCharacter->bIsInteracting)
+                                {
+                                    bHealingOthers = true;
+                                    CurrentAgentState = AgentState::HEALINGAGENTS;
+                                    Path.Empty();
+                                    Path = Manager->GeneratePath(CurrentNode,
+                                                                 Manager->FindNearestNode(
+                                                                     DetectedActor->GetActorLocation()));
+                                    UE_LOG(LogTemp, Warning, TEXT("Seeker needs help"))
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+
+                // Hearing sensing
+            case 1:
+                // If not healing and hearing target is a player
+                if (SensedActor->ActorHasTag(TEXT("Player")) && !bHealingOthers && Cast<APlayerCharacter>(SensedActor)->
+                    PlayerRole == PlayerRole::SEEKER)
+                {
+                    DetectedActor = SensedActor;
+                    bCanHearPlayer = true;
+                    //UE_LOG(LogTemp, Warning, TEXT("Player Heard"))
+                }
+                break;
+            default:
+                UE_LOG(LogTemp, Warning, TEXT("Unknown Stimulus detected"));
+            }
+        }
+
+            // If sensing fails/lost set values to false
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Player Lost"))
+            bCanSeePlayer = false;
+            bCanHearPlayer = false;
+
+            // If healing don't set canSeeEnemy to false
+            if (!bHealingOthers)
+            {
+                bCanSeeEnemy = false;
+            }
+        }
+    }
 }
 
 void AEnemyCharacter::MoveAlongPath()
 {
-	if (Path.Num() > 0 && Manager != NULL)
-	{
-		//UE_LOG(LogTemp, Display, TEXT("Current Node: %s"), *CurrentNode->GetName())
-		if ((GetActorLocation() - CurrentNode->GetActorLocation()).IsNearlyZero(PathfindingNodeAccuracy))
-		{
-			UE_LOG(LogTemp, Display, TEXT("At Node %s"), *CurrentNode->GetName())
-			CurrentNode = Path.Pop();
-		}
-		else
-		{
-			FVector WorldDirection = CurrentNode->GetActorLocation() - GetActorLocation();
-			WorldDirection.Normalize();
-			AddMovementInput(WorldDirection, 1.0f);
+    if (Path.Num() > 0 && Manager != NULL)
+    {
+        //UE_LOG(LogTemp, Display, TEXT("Current Node: %s"), *CurrentNode->GetName())
+        if ((GetActorLocation() - CurrentNode->GetActorLocation()).IsNearlyZero(100.0f))
+        {
+            //UE_LOG(LogTemp, Display, TEXT("At Node %s"), *CurrentNode->GetName())
+            CurrentNode = Path.Pop();
+        }
+        else
+        {
+            FVector WorldDirection = CurrentNode->GetActorLocation() - GetActorLocation();
+            WorldDirection.Normalize();
+            AddMovementInput(WorldDirection, 1.0f);
 
-			//Get the AI to face in the direction of travel.
-			FRotator FaceDirection = WorldDirection.ToOrientationRotator();
-			FaceDirection.Roll = 0.f;
-			FaceDirection.Pitch = 0.f;
-			SetActorRotation(FaceDirection);
-		}
-	}
+            //Get the AI to face in the direction of travel if not healing or engaging 
+            if (CurrentAgentState != AgentState::ENGAGE && CurrentAgentState != AgentState::HEALINGAGENTS)
+            {
+                FaceDirection = WorldDirection.ToOrientationRotator();
+            }
+            FaceDirection.Roll = 0.f;
+            FaceDirection.Pitch = 0.f;
+            SetActorRotation(FaceDirection);
+        }
+    }
 }
 
+// Heals enemy agent
+void AEnemyCharacter::Heal()
+{
+    // Gets AI to look at player if they can hear the player - and when they do, run to another cover
+    if (bCanHearPlayer && CurrentAgentState != AgentState::DEAD)
+    {
+        const FVector DirectionToTarget = DetectedActor->GetActorLocation() - GetActorLocation();
+        FaceDirection = DirectionToTarget.Rotation();
+        FaceDirection.Roll = 0.0f;
+        FaceDirection.Pitch = 0.0f;
+        SetActorRotation(FaceDirection);
 
+        // If the player is close, run!
+        float Distance = FVector::Distance(DetectedActor->GetActorLocation(), GetActorLocation());
+        if (Distance < 200.0f)
+        {
+            // Clears path and make new one far away
+            Path.Empty();
+            Path = Manager->GeneratePath(CurrentNode,
+                                         Manager->FindFurthestCoverNode(DetectedActor->GetActorLocation()));
+        }
+    }
+        // Else if AI cannot sense the player through sight or sound, start healing
+    else if (HealthComponent->HealthPercentageRemaining() < 1)
+    {
+        HealthComponent->CurrentHealth += 3.0f;
+        FMath::Clamp(HealthComponent->CurrentHealth, 0.0f, 100.0f);
+        HealTimer = HealDelay;
+        UE_LOG(LogTemp, Display, TEXT("Healed"));
+    }
+}

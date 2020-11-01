@@ -28,7 +28,7 @@ APlayerCharacter::APlayerCharacter()
 	SprintMovementSpeed = GetCharacterMovement()->MaxWalkSpeed * SprintMultiplier;
 
 	// Role
-	PlayerRole = PlayerRole::HIDER;
+	PlayerRole = PlayerRole::SEEKER;
 	
 }
 

@@ -74,7 +74,7 @@ public:
 	UFUNCTION(Client, Reliable)
 	void HidePlayerHUD(bool bSetHUDVisibility);
 
-	UPROPERTY(Replicated)
+	UPROPERTY(Replicated, VisibleAnywhere)
 	PlayerRole PlayerRole;
 
 	UPROPERTY(Replicated, BlueprintReadOnly)

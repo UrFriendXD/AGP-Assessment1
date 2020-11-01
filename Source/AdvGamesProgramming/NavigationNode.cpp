@@ -17,13 +17,13 @@ ANavigationNode::ANavigationNode()
 void ANavigationNode::BeginPlay()
 {
 	Super::BeginPlay();
+
 	CheckForNearbyNavNodes();
 
 	for (auto It = ConnectedNodes.CreateConstIterator(); It; ++It)
 	{
 		DrawDebugLine(GetWorld(), GetActorLocation(), (*It)->GetActorLocation(), FColor::Blue, true);
 	}
-	
 }
 
 // Called every frame
@@ -46,5 +46,3 @@ void ANavigationNode::AddToConnectedNodes(ANavigationNode * NavigationNode)
 		NavigationNode->ConnectedNodes.Add(this);
 	}
 }
-
-

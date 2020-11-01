@@ -67,6 +67,13 @@ void AAIManager::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 TArray<ANavigationNode*> AAIManager::GeneratePath(ANavigationNode* StartNode, ANavigationNode* EndNode)
 {
+    // An if check for null because sometimes it does that :/
+    if (EndNode == nullptr)
+    {
+        EndNode = AllCoverNodes[FMath::RandRange(0, AllCoverNodes.Num() - 1)];
+        UE_LOG(LogTemp, Error, TEXT("END NODE WAS NULL!"));
+    }
+    
     TArray<ANavigationNode*> OpenSet;
     for (ANavigationNode* Node : AllNodes)
     {
@@ -107,17 +114,20 @@ TArray<ANavigationNode*> AAIManager::GeneratePath(ANavigationNode* StartNode, AN
 
         for (ANavigationNode* ConnectedNode : CurrentNode->ConnectedNodes)
         {
-            float TentativeGScore = CurrentNode->GScore + FVector::Distance(
-                CurrentNode->GetActorLocation(), ConnectedNode->GetActorLocation());
-            if (TentativeGScore < ConnectedNode->GScore)
+            if (ConnectedNode)
             {
-                ConnectedNode->CameFrom = CurrentNode;
-                ConnectedNode->GScore = TentativeGScore;
-                ConnectedNode->HScore = FVector::Distance(ConnectedNode->GetActorLocation(),
-                                                          EndNode->GetActorLocation());
-                if (!OpenSet.Contains(ConnectedNode))
+                float TentativeGScore = CurrentNode->GScore + FVector::Distance(
+                    CurrentNode->GetActorLocation(), ConnectedNode->GetActorLocation());
+                if (TentativeGScore < ConnectedNode->GScore)
                 {
-                    OpenSet.Add(ConnectedNode);
+                    ConnectedNode->CameFrom = CurrentNode;
+                    ConnectedNode->GScore = TentativeGScore;
+                    ConnectedNode->HScore = FVector::Distance(ConnectedNode->GetActorLocation(),
+                                                              EndNode->GetActorLocation());
+                    if (!OpenSet.Contains(ConnectedNode))
+                    {
+                        OpenSet.Add(ConnectedNode);
+                    }
                 }
             }
         }
@@ -325,4 +335,36 @@ ANavigationNode* AAIManager::FindFurthestNode(const FVector& Location)
 
     UE_LOG(LogTemp, Error, TEXT("Furthest Node: %s"), *FurthestNode->GetName())
     return FurthestNode;
+}
+
+ANavigationNode* AAIManager::FindFurthestCoverNode(const FVector & Location)
+{
+    ACover* FurthestCover = nullptr;
+    ANavigationNode* FurthestCoverNode = nullptr;
+    float FurthestDistance = 0.0f;
+
+    // Finds the furthest Cover from the Player
+    for (ACover* CurrentCover : AllCovers)
+    {
+        float CurrentCoverDistance = FVector::Distance(Location, CurrentCover->GetActorLocation());
+        if (CurrentCoverDistance > FurthestDistance)
+        {
+            FurthestDistance = CurrentCoverDistance;
+            FurthestCover = CurrentCover;
+            UE_LOG(LogTemp, Error, TEXT("Updated furthest cover"));
+        }
+    }
+
+    // Then finds the furthest Cover Node attached to that Cover
+    for (ANavigationNode* CurrentNode : FurthestCover->AttachedNodes)
+    {
+		
+        float CurrentNodeDistance = FVector::Distance(Location, CurrentNode->GetActorLocation());
+        if (CurrentNodeDistance > FurthestDistance)
+        {
+            FurthestDistance = CurrentNodeDistance;
+            FurthestCoverNode = CurrentNode;
+        }
+    }
+    return FurthestCoverNode;
 }
