@@ -30,7 +30,7 @@ public:
 	void SetRoleText(FString Role);
 	void SetNumPlayersText(int32 NumPlayers);
 
-	void SetWaitingForHostTimerText(int32 TimeLeft);
+	void SetWaitingForHostTimerText();
 	void SetHidingTimerText(int32 TimeLeft);
 	void SetTimeLeftTimerText(int32 TimeLeft);
 	void SetHideTimerText(bool bIsHidden);
@@ -54,6 +54,7 @@ private:
 	class UTextBlock* NumPlayersTextBlock;
 	class UTextBlock* RoleTextBlock;
 	class UTextBlock* TimerTextBlock;
+	UPROPERTY(meta = (BindWidget))
 	class UButton* StartGameButton;
 
 };
