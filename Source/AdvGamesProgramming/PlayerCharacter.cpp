@@ -29,9 +29,6 @@ APlayerCharacter::APlayerCharacter()
 
 	// Role
 	PlayerRole = PlayerRole::HIDER;
-
-	GameState = Cast<AMultiplayerGameState>(GetWorld()->GetGameState());
-	//HostState = GameState->PlayerArray[0];
 	
 }
 
@@ -46,33 +43,43 @@ void APlayerCharacter::BeginPlay()
 		HealthComponent->SetIsReplicated(true);
 	}
 
-	// If is host, set host HUD to 1/4 Players to begin with, no RoleText, hide TimerText - have a StartGame button in place
-	if (GetLocalRole() == ROLE_Authority && IsLocallyControlled())
+	GameState = Cast<AMultiplayerGameState>(GetWorld()->GetGameState());
+	if (GetPlayerState() == GameState->PlayerArray[0])
 	{
-		if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+		bIsHost = true;
+	}
+	//HostState = GameState->PlayerArray[0];
+
+	// If is host, set host HUD to 1/4 Players to begin with, no RoleText, hide TimerText - have a StartGame button in place
+	if (IsLocallyControlled())
+	{
+		if (bIsHost)
 		{
-			if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+			if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 			{
-				HUD->SetNumPlayersText(1);
-				HUD->SetRoleText(TEXT(""));
-				HUD->SetHideTimerText(true);
-				HUD->SetHideStartGameButton(false);
+				if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+				{
+					HUD->SetNumPlayersText(1);
+					HUD->SetRoleText(TEXT(""));
+					HUD->SetHideTimerText(true);
+					HUD->SetHideStartGameButton(false);
+				}
 			}
 		}
-	}
-	else
-	{
-		if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+		else
 		{
-			if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+			if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 			{
-				int32 NumPlayers = GameState->PlayerArray.Num();
+				if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+				{
+					int32 NumPlayers = GameState->PlayerArray.Num();
 
-				HUD->SetNumPlayersText(NumPlayers);
-				HUD->SetRoleText(TEXT(""));
-				HUD->SetHideTimerText(false);
-				HUD->SetWaitingForHostTimerText();
-				HUD->SetHideStartGameButton(true);
+					HUD->SetNumPlayersText(NumPlayers);
+					HUD->SetRoleText(TEXT(""));
+					HUD->SetHideTimerText(false);
+					HUD->SetWaitingForHostTimerText();
+					HUD->SetHideStartGameButton(true);
+				}
 			}
 		}
 	}
