@@ -94,7 +94,20 @@ void AMultiplayerGameMode::TriggerRespawn(AController* Controller)
 /*
 void AMultiplayerGameMode::StartMatch()
 {
-	auto test = GetWorld()->GetGameState();
-	test->PlayerArray[0];
+	
 }
 */
+
+void AMultiplayerGameMode::StartGame()
+{
+	if (LobbyFloor)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Found lobby floor!"));
+
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Can't find lobby floor"));
+
+	}
+}

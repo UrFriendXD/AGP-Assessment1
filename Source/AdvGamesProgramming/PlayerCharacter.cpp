@@ -48,7 +48,6 @@ void APlayerCharacter::BeginPlay()
 	{
 		bIsHost = true;
 	}
-	//HostState = GameState->PlayerArray[0];
 
 	// If is host, set host HUD to 1/4 Players to begin with, no RoleText, hide TimerText - have a StartGame button in place
 	if (IsLocallyControlled())
@@ -59,6 +58,7 @@ void APlayerCharacter::BeginPlay()
 			{
 				if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
 				{
+					UE_LOG(LogTemp, Warning, TEXT("Is host; setting HUD"))
 					HUD->SetNumPlayersText(1);
 					HUD->SetRoleText(TEXT(""));
 					HUD->SetHideTimerText(true);
@@ -72,8 +72,8 @@ void APlayerCharacter::BeginPlay()
 			{
 				if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
 				{
+					UE_LOG(LogTemp, Warning, TEXT("Is NOT host; setting HUD"))
 					int32 NumPlayers = GameState->PlayerArray.Num();
-
 					HUD->SetNumPlayersText(NumPlayers);
 					HUD->SetRoleText(TEXT(""));
 					HUD->SetHideTimerText(false);
@@ -203,7 +203,12 @@ void APlayerCharacter::InteractEnd()
 // Start Game can only be called if is Host
 void APlayerCharacter::StartGame()
 {
-	
+	UE_LOG(LogTemp, Warning, TEXT("Enter pressed for StartGame."))
+	AMultiplayerGameMode* GameMode = Cast<AMultiplayerGameMode>(GetWorld()->GetAuthGameMode());
+	if (GameMode)
+	{
+		GameMode->StartGame();
+	}
 }
 
 void APlayerCharacter::OnDeath()

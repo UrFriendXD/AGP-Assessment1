@@ -4,11 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
+#include "Engine/StaticMeshActor.h"
 #include "MultiplayerGameMode.generated.h"
 
 /**
  * 
  */
+class ALobbyFloor;
+
 UCLASS()
 class ADVGAMESPROGRAMMING_API AMultiplayerGameMode : public AGameMode
 {
@@ -41,6 +44,12 @@ public:
 	TSubclassOf<class AProceduralSpawner> ProceduralSpawnerClass;
 
 	//void StartMatch() override;
+	void StartGame();
+
+	AStaticMeshActor* LobbyFloor;
+
+
+
 	
 private:
 

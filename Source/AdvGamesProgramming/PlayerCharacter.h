@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "MultiplayerGameState.h"
+#include "Engine/StaticMeshActor.h"
 #include "PlayerCharacter.generated.h"
 
 UENUM()
@@ -99,4 +100,5 @@ private:
 
 	UCameraComponent* Camera;
 
+	AStaticMeshActor* LobbyFloor;
 };
