@@ -102,6 +102,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction(TEXT("Sprint"), EInputEvent::IE_Released, this, &APlayerCharacter::SprintEnd);
 	PlayerInputComponent->BindAction(TEXT("Interact"), EInputEvent::IE_Pressed, this, &APlayerCharacter::InteractStart);
 	PlayerInputComponent->BindAction(TEXT("Interact"), EInputEvent::IE_Released, this, &APlayerCharacter::InteractEnd);
+	PlayerInputComponent->BindAction(TEXT("StartGame"), EInputEvent::IE_Pressed, this, &APlayerCharacter::StartGame);
+
 }
 
 void APlayerCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -189,6 +191,12 @@ void APlayerCharacter::InteractEnd()
 		bIsInteracting = false;
 		UE_LOG(LogTemp, Warning, TEXT("Interact Released"))
 	}
+}
+
+// Start Game can only be called if is Host
+void APlayerCharacter::StartGame()
+{
+	
 }
 
 void APlayerCharacter::OnDeath()

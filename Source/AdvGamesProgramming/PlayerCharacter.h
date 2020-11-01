@@ -51,6 +51,8 @@ public:
 	void InteractStart();
 	void InteractEnd();
 
+	void StartGame();
+
 	class UHealthComponent* HealthComponent;
 
 	void OnDeath();
