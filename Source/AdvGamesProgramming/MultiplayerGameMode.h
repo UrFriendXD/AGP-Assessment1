@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
 #include "Engine/StaticMeshActor.h"
+#include "LobbyFloor.h"
 #include "MultiplayerGameMode.generated.h"
 
 /**
@@ -46,7 +47,8 @@ public:
 	//void StartMatch() override;
 	void StartGame();
 
-	AStaticMeshActor* LobbyFloor;
+	//AStaticMeshActor* LobbyFloor;
+	ALobbyFloor* LobbyFloor;
 
 
 

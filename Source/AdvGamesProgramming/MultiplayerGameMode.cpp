@@ -103,11 +103,17 @@ void AMultiplayerGameMode::StartGame()
 	if (LobbyFloor)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Found lobby floor!"));
-
+		LobbyFloor->SetActorEnableCollision(false);
+		//Set player roles
+		//Set seeker mesh to galaxy
+		//Start 15s UI timer, replicate, disable shooting
+		//Spawn AI and pickups
+		//Disable seeker movement
+		//Reset health and ammo
+		//After 15s timer, start 5min timer
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Can't find lobby floor"));
-
 	}
 }

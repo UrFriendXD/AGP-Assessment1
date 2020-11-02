@@ -30,8 +30,12 @@ void ALobbyFloor::Tick(float DeltaTime)
 
 void ALobbyFloor::AssignLobbyFloor()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Assigning lobby floor"))
 	GameMode = Cast<AMultiplayerGameMode>(GetWorld()->GetAuthGameMode());
-	GameMode->LobbyFloor = Cast<AStaticMeshActor>(GetOwner());
+	if (GameMode)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Assigning lobby floor: GameMode cast worked"))
+		GameMode->LobbyFloor = this;
+	}
+
 }
 
