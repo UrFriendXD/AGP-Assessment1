@@ -88,6 +88,7 @@ void APlayerCharacter::BeginPlay()
         }
     }
 
+	Cast<AMultiplayerGameMode>(GetWorld()->GetAuthGameMode())->PlayerJoined();
     //Set the rounds remaining and health hud components
 }
 
@@ -293,6 +294,9 @@ void APlayerCharacter::SetSeeker()
 				HUD->SetHideNumPlayersText(true);
 				HUD->SetHideStartGameButton(true);
 				bIsInteracting = true;
+				HealthComponent->MaxHealth = 2000.0f;
+				HealthComponent->CurrentHealth = 2000.0f;
+				HealthComponent->UpdateHealthBar();
 			}
 		}
 	}
@@ -342,6 +346,17 @@ void APlayerCharacter::SetSeekingTimerHUD(int32 TimeLeft)
 		{
 			HUD->SetTimeLeftTimerText(TimeLeft);
 			UE_LOG(LogTemp, Warning, TEXT("Hiding time left: %i"), TimeLeft)
+		}
+	}
+}
+
+void APlayerCharacter::SetNumPlayersHUD(int32 NumPlayers)
+{
+	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	{
+		if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+		{
+			HUD->SetNumPlayersText(NumPlayers);
 		}
 	}
 }

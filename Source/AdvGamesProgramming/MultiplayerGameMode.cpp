@@ -131,8 +131,17 @@ void AMultiplayerGameMode::StartGame()
 {
 	if (LobbyFloor)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Found lobby floor!"));
 		LobbyFloor->SetActorEnableCollision(false);
+		/*
+		if (Destroy(LobbyFloor))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Destroyed lobby floor!"));
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Lobby floor NOT destroyed"));
+		}
+		*/
 		
 		// Set a random Seeker 
 		int32 RandIndex = FMath::RandRange(0, GameState->PlayerArray.Num() - 1);
@@ -189,5 +198,13 @@ void AMultiplayerGameMode::SeekingCountdown()
 		{
 			It->SetSeekingTimerHUD(SeekingCountdownTime);
 		}
+	}
+}
+
+void AMultiplayerGameMode::PlayerJoined()
+{
+	for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
+	{
+		It->SetNumPlayersHUD(GameState->PlayerArray.Num());
 	}
 }

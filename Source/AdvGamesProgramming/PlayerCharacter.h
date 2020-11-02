@@ -113,6 +113,8 @@ public:
 	void SetHidingTimerHUD(int32 TimeLeft);
 	void SetSeekingTimerHUD(int32 TimeLeft);
 
+	void SetNumPlayersHUD(int32 NumPlayers);
+
 private:
 	UPROPERTY(EditInstanceOnly, meta = (ClampMin = "0.0", ClampMax = "2.0", UIMin = "0.0", UIMax = "2.0"))
 	float LookSensitivity;

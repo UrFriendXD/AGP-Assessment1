@@ -61,6 +61,8 @@ public:
 	int32 HidingCountdownTime;
 	int32 SeekingCountdownTime;
 
+	void PlayerJoined();
+
 	
 private:
 
