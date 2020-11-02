@@ -247,6 +247,7 @@ void APlayerCharacter::SetSeeker()
 				HUD->SetRoleText(TEXT("Seeker"));
 				HUD->SetHideNumPlayersText(true);
 				HUD->SetHideStartGameButton(true);
+				bIsInteracting = true;
 			}
 		}
 	}
@@ -291,6 +292,7 @@ void APlayerCharacter::SetSeekingTimerHUD(int32 TimeLeft)
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
 		SetCanFire(true);
+		bIsInteracting = false;
 		if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
 		{
 			HUD->SetTimeLeftTimerText(TimeLeft);

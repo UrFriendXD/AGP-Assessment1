@@ -18,6 +18,12 @@ void AMultiplayerGameMode::InitGame(const FString& MapName, const FString& Optio
 	Super::InitGame(MapName, Options, ErrorMessages);
 	HidingCountdownTime = 15;
 	SeekingCountdownTime = 300;
+	
+
+	for (TActorIterator<AProceduralSpawner> It(GetWorld()); It; ++It)
+	{
+		ProceduralSpawnerClass = *It;
+	}
 
 	// //Find the procedurally generated map in the world
 	// for (TActorIterator<AProcedurallyGeneratedMap> It(GetWorld()); It; ++It)
@@ -127,12 +133,10 @@ void AMultiplayerGameMode::StartGame()
 
 		GetWorld()->GetTimerManager().SetTimer(HidingTimerHandle, this, &AMultiplayerGameMode::HidingCountdown, 1.0f, true);
 		
+		ProceduralSpawnerClass->SpawnObjects();
 
-		//Start 15s UI timer, replicate, disable shooting
-		//Spawn AI and pickups
-		//Disable seeker movement
+		//Spawn pickups
 		//Reset health and ammo
-		//After 15s timer, start 5min timer
 	}
 }
 

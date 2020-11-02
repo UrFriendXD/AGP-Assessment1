@@ -6,6 +6,7 @@
 #include "GameFramework/GameMode.h"
 #include "Engine/StaticMeshActor.h"
 #include "LobbyFloor.h"
+#include "ProceduralSpawner.h"
 #include "MultiplayerGameMode.generated.h"
 
 /**
@@ -41,8 +42,8 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AProceduralGeneration> ProceduralGenerationClass;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<class AProceduralSpawner> ProceduralSpawnerClass;
+
+	AProceduralSpawner* ProceduralSpawnerClass;
 
 	//void StartMatch() override;
 	void StartGame();
@@ -58,7 +59,6 @@ public:
 	void SeekingCountdown();
 	int32 HidingCountdownTime;
 	int32 SeekingCountdownTime;
-
 
 	
 private:
