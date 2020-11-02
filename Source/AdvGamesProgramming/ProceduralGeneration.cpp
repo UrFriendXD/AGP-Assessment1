@@ -6,6 +6,7 @@
 
 #include "EngineUtils.h"
 #include "Room.h"
+#include "TimerManager.h"
 #include "Engine/World.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
@@ -251,7 +252,8 @@ void AProceduralGeneration::Move()
             
             ProceduralSpawner->AIManager = AIManager;
             // Call generate AI and Pickups
-            ProceduralSpawner->SpawnObjects();
+            //ProceduralSpawner->SpawnObjects();
+            GetWorldTimerManager().SetTimer(SpawnObjectsHandle, this, &AProceduralGeneration::SpawnObjects, 5, false, 3.0f);
         }
     }
 }
@@ -286,6 +288,12 @@ void AProceduralGeneration::SpawnEmptyRoom()
     {
         RoomSpawner->SpawnRoom();
     }
+}
+
+void AProceduralGeneration::SpawnObjects()
+{
+    ProceduralSpawner->SpawnObjects();
+
 }
 
 void AProceduralGeneration::PopulateAIManager()

@@ -86,6 +86,8 @@ public:
     UPROPERTY(Replicated, VisibleAnywhere)
     bool bIsOutOfBounds;
 
+    FTimerHandle SpawnObjectsHandle;
+
 private:
     void ChooseStartingPoint();
     void PopulateAIManager();
@@ -106,4 +108,6 @@ private:
     void SpawnRoomWithBottom();
 
     void SpawnEmptyRoom();
+
+    void SpawnObjects();
 };

@@ -77,7 +77,7 @@ public:
 	UFUNCTION(Client, Reliable)
 	void HidePlayerHUD(bool bSetHUDVisibility);
 
-	UPROPERTY(Replicated)
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
 	PlayerRole PlayerRole;
 
 	UPROPERTY(Replicated, BlueprintReadOnly)
@@ -87,7 +87,19 @@ public:
 	APlayerState* HostState;
 
 	bool bIsHost;
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadWrite)
+	bool bIsPlayerHealing;
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadWrite)
+	bool bIsDead;
 	bool bGameStarted;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TArray<APlayerCharacter*> TrackPlayers;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void HealHiders();
+	UFUNCTION(BlueprintImplementableEvent)
+	void HealHiders_END();
 
 	void SetSeeker();
 	void SetHider();
@@ -112,6 +124,14 @@ private:
 	float SprintMultiplier;
 
 	UCameraComponent* Camera;
+
+	// Healing timer
+	UPROPERTY(VisibleAnywhere)
+	float HealTimer;
+	UPROPERTY(EditAnywhere)
+	float HealDelay;
+
+	void Heal();
 
 	AStaticMeshActor* LobbyFloor;
 };

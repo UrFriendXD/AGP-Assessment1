@@ -62,6 +62,9 @@ public:
 	*/
 	ANavigationNode* FindFurthestNode(const FVector& Location);
 
+	// Finds the furthest cover node from the given location
+	ANavigationNode* FindFurthestCoverNode(const FVector& Location);
+
 	void PopulateNodes();
 	//void CreateAgents();
 	void PopulateCovers();

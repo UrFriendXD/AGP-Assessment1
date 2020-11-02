@@ -43,6 +43,7 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AProceduralGeneration> ProceduralGenerationClass;
 
+	void PlayerDied(AController* Controller);
 	AProceduralSpawner* ProceduralSpawnerClass;
 
 	//void StartMatch() override;

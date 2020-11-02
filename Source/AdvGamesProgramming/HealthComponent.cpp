@@ -79,11 +79,15 @@ void UHealthComponent::OnDeath()
 	APlayerCharacter* OwningPlayerCharacter = Cast<APlayerCharacter>(GetOwner());
 
 	// If agent isn't already dead, set it to dead and clear current path
-	if (EnemyCharacter->CurrentAgentState != AgentState::DEAD)
+	if (EnemyCharacter)
 	{
-		OwningPlayerCharacter->OnDeath();
+		if (EnemyCharacter->CurrentAgentState != AgentState::DEAD)
+		{
+			EnemyCharacter->CurrentAgentState = AgentState::DEAD;
+			EnemyCharacter->Path.Empty();
+		}
 	}
-	else if (OwningPlayerCharacter)
+	if (OwningPlayerCharacter)
 	{
 		OwningPlayerCharacter->OnDeath();
 	}

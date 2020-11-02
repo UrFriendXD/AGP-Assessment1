@@ -40,7 +40,7 @@ public:
 
 	float HealthPercentageRemaining();
 
-private:
 	UFUNCTION()
 	void UpdateHealthBar();
+private:
 };
