@@ -93,7 +93,7 @@ public:
     UFUNCTION()
     void Heal();
 
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite)
     bool bEnemyHealing;
 
     UPROPERTY(EditAnywhere)
@@ -103,7 +103,7 @@ public:
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
     // This property is used for healing animation
-    UPROPERTY(BlueprintReadOnly)
+    UPROPERTY(Replicated, BlueprintReadOnly)
     bool bIsHealingOthers;
 
 private:

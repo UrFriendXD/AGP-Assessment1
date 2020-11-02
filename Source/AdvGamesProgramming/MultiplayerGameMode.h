@@ -40,7 +40,7 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AProceduralSpawner> ProceduralSpawnerClass;
 
-	//void StartMatch() override;
+	void PlayerDied(AController* Controller);
 	
 private:
 

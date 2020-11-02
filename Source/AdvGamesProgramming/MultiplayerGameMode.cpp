@@ -91,6 +91,27 @@ void AMultiplayerGameMode::TriggerRespawn(AController* Controller)
 	}
 }
 
+void AMultiplayerGameMode::PlayerDied(AController* Controller)
+{
+	if (Controller)
+	{
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Blue, FString::Printf(TEXT("Player died")));
+		}
+
+		if (APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Controller->GetPawn()))
+		{
+			PlayerCharacter->bIsDead = true;
+		}
+		if (true)
+		{
+			Controller->DisableInput(Cast<APlayerController>(Controller));
+		};
+
+	}
+}
+
 /*
 void AMultiplayerGameMode::StartMatch()
 {

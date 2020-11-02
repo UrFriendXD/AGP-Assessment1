@@ -9,266 +9,278 @@
 #include "HealthComponent.h"
 #include "MultiplayerGameMode.h"
 #include "PlayerHUD.h"
+#include "Engine/Engine.h"
 
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	
-	//AutoPossessPlayer = EAutoReceiveInput::Player0;
-	bUseControllerRotationPitch = true;
+    // Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+    PrimaryActorTick.bCanEverTick = true;
 
-	LookSensitivity = 1.0f;
-	SprintMultiplier = 1.5f;
+    //AutoPossessPlayer = EAutoReceiveInput::Player0;
+    bUseControllerRotationPitch = true;
 
-	//Set the normal and sprint movement speeds
-	NormalMovementSpeed = GetCharacterMovement()->MaxWalkSpeed;
-	SprintMovementSpeed = GetCharacterMovement()->MaxWalkSpeed * SprintMultiplier;
+    LookSensitivity = 1.0f;
+    SprintMultiplier = 1.5f;
 
-	// Role
-	PlayerRole = PlayerRole::SEEKER;
-	
+    //Set the normal and sprint movement speeds
+    NormalMovementSpeed = GetCharacterMovement()->MaxWalkSpeed;
+    SprintMovementSpeed = GetCharacterMovement()->MaxWalkSpeed * SprintMultiplier;
+
+    // Role
+    PlayerRole = PlayerRole::HIDER;
+
+    bIsDead = false;
+    HealDelay = 0.3f;
 }
 
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()
 {
-	Super::BeginPlay();
-	Camera = FindComponentByClass<UCameraComponent>();
-	HealthComponent = FindComponentByClass<UHealthComponent>();
-	if (HealthComponent)
-	{
-		HealthComponent->SetIsReplicated(true);
-	}
+    Super::BeginPlay();
+    Camera = FindComponentByClass<UCameraComponent>();
+    HealthComponent = FindComponentByClass<UHealthComponent>();
+    if (HealthComponent)
+    {
+        HealthComponent->SetIsReplicated(true);
+    }
 
-	GameState = Cast<AMultiplayerGameState>(GetWorld()->GetGameState());
-	if (GetPlayerState() == GameState->PlayerArray[0])
-	{
-		bIsHost = true;
-	}
-	//HostState = GameState->PlayerArray[0];
+    GameState = Cast<AMultiplayerGameState>(GetWorld()->GetGameState());
+    if (GetPlayerState() == GameState->PlayerArray[0])
+    {
+        bIsHost = true;
+    }
+    //HostState = GameState->PlayerArray[0];
 
-	// If is host, set host HUD to 1/4 Players to begin with, no RoleText, hide TimerText - have a StartGame button in place
-	if (IsLocallyControlled())
-	{
-		if (bIsHost)
-		{
-			if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
-			{
-				if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
-				{
-					HUD->SetNumPlayersText(1);
-					HUD->SetRoleText(TEXT(""));
-					HUD->SetHideTimerText(true);
-					HUD->SetHideStartGameButton(false);
-				}
-			}
-		}
-		else
-		{
-			if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
-			{
-				if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
-				{
-					int32 NumPlayers = GameState->PlayerArray.Num();
+    // If is host, set host HUD to 1/4 Players to begin with, no RoleText, hide TimerText - have a StartGame button in place
+    if (IsLocallyControlled())
+    {
+        if (bIsHost)
+        {
+            if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+            {
+                if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+                {
+                    HUD->SetNumPlayersText(1);
+                    HUD->SetRoleText(TEXT(""));
+                    HUD->SetHideTimerText(true);
+                    HUD->SetHideStartGameButton(false);
+                }
+            }
+        }
+        else
+        {
+            if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+            {
+                if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+                {
+                    int32 NumPlayers = GameState->PlayerArray.Num();
 
-					HUD->SetNumPlayersText(NumPlayers);
-					HUD->SetRoleText(TEXT(""));
-					HUD->SetHideTimerText(false);
-					HUD->SetWaitingForHostTimerText();
-					HUD->SetHideStartGameButton(true);
-				}
-			}
-		}
-	}
+                    HUD->SetNumPlayersText(NumPlayers);
+                    HUD->SetRoleText(TEXT(""));
+                    HUD->SetHideTimerText(false);
+                    HUD->SetWaitingForHostTimerText();
+                    HUD->SetHideStartGameButton(true);
+                }
+            }
+        }
+    }
 
-	//Set the rounds remaining and health hud components
+    //Set the rounds remaining and health hud components
 }
 
 // Called every frame
 void APlayerCharacter::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+    Super::Tick(DeltaTime);
 
-	// If being healed, heal
-	if (bIsPlayerHealing)
-	{
-		if (HealTimer <= 0)
-		{
-			Heal();
-		}
-	}
+    // If being healed, heal
+    if (bIsPlayerHealing && bIsDead)
+    {
+        if (HealTimer <= 0)
+        {
+            Heal();
+            HealthComponent->UpdateHealthBar();
+        }
+    }
 
-	// Timer
-	if (HealTimer > 0)
-	{
-		HealTimer -= GetWorld()->GetDeltaSeconds();
-	}
+    // Timer
+    if (HealTimer > 0)
+    {
+        HealTimer -= GetWorld()->GetDeltaSeconds();
+    }
 
-	if (bIsDead)
-	{
-		if (HealthComponent->HealthPercentageRemaining() >= 1.0f)
-		{
-			bIsDead = false;
-			EnableInput(Cast<APlayerController>(GetController()));
-		}
-	}
-
+    if (bIsDead)
+    {
+        if (HealthComponent->HealthPercentageRemaining() >= 1.0f)
+        {
+            bIsDead = false;
+            bIsPlayerHealing = false;
+            //EnableInput(Cast<APlayerController>(GetController()));
+        }
+    }
 }
 
 // Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+    Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &APlayerCharacter::MoveForward);
-	PlayerInputComponent->BindAxis(TEXT("Strafe"), this, &APlayerCharacter::Strafe);
-	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APlayerCharacter::LookUp);
-	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &APlayerCharacter::Turn);
+    PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &APlayerCharacter::MoveForward);
+    PlayerInputComponent->BindAxis(TEXT("Strafe"), this, &APlayerCharacter::Strafe);
+    PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APlayerCharacter::LookUp);
+    PlayerInputComponent->BindAxis(TEXT("Turn"), this, &APlayerCharacter::Turn);
 
-	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &APlayerCharacter::Jump);
-	PlayerInputComponent->BindAction(TEXT("Sprint"), EInputEvent::IE_Pressed, this, &APlayerCharacter::SprintStart);
-	PlayerInputComponent->BindAction(TEXT("Sprint"), EInputEvent::IE_Released, this, &APlayerCharacter::SprintEnd);
-	PlayerInputComponent->BindAction(TEXT("Interact"), EInputEvent::IE_Pressed, this, &APlayerCharacter::InteractStart);
-	PlayerInputComponent->BindAction(TEXT("Interact"), EInputEvent::IE_Released, this, &APlayerCharacter::InteractEnd);
+    PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &APlayerCharacter::Jump);
+    PlayerInputComponent->BindAction(TEXT("Sprint"), EInputEvent::IE_Pressed, this, &APlayerCharacter::SprintStart);
+    PlayerInputComponent->BindAction(TEXT("Sprint"), EInputEvent::IE_Released, this, &APlayerCharacter::SprintEnd);
+    PlayerInputComponent->BindAction(TEXT("Interact"), EInputEvent::IE_Pressed, this, &APlayerCharacter::InteractStart);
+    PlayerInputComponent->BindAction(TEXT("Interact"), EInputEvent::IE_Released, this, &APlayerCharacter::InteractEnd);
 }
 
 void APlayerCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(APlayerCharacter, PlayerRole);
-	DOREPLIFETIME(APlayerCharacter, bIsInteracting);
+    DOREPLIFETIME(APlayerCharacter, PlayerRole);
+    DOREPLIFETIME(APlayerCharacter, bIsInteracting);
+    DOREPLIFETIME(APlayerCharacter, bIsDead);
+    DOREPLIFETIME(APlayerCharacter, bIsPlayerHealing);
 }
 
 void APlayerCharacter::MoveForward(float Value)
 {
-	if (!bIsInteracting)
-	{
-		FRotator ForwardRotation = GetControlRotation();
-		ForwardRotation.Roll = 0.0f;
-		ForwardRotation.Pitch = 0.0f;
-		AddMovementInput(ForwardRotation.Vector(), Value);
-	}
+    if (!bIsInteracting && !bIsDead)
+    {
+        FRotator ForwardRotation = GetControlRotation();
+        ForwardRotation.Roll = 0.0f;
+        ForwardRotation.Pitch = 0.0f;
+        AddMovementInput(ForwardRotation.Vector(), Value);
+    }
 }
 
 void APlayerCharacter::Strafe(float Value)
 {
-	if (!bIsInteracting)
-	{
-		AddMovementInput(GetActorRightVector(), Value);
-	}
+    if (!bIsInteracting && !bIsDead)
+    {
+        AddMovementInput(GetActorRightVector(), Value);
+    }
 }
 
 void APlayerCharacter::LookUp(float Value)
 {
-	if (Camera)
-	{
-		FRotator DeltaRotation = FRotator::ZeroRotator;
-		DeltaRotation.Pitch = Value * LookSensitivity;
-		//Bonus Task - Removing Stutter by only adding relative rotation if it does not push pitch above or below 90 or -90 respectively
-		if (DeltaRotation.Pitch + Camera->RelativeRotation.Pitch < 90.0f && DeltaRotation.Pitch + Camera->RelativeRotation.Pitch > -90.0f)
-		{
-			Camera->AddRelativeRotation(DeltaRotation);
-		}
-		//Need to make sure that the camera is not rolling or yawing when the pitch is
-		//trying to pitch greater than 90 or less than -90. AddRelativeRotation starts
-		//adding things to roll and yaw at these extremes.
-		Camera->RelativeRotation.Yaw = 0.0f;
-		Camera->RelativeRotation.Roll = 0.0f;
-	}
+    if (Camera)
+    {
+        FRotator DeltaRotation = FRotator::ZeroRotator;
+        DeltaRotation.Pitch = Value * LookSensitivity;
+        //Bonus Task - Removing Stutter by only adding relative rotation if it does not push pitch above or below 90 or -90 respectively
+        if (DeltaRotation.Pitch + Camera->RelativeRotation.Pitch < 90.0f && DeltaRotation.Pitch + Camera->
+            RelativeRotation.Pitch > -90.0f)
+        {
+            Camera->AddRelativeRotation(DeltaRotation);
+        }
+        //Need to make sure that the camera is not rolling or yawing when the pitch is
+        //trying to pitch greater than 90 or less than -90. AddRelativeRotation starts
+        //adding things to roll and yaw at these extremes.
+        Camera->RelativeRotation.Yaw = 0.0f;
+        Camera->RelativeRotation.Roll = 0.0f;
+    }
 }
 
 void APlayerCharacter::Turn(float Value)
 {
-	AddControllerYawInput(Value * LookSensitivity);
+    AddControllerYawInput(Value * LookSensitivity);
 }
 
 void APlayerCharacter::SprintStart()
 {
-	if (!bIsInteracting)
-	{
-		GetCharacterMovement()->MaxWalkSpeed = SprintMovementSpeed;
-		ServerSprintStart();
-	}
+    if (!bIsInteracting && !bIsDead)
+    {
+        GetCharacterMovement()->MaxWalkSpeed = SprintMovementSpeed;
+        ServerSprintStart();
+    }
 }
 
 void APlayerCharacter::SprintEnd()
 {
-	if (!bIsInteracting)
-	{
-		GetCharacterMovement()->MaxWalkSpeed = NormalMovementSpeed;
-		ServerSprintEnd();
-	}
+    if (!bIsInteracting && !bIsDead)
+    {
+        GetCharacterMovement()->MaxWalkSpeed = NormalMovementSpeed;
+        ServerSprintEnd();
+    }
 }
 
 void APlayerCharacter::InteractStart()
 {
-	if (PlayerRole == PlayerRole::HIDER)
-	{
-		bIsInteracting = true;
-		UE_LOG(LogTemp, Warning, TEXT("Interact pressed"))
-	}
+    if (PlayerRole == PlayerRole::HIDER)
+    {
+        bIsInteracting = true;
+        HealHiders();
+        UE_LOG(LogTemp, Warning, TEXT("Interact pressed"))
+    }
 }
 
 void APlayerCharacter::InteractEnd()
 {
-	if (PlayerRole == PlayerRole::HIDER)
-	{
-		bIsInteracting = false;
-		UE_LOG(LogTemp, Warning, TEXT("Interact Released"))
-	}
+    if (PlayerRole == PlayerRole::HIDER)
+    {
+        bIsInteracting = false;
+        HealHiders_END();
+        UE_LOG(LogTemp, Warning, TEXT("Interact Released"))
+    }
 }
 
 void APlayerCharacter::OnDeath()
 {
-	if (GetLocalRole() == ROLE_Authority)
-	{
-		// AMultiplayerGameMode* GameMode = Cast<AMultiplayerGameMode>(GetWorld()->GetAuthGameMode());
-		// if (GameMode)
-		// {
-		// 	GameMode->Respawn(GetController());
-		// }
+    // if (IsLocallyControlled())
+    // {
+    AMultiplayerGameMode* GameMode = Cast<AMultiplayerGameMode>(GetWorld()->GetAuthGameMode());
+    if (GameMode)
+    {
+        GameMode->PlayerDied(GetController());
+    }
 
-		bIsDead = true;
-		DisableInput(Cast<APlayerController>(GetController()));
-	}
-
+    bIsDead = true;
+    if (GEngine)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Blue, FString::Printf(TEXT("Player is %hs"), bIsDead? "true" : "false"));
+    }
+    // DisableInput(Cast<APlayerController>(GetController()));
+    // UE_LOG(LogTemp, Warning, TEXT("Died"))
+    // }
 }
 
 void APlayerCharacter::Heal()
 {
-	HealthComponent->CurrentHealth += 3.0f;
-	FMath::Clamp(HealthComponent->CurrentHealth, 0.0f, 100.0f);
-	HealTimer = HealDelay;
-	UE_LOG(LogTemp, Display, TEXT("Healed"));
+    HealthComponent->CurrentHealth += 3.0f;
+    FMath::Clamp(HealthComponent->CurrentHealth, 0.0f, 100.0f);
+    HealTimer = HealDelay;
+    UE_LOG(LogTemp, Display, TEXT("Healed"));
 }
 
 void APlayerCharacter::HidePlayerHUD_Implementation(bool bSetHUDVisibility)
 {
-	//Get the player controller then the player hud of the autonomous proxy
-	// CAN ALSO JUST CHECK FOR IsLocallyControlled()
-	if (GetLocalRole() == ROLE_AutonomousProxy || (GetLocalRole() == ROLE_Authority && IsLocallyControlled()))
-	{
-		if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
-		{
-			if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
-			{
-				HUD->SetHideWidgets(bSetHUDVisibility);
-			}
-		}
-	}
+    //Get the player controller then the player hud of the autonomous proxy
+    // CAN ALSO JUST CHECK FOR IsLocallyControlled()
+    if (GetLocalRole() == ROLE_AutonomousProxy || (GetLocalRole() == ROLE_Authority && IsLocallyControlled()))
+    {
+        if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+        {
+            if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+            {
+                HUD->SetHideWidgets(bSetHUDVisibility);
+            }
+        }
+    }
 }
 
 void APlayerCharacter::ServerSprintStart_Implementation()
 {
-	GetCharacterMovement()->MaxWalkSpeed = SprintMovementSpeed;
+    GetCharacterMovement()->MaxWalkSpeed = SprintMovementSpeed;
 }
 
 void APlayerCharacter::ServerSprintEnd_Implementation()
 {
-	GetCharacterMovement()->MaxWalkSpeed = NormalMovementSpeed;
+    GetCharacterMovement()->MaxWalkSpeed = NormalMovementSpeed;
 }
-

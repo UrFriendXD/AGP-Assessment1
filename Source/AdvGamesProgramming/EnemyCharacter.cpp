@@ -170,6 +170,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
             if (HealthComponent->HealthPercentageRemaining() >= 1.0f)
             {
                 CurrentAgentState = AgentState::REVIVING;
+                bEnemyHealing = false;
             }
             if (bHealingOthers)
             {
@@ -227,6 +228,8 @@ void AEnemyCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
     DOREPLIFETIME(AEnemyCharacter, Manager);
     DOREPLIFETIME(AEnemyCharacter, CurrentAgentState);
     DOREPLIFETIME(AEnemyCharacter, CurrentNode);
+    DOREPLIFETIME(AEnemyCharacter, bIsHealingOthers);
+    DOREPLIFETIME(AEnemyCharacter, bEnemyHealing);
 }
 
 // Called to bind functionality to input
@@ -317,10 +320,8 @@ void AEnemyCharacter::AgentHealing()
         //UE_LOG(LogTemp, Warning, TEXT("Helping Friend"));
         Path.Empty();
 
-        AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(DetectedActor);
-        APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(DetectedActor);
-
-        if (EnemyCharacter)
+        //Checks for enemy character
+        if (AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(DetectedActor))
         {
             // If they aren't already being healed
             if (!EnemyCharacter->bEnemyHealing)
@@ -341,7 +342,8 @@ void AEnemyCharacter::AgentHealing()
             }
         }
 
-        if (PlayerCharacter)
+        // Checks for player
+        if (APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(DetectedActor))
         {
             // If they aren't already being healed
             if (!PlayerCharacter->bIsPlayerHealing)
@@ -351,11 +353,11 @@ void AEnemyCharacter::AgentHealing()
             }
 
             // If they're full on HP, go back to patrol
-            if (PlayerCharacter->HealthComponent->HealthPercentageRemaining() >= 1.0f)
+            if (PlayerCharacter->HealthComponent->HealthPercentageRemaining() >= 1.0f || !PlayerCharacter->bIsDead)
             {
                 bHealingOthers = false;
                 bIsHealingOthers = false;
-                PlayerCharacter->bIsPlayerHealing= false;
+                PlayerCharacter->bIsPlayerHealing = false;
                 CurrentAgentState = AgentState::COVER;
                 Path.Empty();
                 bTransitioningIntoCover = true;
@@ -418,29 +420,28 @@ void AEnemyCharacter::SensePlayer(AActor* SensedActor, FAIStimulus Stimulus)
                             }
                         }
                     }
+                }
 
-                    if (SensedActor->ActorHasTag(TEXT("Player")) && Cast<APlayerCharacter>(SensedActor)->PlayerRole ==
+                if (SensedActor->ActorHasTag(TEXT("Player")) && Cast<APlayerCharacter>(SensedActor)->PlayerRole ==
                         PlayerRole::HIDER)
+                {
+                    DetectedActor = SensedActor;
+                    bCanSeeEnemy = true;
+                    UE_LOG(LogTemp, Warning, TEXT("Enemy Detected"))
+                    if (!bHealingOthers)
                     {
-                        DetectedActor = SensedActor;
-                        bCanSeeEnemy = true;
-                        UE_LOG(LogTemp, Warning, TEXT("Enemy Detected"))
-                        if (!bHealingOthers)
+                        APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(SensedActor);
+                        if (PlayerCharacter)
                         {
-                            APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(SensedActor);
-                            if (PlayerCharacter)
+                            if (PlayerCharacter->bIsDead && !PlayerCharacter->bIsPlayerHealing)
                             {
-                                if (PlayerCharacter->HealthComponent->HealthPercentageRemaining() == 0 && !
-                                    PlayerCharacter->bIsInteracting)
-                                {
-                                    bHealingOthers = true;
-                                    CurrentAgentState = AgentState::HEALINGAGENTS;
-                                    Path.Empty();
-                                    Path = Manager->GeneratePath(CurrentNode,
-                                                                 Manager->FindNearestNode(
-                                                                     DetectedActor->GetActorLocation()));
-                                    UE_LOG(LogTemp, Warning, TEXT("Seeker needs help"))
-                                }
+                                bHealingOthers = true;
+                                CurrentAgentState = AgentState::HEALINGAGENTS;
+                                Path.Empty();
+                                Path = Manager->GeneratePath(CurrentNode,
+                                                             Manager->FindNearestNode(
+                                                                 DetectedActor->GetActorLocation()));
+                                UE_LOG(LogTemp, Warning, TEXT("Seeker needs help"))
                             }
                         }
                     }
