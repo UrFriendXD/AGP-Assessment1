@@ -29,6 +29,7 @@ public:
 	void SetAmmoText(int32 RoundsRemaining, int32 MagazineSize);
 	void SetRoleText(FString PlayerRole);
 	void SetNumPlayersText(int32 NumPlayers);
+	void SetHideNumPlayersText(bool bIsHidden);
 
 	void SetWaitingForHostTimerText();
 	void SetHidingTimerText(int32 TimeLeft);

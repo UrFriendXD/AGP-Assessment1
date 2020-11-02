@@ -16,6 +16,14 @@
 void AMultiplayerGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessages)
 {
 	Super::InitGame(MapName, Options, ErrorMessages);
+	HidingCountdownTime = 15;
+	SeekingCountdownTime = 300;
+	
+
+	for (TActorIterator<AProceduralSpawner> It(GetWorld()); It; ++It)
+	{
+		ProceduralSpawnerClass = *It;
+	}
 
 	// //Find the procedurally generated map in the world
 	// for (TActorIterator<AProcedurallyGeneratedMap> It(GetWorld()); It; ++It)
@@ -115,7 +123,71 @@ void AMultiplayerGameMode::PlayerDied(AController* Controller)
 /*
 void AMultiplayerGameMode::StartMatch()
 {
-	auto test = GetWorld()->GetGameState();
-	test->PlayerArray[0];
+	
 }
 */
+
+void AMultiplayerGameMode::StartGame()
+{
+	if (LobbyFloor)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Found lobby floor!"));
+		LobbyFloor->SetActorEnableCollision(false);
+		
+		// Set a random Seeker 
+		int32 RandIndex = FMath::RandRange(0, GameState->PlayerArray.Num() - 1);
+		int32 ItIndex = 0;
+		for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
+		{
+			if (ItIndex == RandIndex)
+			{
+				It->PlayerRole = PlayerRole::SEEKER;
+				It->SetSeeker();
+			}
+			else
+			{
+				It->PlayerRole = PlayerRole::HIDER;
+				It->SetHider();
+			}
+			ItIndex++;
+		}
+
+		GetWorld()->GetTimerManager().SetTimer(HidingTimerHandle, this, &AMultiplayerGameMode::HidingCountdown, 1.0f, true);
+		
+		ProceduralSpawnerClass->SpawnObjects();
+
+		//Spawn pickups
+		//Reset health and ammo
+	}
+}
+
+void AMultiplayerGameMode::HidingCountdown()
+{
+	// Hiding countdown over
+	if (--HidingCountdownTime <= 0)
+	{
+		GetWorld()->GetTimerManager().SetTimer(HidingTimerHandle, this, &AMultiplayerGameMode::SeekingCountdown, 1.0f, true);	
+	}
+	else // Hiding countdown ongoing
+	{
+		for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
+		{
+			It->SetHidingTimerHUD(HidingCountdownTime);
+		}
+	}
+}
+
+void AMultiplayerGameMode::SeekingCountdown()
+{
+	if (--SeekingCountdownTime <= 0)
+	{
+		//Gameover: out of time
+	}
+	else // Seeking countdown ongoing
+	{
+		for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
+		{
+			It->SetSeekingTimerHUD(SeekingCountdownTime);
+		}
+	}
+}

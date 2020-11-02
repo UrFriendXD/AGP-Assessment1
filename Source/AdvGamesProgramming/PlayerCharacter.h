@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "MultiplayerGameState.h"
+#include "Engine/StaticMeshActor.h"
 #include "PlayerCharacter.generated.h"
 
 UENUM()
@@ -51,6 +52,8 @@ public:
 	void InteractStart();
 	void InteractEnd();
 
+	void StartGame();
+
 	class UHealthComponent* HealthComponent;
 
 	void OnDeath();
@@ -88,6 +91,7 @@ public:
 	bool bIsPlayerHealing;
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadWrite)
 	bool bIsDead;
+	bool bGameStarted;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TArray<APlayerCharacter*> TrackPlayers;
@@ -96,6 +100,18 @@ public:
 	void HealHiders();
 	UFUNCTION(BlueprintImplementableEvent)
 	void HealHiders_END();
+
+	void SetSeeker();
+	void SetHider();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetSeekerMaterial(bool bSetSeekerMat);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetCanFire(bool bCanFire);
+
+	void SetHidingTimerHUD(int32 TimeLeft);
+	void SetSeekingTimerHUD(int32 TimeLeft);
 
 private:
 	UPROPERTY(EditInstanceOnly, meta = (ClampMin = "0.0", ClampMax = "2.0", UIMin = "0.0", UIMax = "2.0"))
@@ -117,4 +133,5 @@ private:
 
 	void Heal();
 
+	AStaticMeshActor* LobbyFloor;
 };

@@ -4,11 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
+#include "Engine/StaticMeshActor.h"
+#include "LobbyFloor.h"
+#include "ProceduralSpawner.h"
 #include "MultiplayerGameMode.generated.h"
 
 /**
  * 
  */
+class ALobbyFloor;
+
 UCLASS()
 class ADVGAMESPROGRAMMING_API AMultiplayerGameMode : public AGameMode
 {
@@ -37,10 +42,25 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AProceduralGeneration> ProceduralGenerationClass;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<class AProceduralSpawner> ProceduralSpawnerClass;
 
 	void PlayerDied(AController* Controller);
+	AProceduralSpawner* ProceduralSpawnerClass;
+
+	//void StartMatch() override;
+	void StartGame();
+
+	//AStaticMeshActor* LobbyFloor;
+	ALobbyFloor* LobbyFloor;
+
+	bool bSeekerAssigned;
+
+	FTimerHandle HidingTimerHandle;
+	UFUNCTION()
+	void HidingCountdown();
+	void SeekingCountdown();
+	int32 HidingCountdownTime;
+	int32 SeekingCountdownTime;
+
 	
 private:
 
