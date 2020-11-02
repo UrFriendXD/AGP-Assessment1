@@ -7,6 +7,7 @@
 #include "Components/Image.h"
 #include "Components/Button.h"
 #include "PlayerCharacter.h"
+#include "Engine/Engine.h"
 
 APlayerHUD::APlayerHUD()
 {
@@ -31,6 +32,7 @@ APlayerHUD::APlayerHUD()
 			CrosshairImageBlock = Cast<UImage>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("ImgCrosshair")));
 			RoleTextBlock = Cast<UTextBlock>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("TextRole")));
 			TimerTextBlock = Cast<UTextBlock>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("TextTimer")));
+			NumPlayersTextBlock = Cast<UTextBlock>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("TextNumPlayers")));
 			StartGameButton = Cast<UButton>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("StartGameButton")));
 
 		}
@@ -73,8 +75,11 @@ void APlayerHUD::SetNumPlayersText(int32 NumPlayers)
 	if (NumPlayersTextBlock)
 	{
 		NumPlayersTextBlock->SetText(FText::FromString(FString::Printf(TEXT("%i/4 Players"), NumPlayers)));
+		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Blue, FString::Printf(TEXT("play%i"), NumPlayers));
 
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Blue, FString::Printf(TEXT("s%i"), NumPlayers));
+
 }
 
 void APlayerHUD::SetHideNumPlayersText(bool bIsHidden)

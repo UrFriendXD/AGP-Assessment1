@@ -76,6 +76,8 @@ public:
 	 */
 	UFUNCTION(Client, Reliable)
 	void HidePlayerHUD(bool bSetHUDVisibility);
+	UFUNCTION(Client, Reliable)
+	void SetNumPlayersHUDClient(int32 NumPlayers);
 
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
 	PlayerRole PlayerRole;
@@ -92,9 +94,6 @@ public:
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadWrite)
 	bool bIsDead;
 	bool bGameStarted;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	TArray<APlayerCharacter*> TrackPlayers;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void HealHiders();

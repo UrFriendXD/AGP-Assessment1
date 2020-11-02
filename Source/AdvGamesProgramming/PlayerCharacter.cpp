@@ -48,10 +48,19 @@ void APlayerCharacter::BeginPlay()
     }
 
     GameState = Cast<AMultiplayerGameState>(GetWorld()->GetGameState());
-    if (GetPlayerState() == GameState->PlayerArray[0])
+    if (GameState->PlayerArray.Num() > 0)
     {
-        bIsHost = true;
+        if (GetPlayerState() == GameState->PlayerArray[0])
+        {
+            bIsHost = true;
+        }
     }
+    // } else
+    // {
+    //     GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Blue,
+    //                                             FString::Printf(TEXT("char: %s"), *GetOwner()->GetName()));
+    // }
+    
     //HostState = GameState->PlayerArray[0];
 
     // If is host, set host HUD to 1/4 Players to begin with, no RoleText, hide TimerText - have a StartGame button in place
@@ -63,7 +72,7 @@ void APlayerCharacter::BeginPlay()
             {
                 if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
                 {
-                    HUD->SetNumPlayersText(1);
+                    //HUD->SetNumPlayersText(1);
                     HUD->SetRoleText(TEXT(""));
                     HUD->SetHideTimerText(true);
                     HUD->SetHideStartGameButton(false);
@@ -76,9 +85,9 @@ void APlayerCharacter::BeginPlay()
             {
                 if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
                 {
-                    int32 NumPlayers = GameState->PlayerArray.Num();
-
-                    HUD->SetNumPlayersText(NumPlayers);
+                    // int32 NumPlayers = GameState->PlayerArray.Num();
+                    //
+                    // HUD->SetNumPlayersText(NumPlayers);
                     HUD->SetRoleText(TEXT(""));
                     HUD->SetHideTimerText(false);
                     HUD->SetWaitingForHostTimerText();
@@ -88,7 +97,11 @@ void APlayerCharacter::BeginPlay()
         }
     }
 
-	Cast<AMultiplayerGameMode>(GetWorld()->GetAuthGameMode())->PlayerJoined();
+    AMultiplayerGameMode* GameMode = Cast<AMultiplayerGameMode>(GetWorld()->GetAuthGameMode());
+    if (GameMode)
+    {
+        GameMode->PlayerJoined();
+    }
     //Set the rounds remaining and health hud components
 }
 
@@ -134,13 +147,12 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APlayerCharacter::LookUp);
     PlayerInputComponent->BindAxis(TEXT("Turn"), this, &APlayerCharacter::Turn);
 
-	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &APlayerCharacter::Jump);
-	PlayerInputComponent->BindAction(TEXT("Sprint"), EInputEvent::IE_Pressed, this, &APlayerCharacter::SprintStart);
-	PlayerInputComponent->BindAction(TEXT("Sprint"), EInputEvent::IE_Released, this, &APlayerCharacter::SprintEnd);
-	PlayerInputComponent->BindAction(TEXT("Interact"), EInputEvent::IE_Pressed, this, &APlayerCharacter::InteractStart);
-	PlayerInputComponent->BindAction(TEXT("Interact"), EInputEvent::IE_Released, this, &APlayerCharacter::InteractEnd);
-	PlayerInputComponent->BindAction(TEXT("StartGame"), EInputEvent::IE_Pressed, this, &APlayerCharacter::StartGame);
-
+    PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &APlayerCharacter::Jump);
+    PlayerInputComponent->BindAction(TEXT("Sprint"), EInputEvent::IE_Pressed, this, &APlayerCharacter::SprintStart);
+    PlayerInputComponent->BindAction(TEXT("Sprint"), EInputEvent::IE_Released, this, &APlayerCharacter::SprintEnd);
+    PlayerInputComponent->BindAction(TEXT("Interact"), EInputEvent::IE_Pressed, this, &APlayerCharacter::InteractStart);
+    PlayerInputComponent->BindAction(TEXT("Interact"), EInputEvent::IE_Released, this, &APlayerCharacter::InteractEnd);
+    PlayerInputComponent->BindAction(TEXT("StartGame"), EInputEvent::IE_Pressed, this, &APlayerCharacter::StartGame);
 }
 
 void APlayerCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -238,17 +250,16 @@ void APlayerCharacter::InteractEnd()
 // Start Game can only be called if is Host
 void APlayerCharacter::StartGame()
 {
-	if (!bGameStarted)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Enter pressed for StartGame."))
-		AMultiplayerGameMode* GameMode = Cast<AMultiplayerGameMode>(GetWorld()->GetAuthGameMode());
-		if (GameMode)
-		{
-			bGameStarted = true;
-			GameMode->StartGame();
-			
-		}
-	}
+    if (!bGameStarted)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Enter pressed for StartGame."))
+        AMultiplayerGameMode* GameMode = Cast<AMultiplayerGameMode>(GetWorld()->GetAuthGameMode());
+        if (GameMode)
+        {
+            bGameStarted = true;
+            GameMode->StartGame();
+        }
+    }
 }
 
 void APlayerCharacter::OnDeath()
@@ -264,10 +275,27 @@ void APlayerCharacter::OnDeath()
     bIsDead = true;
     if (GEngine)
     {
-        GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Blue, FString::Printf(TEXT("Player is %hs"), bIsDead? "true" : "false"));
+        GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Blue,
+                                         FString::Printf(TEXT("Player is %hs"), bIsDead ? "true" : "false"));
     }
     // DisableInput(Cast<APlayerController>(GetController()));
     // UE_LOG(LogTemp, Warning, TEXT("Died"))
+    // }
+}
+
+void APlayerCharacter::SetNumPlayersHUDClient_Implementation(int32 NumPlayers)
+{
+    // if (GetLocalRole() == ROLE_AutonomousProxy || (GetLocalRole() == ROLE_Authority && IsLocallyControlled()))
+    // {
+        if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+        {
+            if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+            {
+                HUD->SetNumPlayersText(NumPlayers);
+                GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Blue,
+                                                 FString::Printf(TEXT("player%i"), NumPlayers));
+            }
+        }
     // }
 }
 
@@ -281,84 +309,86 @@ void APlayerCharacter::Heal()
 
 void APlayerCharacter::SetSeeker()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Setting Seeker!"))
-	SetSeekerMaterial(true);
-	//Set HUD
-	if (GetLocalRole() == ROLE_AutonomousProxy || (GetLocalRole() == ROLE_Authority && IsLocallyControlled()))
-	{
-		if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
-		{
-			if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
-			{
-				HUD->SetRoleText(TEXT("Seeker"));
-				HUD->SetHideNumPlayersText(true);
-				HUD->SetHideStartGameButton(true);
-				bIsInteracting = true;
-				HealthComponent->MaxHealth = 2000.0f;
-				HealthComponent->CurrentHealth = 2000.0f;
-				HealthComponent->UpdateHealthBar();
-			}
-		}
-	}
+    UE_LOG(LogTemp, Warning, TEXT("Setting Seeker!"))
+    SetSeekerMaterial(true);
+    //Set HUD
+    if (GetLocalRole() == ROLE_AutonomousProxy || (GetLocalRole() == ROLE_Authority && IsLocallyControlled()))
+    {
+        if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+        {
+            if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+            {
+                HUD->SetRoleText(TEXT("Seeker"));
+                HUD->SetHideNumPlayersText(true);
+                HUD->SetHideStartGameButton(true);
+                bIsInteracting = true;
+                HealthComponent->MaxHealth = 2000.0f;
+                HealthComponent->CurrentHealth = 2000.0f;
+                HealthComponent->UpdateHealthBar();
+            }
+        }
+    }
 }
 
 void APlayerCharacter::SetHider()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Setting Hider!"))
-	SetSeekerMaterial(false);
-	//Set HUD
-	if (GetLocalRole() == ROLE_AutonomousProxy || (GetLocalRole() == ROLE_Authority && IsLocallyControlled()))
-	{
-		if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
-		{
-			if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
-			{
-				HUD->SetRoleText(TEXT("Hider"));
-				HUD->SetHideNumPlayersText(true);
-				HUD->SetHideStartGameButton(true);
-			}
-		}
-	}
+    UE_LOG(LogTemp, Warning, TEXT("Setting Hider!"))
+    SetSeekerMaterial(false);
+    //Set HUD
+    if (GetLocalRole() == ROLE_AutonomousProxy || (GetLocalRole() == ROLE_Authority && IsLocallyControlled()))
+    {
+        if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+        {
+            if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+            {
+                HUD->SetRoleText(TEXT("Hider"));
+                HUD->SetHideNumPlayersText(true);
+                HUD->SetHideStartGameButton(true);
+            }
+        }
+    }
 }
 
 
 void APlayerCharacter::SetHidingTimerHUD(int32 TimeLeft)
 {
-	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
-	{
-		SetCanFire(false);
-		if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
-		{
-			HUD->SetHideTimerText(false);
-			HUD->SetHidingTimerText(TimeLeft);
-			UE_LOG(LogTemp, Warning, TEXT("Hiding time left: %i"), TimeLeft)
-		}
-	}
+    if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+    {
+        SetCanFire(false);
+        if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+        {
+            HUD->SetHideTimerText(false);
+            HUD->SetHidingTimerText(TimeLeft);
+            UE_LOG(LogTemp, Warning, TEXT("Hiding time left: %i"), TimeLeft)
+        }
+    }
 }
 
 void APlayerCharacter::SetSeekingTimerHUD(int32 TimeLeft)
 {
-	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
-	{
-		SetCanFire(true);
-		bIsInteracting = false;
-		if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
-		{
-			HUD->SetTimeLeftTimerText(TimeLeft);
-			UE_LOG(LogTemp, Warning, TEXT("Hiding time left: %i"), TimeLeft)
-		}
-	}
+    if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+    {
+        SetCanFire(true);
+        bIsInteracting = false;
+        if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+        {
+            HUD->SetTimeLeftTimerText(TimeLeft);
+            UE_LOG(LogTemp, Warning, TEXT("Hiding time left: %i"), TimeLeft)
+        }
+    }
 }
 
 void APlayerCharacter::SetNumPlayersHUD(int32 NumPlayers)
 {
-	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
-	{
-		if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
-		{
-			HUD->SetNumPlayersText(NumPlayers);
-		}
-	}
+    if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+    {
+        if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+        {
+            HUD->SetNumPlayersText(NumPlayers);
+            GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Blue,
+                                             FString::Printf(TEXT("player%i"), NumPlayers));
+        }
+    }
 }
 
 void APlayerCharacter::HidePlayerHUD_Implementation(bool bSetHUDVisibility)

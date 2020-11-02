@@ -40857,6 +40857,8 @@
           <e p="EnemyCharacter.h" t="Include" />
           <e p="HealthComponent.cpp" t="Include" />
           <e p="HealthComponent.h" t="Include" />
+          <e p="LobbyFloor.cpp" t="Include" />
+          <e p="LobbyFloor.h" t="Include" />
           <e p="MainGameInstance.cpp" t="Include" />
           <e p="MainGameInstance.h" t="Include" />
           <e p="MainMenuWidget.cpp" t="Include" />

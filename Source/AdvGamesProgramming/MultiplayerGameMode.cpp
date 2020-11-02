@@ -12,6 +12,7 @@
 #include "Engine/World.h"
 #include "GameFramework/GameState.h"
 #include "PlayerCharacter.h"
+#include "GameFramework/PlayerState.h"
 
 void AMultiplayerGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessages)
 {
@@ -203,8 +204,19 @@ void AMultiplayerGameMode::SeekingCountdown()
 
 void AMultiplayerGameMode::PlayerJoined()
 {
-	for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
+	for (APlayerState* PlayerState : GameState->PlayerArray )
 	{
-		It->SetNumPlayersHUD(GameState->PlayerArray.Num());
+		if (APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(PlayerState->GetPawn()))
+		{
+			PlayerCharacter->SetNumPlayersHUDClient(GameState->PlayerArray.Num());
+		}
 	}
+	// for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
+	// {
+	// 	It->SetNumPlayersHUD(GameState->PlayerArray.Num());
+	// 	if (GEngine)
+	// 	{
+	// 		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Blue, FString::Printf(TEXT("player joined. Num:%i"), GameState->PlayerArray.Num()));
+	// 	}
+	// }
 }
