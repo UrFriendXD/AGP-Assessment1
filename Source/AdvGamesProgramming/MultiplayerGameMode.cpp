@@ -16,6 +16,8 @@
 void AMultiplayerGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessages)
 {
 	Super::InitGame(MapName, Options, ErrorMessages);
+	HidingCountdownTime = 15;
+	SeekingCountdownTime = 300;
 
 	// //Find the procedurally generated map in the world
 	// for (TActorIterator<AProcedurallyGeneratedMap> It(GetWorld()); It; ++It)
@@ -104,16 +106,74 @@ void AMultiplayerGameMode::StartGame()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Found lobby floor!"));
 		LobbyFloor->SetActorEnableCollision(false);
-		//Set player roles
-		//Set seeker mesh to galaxy
+		
+		// Set a random Seeker if there's more than 1 player
+		if (GameState->PlayerArray.Num() > 1)
+		{
+			int32 RandIndex = FMath::RandRange(0, GameState->PlayerArray.Num() - 1);
+			int32 ItIndex = 0;
+			for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
+			{
+				if (ItIndex == RandIndex)
+				{
+					It->PlayerRole = PlayerRole::SEEKER;
+					It->SetSeeker();
+				}
+				else
+				{
+					It->PlayerRole = PlayerRole::HIDER;
+					It->SetHider();
+				}
+				ItIndex++;
+			}
+		}
+		else //	1P game, host is Seeker
+		{
+			for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
+			{
+				It->PlayerRole = PlayerRole::SEEKER;
+				It->SetSeeker();
+			}
+		}
+		GetWorld()->GetTimerManager().SetTimer(HidingTimerHandle, this, &AMultiplayerGameMode::HidingCountdown, 1.0f, true);
+		
+
+
 		//Start 15s UI timer, replicate, disable shooting
 		//Spawn AI and pickups
 		//Disable seeker movement
 		//Reset health and ammo
 		//After 15s timer, start 5min timer
 	}
-	else
+}
+
+void AMultiplayerGameMode::HidingCountdown()
+{
+	// Hiding countdown over
+	if (--HidingCountdownTime <= 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Can't find lobby floor"));
+		GetWorld()->GetTimerManager().SetTimer(HidingTimerHandle, this, &AMultiplayerGameMode::SeekingCountdown, 1.0f, true);	
+	}
+	else // Hiding countdown ongoing
+	{
+		for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
+		{
+			It->SetHidingTimerHUD(HidingCountdownTime);
+		}
+	}
+}
+
+void AMultiplayerGameMode::SeekingCountdown()
+{
+	if (--SeekingCountdownTime <= 0)
+	{
+		//Gameover: out of time
+	}
+	else // Seeking countdown ongoing
+	{
+		for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
+		{
+			It->SetSeekingTimerHUD(SeekingCountdownTime);
+		}
 	}
 }

@@ -87,6 +87,16 @@ public:
 	APlayerState* HostState;
 
 	bool bIsHost;
+	bool bGameStarted;
+
+	void SetSeeker();
+	void SetHider();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetSeekerMaterial(bool bSetSeekerMat);
+
+	void SetHidingTimerHUD(int32 TimeLeft);
+	void SetSeekingTimerHUD(int32 TimeLeft);
 
 private:
 	UPROPERTY(EditInstanceOnly, meta = (ClampMin = "0.0", ClampMax = "2.0", UIMin = "0.0", UIMax = "2.0"))

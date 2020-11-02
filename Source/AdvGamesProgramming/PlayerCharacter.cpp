@@ -8,6 +8,7 @@
 #include "Net/UnrealNetwork.h"
 #include "HealthComponent.h"
 #include "MultiplayerGameMode.h"
+#include "UObject/ConstructorHelpers.h"
 #include "PlayerHUD.h"
 
 
@@ -28,8 +29,11 @@ APlayerCharacter::APlayerCharacter()
 	SprintMovementSpeed = GetCharacterMovement()->MaxWalkSpeed * SprintMultiplier;
 
 	// Role
-	PlayerRole = PlayerRole::HIDER;
-	
+	PlayerRole = PlayerRole::SEEKER;
+
+	//MeshComponent 
+	//static ConstructorHelpers::FObjectFinder<UStaticMesh> FoundMesh(TEXT("/Engine/EditorMeshes/EditorSphere.EditorSphere"));
+
 }
 
 // Called when the game starts or when spawned
@@ -203,11 +207,16 @@ void APlayerCharacter::InteractEnd()
 // Start Game can only be called if is Host
 void APlayerCharacter::StartGame()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Enter pressed for StartGame."))
-	AMultiplayerGameMode* GameMode = Cast<AMultiplayerGameMode>(GetWorld()->GetAuthGameMode());
-	if (GameMode)
+	if (!bGameStarted)
 	{
-		GameMode->StartGame();
+		UE_LOG(LogTemp, Warning, TEXT("Enter pressed for StartGame."))
+		AMultiplayerGameMode* GameMode = Cast<AMultiplayerGameMode>(GetWorld()->GetAuthGameMode());
+		if (GameMode)
+		{
+			bGameStarted = true;
+			GameMode->StartGame();
+			
+		}
 	}
 }
 
@@ -222,6 +231,70 @@ void APlayerCharacter::OnDeath()
 		}
 	}
 
+}
+
+void APlayerCharacter::SetSeeker()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Setting Seeker!"))
+	SetSeekerMaterial(true);
+	//Set HUD
+	if (GetLocalRole() == ROLE_AutonomousProxy || (GetLocalRole() == ROLE_Authority && IsLocallyControlled()))
+	{
+		if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+		{
+			if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+			{
+				HUD->SetRoleText(TEXT("Seeker"));
+				HUD->SetHideNumPlayersText(true);
+				HUD->SetHideStartGameButton(true);
+			}
+		}
+	}
+}
+
+void APlayerCharacter::SetHider()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Setting Hider!"))
+	SetSeekerMaterial(false);
+	//Set HUD
+	if (GetLocalRole() == ROLE_AutonomousProxy || (GetLocalRole() == ROLE_Authority && IsLocallyControlled()))
+	{
+		if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+		{
+			if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+			{
+				HUD->SetRoleText(TEXT("Hider"));
+				HUD->SetHideNumPlayersText(true);
+				HUD->SetHideStartGameButton(true);
+			}
+		}
+	}
+}
+
+
+void APlayerCharacter::SetHidingTimerHUD(int32 TimeLeft)
+{
+	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	{
+		if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+		{
+			HUD->SetHideTimerText(false);
+			HUD->SetHidingTimerText(TimeLeft);
+			UE_LOG(LogTemp, Warning, TEXT("Hiding time left: %i"), TimeLeft)
+		}
+	}
+}
+
+void APlayerCharacter::SetSeekingTimerHUD(int32 TimeLeft)
+{
+	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	{
+		if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
+		{
+			HUD->SetTimeLeftTimerText(TimeLeft);
+			UE_LOG(LogTemp, Warning, TEXT("Hiding time left: %i"), TimeLeft)
+		}
+	}
 }
 
 void APlayerCharacter::HidePlayerHUD_Implementation(bool bSetHUDVisibility)

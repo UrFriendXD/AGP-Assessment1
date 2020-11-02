@@ -64,8 +64,7 @@ void APlayerHUD::SetRoleText(FString PlayerRole)
 {
 	if (RoleTextBlock)
 	{
-		//RoleTextBlock->SetText(FText::FromString(FString::Printf(TEXT("%s"), *Role)));
-
+		RoleTextBlock->SetText(FText::FromString(FString::Printf(TEXT("%s"), *PlayerRole)));
 	}
 }
 
@@ -75,6 +74,21 @@ void APlayerHUD::SetNumPlayersText(int32 NumPlayers)
 	{
 		NumPlayersTextBlock->SetText(FText::FromString(FString::Printf(TEXT("%i/4 Players"), NumPlayers)));
 
+	}
+}
+
+void APlayerHUD::SetHideNumPlayersText(bool bIsHidden)
+{
+	if (NumPlayersTextBlock)
+	{
+		if (bIsHidden)
+		{
+			NumPlayersTextBlock->SetVisibility(ESlateVisibility::Hidden);
+		}
+		else
+		{
+			NumPlayersTextBlock->SetVisibility(ESlateVisibility::Visible);
+		}
 	}
 }
 

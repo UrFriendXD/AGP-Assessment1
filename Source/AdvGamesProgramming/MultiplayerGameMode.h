@@ -50,7 +50,14 @@ public:
 	//AStaticMeshActor* LobbyFloor;
 	ALobbyFloor* LobbyFloor;
 
+	bool bSeekerAssigned;
 
+	FTimerHandle HidingTimerHandle;
+	UFUNCTION()
+	void HidingCountdown();
+	void SeekingCountdown();
+	int32 HidingCountdownTime;
+	int32 SeekingCountdownTime;
 
 	
 private:
