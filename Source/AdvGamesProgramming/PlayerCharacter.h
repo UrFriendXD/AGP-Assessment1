@@ -95,6 +95,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetSeekerMaterial(bool bSetSeekerMat);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetCanFire(bool bCanFire);
+
 	void SetHidingTimerHUD(int32 TimeLeft);
 	void SetSeekingTimerHUD(int32 TimeLeft);
 

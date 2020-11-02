@@ -107,37 +107,26 @@ void AMultiplayerGameMode::StartGame()
 		UE_LOG(LogTemp, Warning, TEXT("Found lobby floor!"));
 		LobbyFloor->SetActorEnableCollision(false);
 		
-		// Set a random Seeker if there's more than 1 player
-		if (GameState->PlayerArray.Num() > 1)
+		// Set a random Seeker 
+		int32 RandIndex = FMath::RandRange(0, GameState->PlayerArray.Num() - 1);
+		int32 ItIndex = 0;
+		for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
 		{
-			int32 RandIndex = FMath::RandRange(0, GameState->PlayerArray.Num() - 1);
-			int32 ItIndex = 0;
-			for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
-			{
-				if (ItIndex == RandIndex)
-				{
-					It->PlayerRole = PlayerRole::SEEKER;
-					It->SetSeeker();
-				}
-				else
-				{
-					It->PlayerRole = PlayerRole::HIDER;
-					It->SetHider();
-				}
-				ItIndex++;
-			}
-		}
-		else //	1P game, host is Seeker
-		{
-			for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
+			if (ItIndex == RandIndex)
 			{
 				It->PlayerRole = PlayerRole::SEEKER;
 				It->SetSeeker();
 			}
+			else
+			{
+				It->PlayerRole = PlayerRole::HIDER;
+				It->SetHider();
+			}
+			ItIndex++;
 		}
+
 		GetWorld()->GetTimerManager().SetTimer(HidingTimerHandle, this, &AMultiplayerGameMode::HidingCountdown, 1.0f, true);
 		
-
 
 		//Start 15s UI timer, replicate, disable shooting
 		//Spawn AI and pickups

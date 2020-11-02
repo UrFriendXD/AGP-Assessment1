@@ -276,6 +276,7 @@ void APlayerCharacter::SetHidingTimerHUD(int32 TimeLeft)
 {
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
+		SetCanFire(false);
 		if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
 		{
 			HUD->SetHideTimerText(false);
@@ -289,6 +290,7 @@ void APlayerCharacter::SetSeekingTimerHUD(int32 TimeLeft)
 {
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
+		SetCanFire(true);
 		if (APlayerHUD* HUD = Cast<APlayerHUD>(PlayerController->GetHUD()))
 		{
 			HUD->SetTimeLeftTimerText(TimeLeft);
